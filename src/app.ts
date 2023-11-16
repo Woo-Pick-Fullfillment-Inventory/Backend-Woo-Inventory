@@ -5,6 +5,8 @@ import express from "express";
 import helmet from "helmet";
 import createError from "http-errors";
 
+import webhookRouter from "../src/webhook/index.js";
+
 import type {
   Express,
   NextFunction,
@@ -21,6 +23,8 @@ const PORT = config.get<string>("SERVICE_PORT") || 3000;
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("", webhookRouter);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("hello world");
