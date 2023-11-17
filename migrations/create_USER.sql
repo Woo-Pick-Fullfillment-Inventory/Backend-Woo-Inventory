@@ -1,0 +1,4 @@
+CREATE TABLE "woousers" (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL
+);
