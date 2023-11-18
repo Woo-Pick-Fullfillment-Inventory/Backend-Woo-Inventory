@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   postgres:
     image: postgres:12
@@ -11,4 +12,5 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./migrations:/docker-entrypoint-initdb.d
+      - ./migrations/create:/docker-entrypoint-initdb.d
+      - ./migrations/insert:/docker-entrypoint-initdb.d

@@ -1,5 +1,7 @@
 import { StatusCodes } from "http-status-codes";
+import { randomUUID } from "node:crypto";
 
+import { databaseFactory } from "../../repository/postgres/index.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
 
@@ -29,12 +31,26 @@ const SERVICE_ERRORS = {
     type: "/auth/createURL-failed",
     title: "invalid request",
   },
+  databaseError: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/auth/createURL-failed",
+    title: "database error",
+  },
 };
 
-const createUrl = (req: Request, res: Response) => {
+const createUrl = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema)) {
     throw createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
   }
+
+  const isInserted = await databaseFactory.insertUser({
+    app_user_id: randomUUID(),
+    app_username: req.body.username,
+    app_password: req.body.password,
+    app_url: req.body.appURL,
+  });
+
+  if (!isInserted) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
   res.status(200).send("create URL done");
 };

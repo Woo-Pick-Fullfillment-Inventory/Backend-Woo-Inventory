@@ -6,7 +6,7 @@ import helmet from "helmet";
 import createError from "http-errors";
 
 import authRouter from "./business/authentication/index.js";
-import database from "../src/repository/postgres/index.js";
+import { database } from "../src/repository/postgres/index.js";
 import webhookRouter from "../src/webhook/index.js";
 
 import type {
@@ -35,7 +35,7 @@ app.get("/", (_req: Request, res: Response) => {
 
 app.get("/test-db", async (_req: Request, res: Response) => {
   try {
-    const queryResult = await database.query("SELECT * FROM woousers");
+    const queryResult = await database.query("SELECT * FROM app_users");
     res.json(queryResult.rows);
   } catch (error) {
     console.error("Error running query", error);
