@@ -1,6 +1,11 @@
 import pg from "pg";
 
-import insertUser from "./users.js";
+import {
+  insertAppUser,
+  updateAuthenticatedStatus,
+} from "./appUsers.js";
+import insertAppUserToWooUser from "./appUsersToWooUsers.js";
+import insertWooUser from "./wooUsers.js";
 
 const { Pool } = pg;
 
@@ -16,7 +21,12 @@ const createDatabase = () => {
 
 const database = createDatabase();
 
-const databaseFactory = { insertUser };
+const databaseFactory = {
+  insertAppUser,
+  insertAppUserToWooUser,
+  insertWooUser,
+  updateAuthenticatedStatus,
+};
 
 export {
   database,

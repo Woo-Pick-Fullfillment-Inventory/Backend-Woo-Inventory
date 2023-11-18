@@ -43,7 +43,7 @@ const createUrl = async (req: Request, res: Response) => {
     throw createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
   }
 
-  const isInserted = await databaseFactory.insertUser({
+  const isInserted = await databaseFactory.insertAppUser({
     app_user_id: randomUUID(),
     app_username: req.body.username,
     app_password: req.body.password,
@@ -52,7 +52,7 @@ const createUrl = async (req: Request, res: Response) => {
 
   if (!isInserted) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
-  res.status(200).send("create URL done");
+  res.status(200).send({ url: "new-url" });
 };
 
 export default createUrl;

@@ -9,7 +9,7 @@ type UserModel = {
     app_url: string;
   };
 
-async function insertUser(user: UserModel): Promise<boolean> {
+async function insertAppUser(user: UserModel): Promise<boolean> {
   const query =
       "INSERT INTO app_users (app_user_id, app_username, app_password, app_url) VALUES ($1, $2, $3, $4)";
   const values = [
@@ -29,4 +29,23 @@ async function insertUser(user: UserModel): Promise<boolean> {
   }
 }
 
-export default insertUser;
+async function updateAuthenticatedStatus(appUserId: string, isAuthenticated: boolean): Promise<boolean> {
+  const query = "UPDATE app_users SET authenticated = $1 WHERE app_user_id = $2";
+  const values = [
+    isAuthenticated,
+    appUserId,
+  ];
+
+  try {
+    const result = await database.query(query, values);
+    assert(result.rowCount === 1, "Expected exactly one row to be affected");
+    return (result.rowCount === 1);
+  } catch (error) {
+    return false;
+  }
+}
+
+export {
+  insertAppUser,
+  updateAuthenticatedStatus,
+};
