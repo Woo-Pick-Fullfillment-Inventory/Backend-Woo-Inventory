@@ -1,4 +1,6 @@
 CREATE TABLE "woousers" (
     id SERIAL PRIMARY KEY,
-    token VARCHAR(255) NOT NULL
+    woo_token VARCHAR(255),
+    woo_secret VARCHAR(255),
+    woo_url VARCHAR(255)
 );

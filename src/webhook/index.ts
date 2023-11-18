@@ -1,9 +1,9 @@
 import express from "express";
 
-import wooAuthenticationRouter from "./wooAuthentication.js";
+import wooAuthenticator from "./wooAuthentication.js";
 
 const webhookRouter = express.Router();
 
-webhookRouter.use("/webhook", wooAuthenticationRouter);
+webhookRouter.use("/wc-auth", wooAuthenticator);
 
 export default webhookRouter;
