@@ -12,8 +12,8 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./migrations/create:/docker-entrypoint-initdb.d
-      - ./migrations/insert:/docker-entrypoint-initdb.d
+      - ./migrations/create:/docker-entrypoint-initdb.d/create
+      - ./migrations/insert:/docker-entrypoint-initdb.d/insert
   
   wiremock:
     image: wiremock/wiremock:3.1.0
