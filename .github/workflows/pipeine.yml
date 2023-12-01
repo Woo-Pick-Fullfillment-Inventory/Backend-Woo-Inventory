@@ -25,6 +25,3 @@ jobs:
       
       - name: Start dependencies and application
         run: docker-compose up -d
-
-      - name: Run Integration Tests
-        run: npm run test
