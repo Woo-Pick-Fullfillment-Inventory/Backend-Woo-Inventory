@@ -24,7 +24,7 @@ jobs:
         run: npm install --save-dev jest
       
       - name: Start dependencies and application
-        run: docker-compose -f docker-compose.yml -f docker-compose.github.yml up -d
+        run: docker-compose up -d
 
       - name: Run Integration Tests
         run: npm run test
