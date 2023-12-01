@@ -8,18 +8,12 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
-    name: Checks
+    name: integration-test
     permissions:
       contents: read
       id-token: write
 
     steps:
       - uses: actions/checkout@v3
-      - name: Run Docker Linter
-        run: npm run lint-docker
-
-      - name: Run Typescript Linter
-        run: npm run lint
-
-      - name: Run Npm Build
-        run: npm run build
+      - name: Run Integration Tests
+        run: npm run test
