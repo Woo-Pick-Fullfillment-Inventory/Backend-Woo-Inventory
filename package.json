@@ -11,7 +11,6 @@
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest -c integration-test/jest.config.json --detectOpenHandles",
-    "lint-markdown": "markdownlint -i ./node_modules .",
     "dev": "nodemon"
   },
   "author": "",
@@ -60,7 +59,6 @@
   },
   "pre-commit": [
     "lint",
-    "build",
-    "lint-markdown"
+    "build"
   ]
 }
