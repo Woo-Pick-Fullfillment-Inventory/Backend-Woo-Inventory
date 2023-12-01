@@ -1,34 +1,16 @@
 import pg from "pg";
 
-import {
-  insertAppUser,
-  updateAuthenticatedStatus,
-} from "./appUsers.js";
-import insertAppUserToWooUser from "./appUsersToWooUsers.js";
-import insertWooUser from "./wooUsers.js";
-
 const { Pool } = pg;
 
 const createDatabase = () => {
   return new Pool({
-    user: "woo-backend",
-    host: "localhost",
-    database: "integration-test",
-    password: "woo-backend",
-    port: 5432,
+    user: process.env["DB_USER"],
+    host: process.env["DB_HOST"],
+    database: process.env["DB_NAME"],
+    password: process.env["DB_PASSWORD"],
+    port: Number(process.env["DB_PORT"]),
   });
 };
 
 const database = createDatabase();
-
-const databaseFactory = {
-  insertAppUser,
-  insertAppUserToWooUser,
-  insertWooUser,
-  updateAuthenticatedStatus,
-};
-
-export {
-  database,
-  databaseFactory,
-};
+export default database;

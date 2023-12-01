@@ -1,7 +1,9 @@
 import { randomUUID } from "crypto";
 import { StatusCodes } from "http-status-codes";
 
-import { databaseFactory } from "../repository/postgres/index.js";
+import { insertAppUserToWooUser } from "../repository/postgres/insert-app-user-to-woo-user.js";
+import { insertWooUser } from "../repository/postgres/insert-woo-user.js";
+import { updateAuthenticatedStatus } from "../repository/postgres/update-authenticated-status.js";
 import { validateTypeFactory } from "../util/ajvValidator.js";
 import { createErrorResponse } from "../util/errorReponse.js";
 
@@ -48,20 +50,20 @@ const wooAuthenticator = async (req: Request, res: Response) => {
   }
 
   const wooUserId = randomUUID();
-  const isInsertedWooUserToAppUser = await databaseFactory.insertAppUserToWooUser({
+  const isInsertedWooUserToAppUser = await insertAppUserToWooUser({
     app_user_id: req.body.user_id,
     woo_user_id: wooUserId,
   });
   if (!isInsertedWooUserToAppUser) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
-  const isInsertedWooUser = await databaseFactory.insertWooUser({
+  const isInsertedWooUser = await insertWooUser({
     woo_user_id: wooUserId,
     woo_token: req.body.consumer_key,
     woo_secret: req.body.consumer_secret,
   });
   if (!isInsertedWooUser) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
-  const isUpdated = await databaseFactory.updateAuthenticatedStatus(req.body.user_id, true);
+  const isUpdated = await updateAuthenticatedStatus(req.body.user_id, true);
   if (!isUpdated) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
   res.send("Webhook is listening...");
