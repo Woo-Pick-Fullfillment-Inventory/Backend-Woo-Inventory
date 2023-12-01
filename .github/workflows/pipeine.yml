@@ -1,7 +1,9 @@
 name: Check, build and deploy
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - '**'
 
 jobs:
   checks:
