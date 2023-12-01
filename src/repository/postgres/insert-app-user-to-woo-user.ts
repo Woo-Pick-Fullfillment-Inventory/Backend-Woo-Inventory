@@ -1,20 +1,18 @@
 import assert from "node:assert";
 
-import { database } from "./index.js";
+import database from "./index.js";
 
 type UserModel = {
+    app_user_id: string;
     woo_user_id: string;
-    woo_token: string;
-    woo_secret: string;
   };
 
-async function insertWooUser(user: UserModel): Promise<boolean> {
+export async function insertAppUserToWooUser(user: UserModel): Promise<boolean> {
   const query =
-      "INSERT INTO woo_users (woo_user_id, woo_token, woo_secret) VALUES ($1, $2, $3)";
+      "INSERT INTO app_users_to_woo_users (app_user_id,woo_user_id) VALUES ($1, $2)";
   const values = [
+    user.app_user_id,
     user.woo_user_id,
-    user.woo_token,
-    user.woo_secret,
   ];
 
   try {
@@ -25,5 +23,3 @@ async function insertWooUser(user: UserModel): Promise<boolean> {
     return false;
   }
 }
-
-export default insertWooUser;

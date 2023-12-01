@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { randomUUID } from "node:crypto";
 
-import { databaseFactory } from "../../repository/postgres/index.js";
+import { insertAppUser } from "../../repository/postgres/insert-app-user.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
 
@@ -38,12 +38,12 @@ const SERVICE_ERRORS = {
   },
 };
 
-const createUrl = async (req: Request, res: Response) => {
+const signup = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema)) {
     throw createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
   }
 
-  const isInserted = await databaseFactory.insertAppUser({
+  const isInserted = await insertAppUser({
     app_user_id: randomUUID(),
     app_username: req.body.username,
     app_password: req.body.password,
@@ -55,4 +55,4 @@ const createUrl = async (req: Request, res: Response) => {
   res.status(200).send({ url: "new-url" });
 };
 
-export default createUrl;
+export default signup;
