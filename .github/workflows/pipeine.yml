@@ -1,0 +1,27 @@
+name: Check, build and deploy
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    name: integration-test
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+
+      - name: Install Jest
+        run: npm install --save-dev jest
+      
+      - name: Start dependencies and application
+        run: docker-compose up -d
