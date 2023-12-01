@@ -6,10 +6,12 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
+    "lint-docker": "docker run --rm -i hadolint/hadolint < Dockerfile",
     "lint:fix": "npx eslint 'src/**/*' 'integration-test/**/*' --fix",
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest -c integration-test/jest.config.json --detectOpenHandles",
+    "lint-markdown": "markdownlint -i ./node_modules .",
     "dev": "nodemon"
   },
   "author": "",
@@ -45,6 +47,7 @@
     "eslint-plugin-json": "^3.1.0",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
+    "markdownlint-cli": "^0.37.0",
     "nodemon": "^3.0.1",
     "pre-commit": "^1.2.2",
     "ts-jest": "^29.1.1",
@@ -56,6 +59,7 @@
   },
   "pre-commit": [
     "lint",
-    "build"
+    "build",
+    "lint-markdown"
   ]
 }
