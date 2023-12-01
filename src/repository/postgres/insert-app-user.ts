@@ -24,7 +24,6 @@ export async function insertAppUser(user: UserModel): Promise<boolean> {
     assert(result.rowCount === 1, "Expected exactly one row to be affected");
     return (result.rowCount === 1);
   } catch (error) {
-    console.error("Error inserting user:", error);
     return false;
   }
 }
