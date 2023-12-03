@@ -19,9 +19,3 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
-
-      - name: Install Jest
-        run: npm install --save-dev jest
-      
-      - name: Start dependencies and application
-        run: docker-compose up -d
