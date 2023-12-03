@@ -14,4 +14,6 @@ const createDatabase = () => {
 };
 
 const database = createDatabase();
+
+// TODO : make database abstract
 export default database;
