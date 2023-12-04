@@ -5,23 +5,47 @@ on:
     branches:
       - '**'
 
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  IMAGE_NAME: woopick-be
+  REGION: europe-west3
+  DEPLOYMENT_NAME: woopick-be
+  SA_GH_ACTIONS: ${{ secrets.SA_GH_ACTIONS }}
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  GH_TOKEN: ${{ secrets.WOOPICK_GITHUB_TOKEN}}
+
 jobs:
-  checks:
+  build-push-gcr:
     runs-on: ubuntu-latest
-    name: integration-test
+
     permissions:
-      contents: read
-      id-token: write
+      id-token: write 
+      contents: read  
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: GH_TOKEN
+      - name: Authenticate to WIF
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: WORKLOAD_IDENTITY_PROVIDER
+          service_account: SA_GH_ACTIONS
+          token_format: access_token
+          export_environment_variables: true
+    
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
+        run: |
+          bash ./scripts/auto_update_tag.sh -v patch
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-
-      - name: Install Jest
-        run: npm install --save-dev jest
-      
-      - name: Start dependencies and application
-        run: docker-compose up -d
+      - name: Build and push Docker image
+        env:
+          GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        run: |-
+          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+          docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest .
+          docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG
