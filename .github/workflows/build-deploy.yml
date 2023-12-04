@@ -44,7 +44,7 @@ jobs:
         env:
           GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |-
-          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+          gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
           docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest .
           docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
           docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
