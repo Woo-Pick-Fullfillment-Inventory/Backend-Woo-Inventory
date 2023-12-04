@@ -10,9 +10,6 @@ env:
   IMAGE_NAME: woopick-backend
   REGION: europe-west3
   DEPLOYMENT_NAME: woopick-backend
-  SA_GH_ACTIONS: ${{ secrets.SA_GH_ACTIONS }}
-  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-  GH_TOKEN: ${{ secrets.WOOPICK_GITHUB_TOKEN}}
 
 jobs:
   build-push-gcr:
@@ -28,13 +25,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: Woo-Pick-Fullfillment-Inventory/Backend-Woo-Inventory
-          token: $GH_TOKEN
+          token: ${{ secrets.WOOPICK_GITHUB_TOKEN}}
 
       - name: Authenticate to WIF
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: $WORKLOAD_IDENTITY_PROVIDER
-          service_account: $SA_GH_ACTIONS
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SA_GH_ACTIONS }}
           token_format: access_token
           export_environment_variables: true
     
