@@ -27,6 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          repository: Woo-Pick-Fullfillment-Inventory/Backend-Woo-Inventory
           token: $GH_TOKEN
 
       - name: Authenticate to WIF
