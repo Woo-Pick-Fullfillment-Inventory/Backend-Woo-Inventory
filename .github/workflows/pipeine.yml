@@ -27,13 +27,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          token: GH_TOKEN
-          
+          token: $GH_TOKEN
+
       - name: Authenticate to WIF
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: WORKLOAD_IDENTITY_PROVIDER
-          service_account: SA_GH_ACTIONS
+          workload_identity_provider: $WORKLOAD_IDENTITY_PROVIDER
+          service_account: $SA_GH_ACTIONS
           token_format: access_token
           export_environment_variables: true
     
