@@ -27,6 +27,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/webhook", webhookRouter);
 app.use("/api/v1", authRouter);
 
+app.get("/", (_req: Request, res: Response) => {
+  res.send("This is the backend service");
+});
+
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
   next(createError(404));
 });
