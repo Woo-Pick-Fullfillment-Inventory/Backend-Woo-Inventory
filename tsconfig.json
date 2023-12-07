@@ -5,5 +5,5 @@
     "exactOptionalPropertyTypes": false,
     "ignoreDeprecations": "5.0"
   },
-  "include": ["src/**/*", "test-integration/**/*"]
+  "include": ["src/**/*", "integration-test/**/*"]
 }
