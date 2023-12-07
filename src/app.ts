@@ -28,7 +28,7 @@ app.use("/webhook", webhookRouter);
 app.use("/api/v1", authRouter);
 
 app.get("/", (_req: Request, res: Response) => {
-  res.send("This is the backend service");
+  res.send("This is the backend service of Woo Pick Inventory");
 });
 
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
