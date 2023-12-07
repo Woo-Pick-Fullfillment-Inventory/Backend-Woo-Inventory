@@ -21,4 +21,4 @@ ENV NODE_ENV=production
 
 USER 1000
 
-CMD ["./dist/app.js"]
+CMD ["node","./dist/app.js"]
