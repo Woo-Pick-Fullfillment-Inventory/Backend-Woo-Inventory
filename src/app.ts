@@ -5,7 +5,7 @@ import helmet from "helmet";
 import createError from "http-errors";
 
 import authRouter from "./business/authentication/index.js";
-import webhookRouter from "../src/webhook/index.js";
+import webhookRouter from "./webhook/index.js";
 
 import type {
   Express,
