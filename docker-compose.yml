@@ -1,19 +1,23 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:12
-    container_name: postgres
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-      POSTGRES_USER: woo-backend
-      POSTGRES_DB: integration-test
-      POSTGRES_PASSWORD: woo-backend
+  spanner-emulator:
+    image: gcr.io/cloud-spanner-emulator/emulator:1.5.4
     ports:
-      - '5432:5432'
+      - 9010:9010
+      - 9020:9020
+  
+  gcloud-spanner-run-up:
+    depends_on:
+      spanner-emulator:
+        condition: service_started
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
     volumes:
-      - ./migrations/create:/docker-entrypoint-initdb.d
-      - ./migrations/insert:/docker-entrypoint-initdb.d
+      - type: bind
+        source: ./scripts/run_up_spanner.sh
+        target: /scripts/run_up_spanner.sh
+    command: |
+      bash -c 'source /scripts/run_up_spanner.sh'
 
   wiremock:
     image: wiremock/wiremock:3.1.0
