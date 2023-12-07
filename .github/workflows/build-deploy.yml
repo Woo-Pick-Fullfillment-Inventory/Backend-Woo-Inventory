@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy sa-cloudrun \
+          gcloud run deploy github-actions-woopick \
             --image europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG \
             --platform managed \
             --region europe-west3 \
