@@ -24,4 +24,3 @@ spec:
               key: JWT_SECRET
       labels:
         cloud.googleapis.com/location: europe-west3
-      
