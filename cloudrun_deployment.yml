@@ -10,8 +10,6 @@ spec:
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
         env:
-        - name: PORT
-          value: $PORT
         - name: SPANNER_PROJECT_ID
           value: $SPANNER_PROJECT_ID
         - name: SPANNER_INSTANCE_ID
