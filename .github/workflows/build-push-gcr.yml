@@ -83,7 +83,7 @@ jobs:
 
       - name: Start dependencies and application
         run: |-
-          gcloud auth configure-docker us-east1-docker.pkg.dev
+          gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
           docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
 
       - name: Execute integration tests
