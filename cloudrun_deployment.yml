@@ -10,6 +10,9 @@ spec:
       serviceAccountName: $SA_GH_ACTIONS
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+        ports:
+        - name: http1
+          containerPort: 8080
         env:
         - name: SPANNER_PROJECT_ID
           value: $SPANNER_PROJECT_ID
