@@ -7,13 +7,9 @@ services:
       gcloud-spanner-run-up:
         condition: service_completed_successfully
     ports:
-      - 3000:3000
+      - 8080:8080
     environment:
-<<<<<<< HEAD
       SERVICE_PORT: 8080
-=======
-      SERVICE_PORT: 3000
->>>>>>> main
       SPANNER_EMULATOR_HOST: spanner-emulator:9010
       SPANNER_PROJECT_ID: test-project
       SPANNER_INSTANCE_ID: test-instance
