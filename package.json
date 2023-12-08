@@ -10,13 +10,14 @@
     "lint:fix": "npx eslint 'src/**/*' 'integration-test/**/*' --fix",
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest -c integration-test/jest.config.json --detectOpenHandles",
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules SPANNER_EMULATOR_HOST=localhost:9010 jest -c integration-test/jest.config.json --detectOpenHandles",
     "dev": "nodemon"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/logging-winston": "^6.0.0",
+    "@google-cloud/spanner": "^7.1.0",
     "@types/express": "^4.17.20",
     "@types/http-errors": "^2.0.3",
     "@types/node": "^20.8.10",
@@ -26,6 +27,7 @@
     "body-parser": "^1.20.2",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
+    "email-validator": "^2.0.4",
     "express": "^4.18.2",
     "helmet": "^7.0.0",
     "http-status-codes": "^2.3.0",

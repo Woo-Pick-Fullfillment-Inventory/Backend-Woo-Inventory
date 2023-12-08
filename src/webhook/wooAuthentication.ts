@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
 import { StatusCodes } from "http-status-codes";
 
-import { insertAppUserToWooUser } from "../repository/postgres/insert-app-user-to-woo-user.js";
-import { insertWooUser } from "../repository/postgres/insert-woo-user.js";
-import { updateAuthenticatedStatus } from "../repository/postgres/update-authenticated-status.js";
+import { insertAppUserToWooUser } from "../repository/spanner/insert-app-user-to-woo-user.js";
+import { insertWooUser } from "../repository/spanner/insert-woo-user.js";
+import { updateAuthenticatedStatus } from "../repository/spanner/update-authenticated-status.js";
 import { validateTypeFactory } from "../util/ajvValidator.js";
 import { createErrorResponse } from "../util/errorReponse.js";
 
