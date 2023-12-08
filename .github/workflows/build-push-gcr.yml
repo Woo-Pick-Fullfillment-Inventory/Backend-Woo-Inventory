@@ -66,9 +66,15 @@ jobs:
       id-token: write
 
     steps:
-      - name: Pull image from registry
-        run: echo "The exported image-name is ${{ needs.build-push-gcr.outputs.image-name }}"
       - uses: actions/checkout@v3
+
+      - name: Authenticate to WIF
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SA_GH_ACTIONS }}
+          token_format: access_token
+          export_environment_variables: true
 
       - name: Replace Docker image
         run: |
@@ -76,7 +82,9 @@ jobs:
           cat docker-compose.integration-test.yml
 
       - name: Start dependencies and application
-        run: docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
+        run: 
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+          docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
 
       - name: Execute integration tests
         run: npm run test
