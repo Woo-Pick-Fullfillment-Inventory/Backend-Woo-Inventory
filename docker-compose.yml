@@ -14,8 +14,9 @@ services:
     image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
     volumes:
       - type: bind
-        source: ./scripts/run_up_spanner.sh
+        source: ${PWD}/scripts/run_up_spanner.sh
         target: /scripts/run_up_spanner.sh
+      - ${PWD}/migrations:/home/spanner
     environment:
       - SPANNER_EMULATOR_HOST=http://spanner-emulator:9020/
       - SPANNER_PROJECT_ID=test-project
