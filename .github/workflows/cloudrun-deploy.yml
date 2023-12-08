@@ -32,11 +32,11 @@ jobs:
 
       - name: Prepare and Deploy to Cloud Run
         run: |
-          sed -i "s|\$PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yaml
-          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yaml
-          sed -i "s|\$PORT_PLACEHOLDER|${{ secrets.PORT }}|g" cloudrun_deployment.yaml
-          sed -i "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yaml
-          sed -i "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" cloudrun_deployment.yaml
-          sed -i "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" cloudrun_deployment.yaml
+          sed -i "s|\$PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yml
+          sed -i "s|\$PORT_PLACEHOLDER|${{ secrets.PORT }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yml
+          sed -i "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" cloudrun_deployment.yml
 
-          gcloud run services replace cloudrun_deployment.yaml
+          gcloud run services replace cloudrun_deployment.yml
