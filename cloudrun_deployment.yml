@@ -23,7 +23,8 @@ spec:
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              key: JWT_SECRET
+              key: latest
+              name: JWT_SECRET
   traffic:
   - percent: 100
     latestRevision: true
