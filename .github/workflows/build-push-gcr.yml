@@ -67,15 +67,15 @@ jobs:
 
       - name: Replace Docker image
         run: |
-          sed -i 's#\$IMAGE_NAME#${{ needs.build-push-gcr.outputs.image-name }}#g' 'docker-compose.integration-test.yaml'
+          sed -i 's#\$IMAGE_NAME#${{ needs.build-push-gcr.outputs.image-name }}#g' 'docker-compose.integration-test.yml'
 
       - name: Start dependencies and application
-        run: docker-compose -f docker-compose.yaml -f docker-compose.github.yaml up -d
+        run: docker-compose -f docker-compose.yml -f docker-compose.github.yml up -d
 
       - name: Execute integration tests
         run: npm run test
 
       - name: Stop containers
         if: always()
-        run: docker-compose -f docker-compose.yaml -f docker-compose.github.yaml down
+        run: docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml down
           
