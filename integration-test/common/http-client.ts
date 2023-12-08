@@ -2,10 +2,10 @@ import axios from "axios";
 
 import type { AxiosRequestConfig } from "axios";
 
-const PORT = process.env["SERVICE_PORT"] || 8080;
+//const PORT = process.env["SERVICE_PORT"] || 3000;
 
 export const instance = axios.create({
-  baseURL: `http://127.0.0.1:${PORT}`,
+  baseURL: "http://localhost:3000",
   validateStatus: () => true,
 });
 
