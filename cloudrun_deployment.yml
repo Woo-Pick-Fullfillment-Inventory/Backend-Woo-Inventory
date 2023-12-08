@@ -2,12 +2,12 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: woopick-backend
+  labels:
+    cloud.googleapis.com/location: europe-west3
 spec:
   template:
     metadata:
       name: woopick-backend
-      labels:
-        cloud.googleapis.com/location: europe-west3
     spec:
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
