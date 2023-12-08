@@ -87,7 +87,9 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
 
       - name: Execute integration tests
-        run: npm run test
+        run: |-
+          npm install
+          npm run test
 
       - name: Stop containers
         if: always()
