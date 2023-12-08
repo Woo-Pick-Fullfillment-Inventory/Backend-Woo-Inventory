@@ -15,7 +15,7 @@ spec:
           containerPort: 8080
         env:
         - name: SERVICE_PORT
-          value: 8080
+          value: "8080"
         - name: SPANNER_PROJECT_ID
           value: $SPANNER_PROJECT_ID
         - name: SPANNER_INSTANCE_ID
