@@ -9,17 +9,13 @@ type UserModel = {
   };
 
 export async function insertAppUserToWooUser(user: UserModel): Promise<boolean> {
-  const query =
-      "INSERT INTO app_users_to_woo_users (app_user_id,woo_user_id) VALUES ($1, $2)";
-  const values = [
-    user.app_user_id,
-    user.woo_user_id,
-  ];
-
   try {
-    const result = await database.query(query, values);
-    assert(result.rowCount === 1, "Expected exactly one row to be affected");
-    return (result.rowCount === 1);
+    const result = await database.table("app_users_to_woo_users").insert({
+      app_user_id: user.app_user_id,
+      woo_user_id: user.woo_user_id,
+    });
+    assert (result.length === 1, "Expected exactly one row to be affected");
+    return result.length === 1;
   } catch (error) {
     logger.error("insertAppUserToWooUser", error);
     return false;
