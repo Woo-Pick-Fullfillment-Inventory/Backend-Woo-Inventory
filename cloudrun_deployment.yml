@@ -22,3 +22,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: JWT_SECRET
+        
+        label:
+          cloud.googleapis.com/location: europe-west3
+      
