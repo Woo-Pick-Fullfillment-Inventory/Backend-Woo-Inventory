@@ -105,7 +105,7 @@ const signup = async (req: Request, res: Response) => {
         req.body.token.split("|")[1],
       ),
     );
-
+    console.log("products", products);
     if (!products) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
 
     const appUserId = randomUUID();
