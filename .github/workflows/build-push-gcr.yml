@@ -22,7 +22,7 @@ jobs:
       contents: read  
 
     outputs:
-      image-name: ${{ steps.output-image-name-and-tag.outputs.image-name }}
+      image-name: ${{ steps.output-image-name.outputs.image-name }}
 
     steps:
       - name: Checkout
@@ -53,9 +53,9 @@ jobs:
           docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
           docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
           docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG
-      - id: output-image-name-and-tag
+      - id: output-image-name
         name: Set image name output
-        run: echo "image-name=europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest" >> $GITHUB_ENV
+        run: echo "image-name=europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest" >> $GITHUB_OUTPUT
   
   check-test:
     needs:
