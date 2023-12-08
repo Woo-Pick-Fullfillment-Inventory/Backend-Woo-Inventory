@@ -22,7 +22,7 @@ jobs:
       contents: read  
 
     outputs:
-      image-name: ${{ steps.output-image-name-and-tag.outputs.image-name }
+      image-name: ${{ steps.output-image-name-and-tag.outputs.image-name }}
 
     steps:
       - name: Checkout
