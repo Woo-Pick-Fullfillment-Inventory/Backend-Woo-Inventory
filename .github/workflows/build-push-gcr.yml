@@ -82,7 +82,7 @@ jobs:
           cat docker-compose.integration-test.yml
 
       - name: Start dependencies and application
-        run: 
+        run: |-
           gcloud auth configure-docker us-east1-docker.pkg.dev
           docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
 
