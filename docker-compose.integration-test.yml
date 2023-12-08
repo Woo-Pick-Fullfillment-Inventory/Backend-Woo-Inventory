@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   application:
-    image: test-image:latest
+    image: $IMAGE_NAME
     depends_on:
       gcloud-spanner-run-up:
         condition: service_completed_successfully
