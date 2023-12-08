@@ -1,1 +1,24 @@
-# add your configuration here
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: woopick-backend
+spec:
+  template:
+    metadata:
+      name: woopick-backend
+    spec:
+      containers:
+      - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+        env:
+        - name: PORT
+          value: $PORT
+        - name: SPANNER_PROJECT_ID
+          value: $SPANNER_PROJECT_ID
+        - name: SPANNER_INSTANCE_ID
+          value: $SPANNER_INSTANCE_ID
+        - name: SPANNER_DATABASE_ID
+          value: $SPANNER_DATABASE_ID
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
