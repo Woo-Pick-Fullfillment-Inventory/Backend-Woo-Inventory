@@ -17,8 +17,6 @@ COPY --from=ts-builder /app/dist ./dist/
 COPY --from=prod-dependencies /app/node_modules /node_modules
 COPY package.json ./
 
-ENV NODE_ENV=production
-
 USER 1000
 
 CMD ["node","./dist/app.js"]

@@ -9,7 +9,11 @@ services:
     ports:
       - 3000:3000
     environment:
+<<<<<<< HEAD
       SERVICE_PORT: 8080
+=======
+      SERVICE_PORT: 3000
+>>>>>>> main
       SPANNER_EMULATOR_HOST: spanner-emulator:9010
       SPANNER_PROJECT_ID: test-project
       SPANNER_INSTANCE_ID: test-instance

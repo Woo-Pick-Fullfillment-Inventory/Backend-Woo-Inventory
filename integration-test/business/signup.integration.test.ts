@@ -20,7 +20,6 @@ describe("Signup test", () => {
         password: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
       });
-    console.log(response.data);
     expect(response.status).toEqual(200);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
