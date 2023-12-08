@@ -1,14 +1,11 @@
 import database from "./index.js";
 import logger from "../../modules/logger.js";
 
-export async function getAppUser(email: string, username: string): Promise<boolean> {
+export async function getAppUser(email: string): Promise<boolean> {
   try {
-    const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email AND app_username = @username";
+    const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email";
 
-    const params = {
-      email,
-      username,
-    };
+    const params = { email };
 
     const [ rows ] = await database.run({
       sql: sqlQuery,

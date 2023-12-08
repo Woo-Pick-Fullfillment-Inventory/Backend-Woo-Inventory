@@ -16,7 +16,7 @@
       }
     },
     {
-        "scenarioName": "sign up auth - Incorrect Password",
+        "scenarioName": "sign up auth - Incorrect Token",
         "request": {
           "method": "GET",
           "url": "/wp-json/wc/v3/products",

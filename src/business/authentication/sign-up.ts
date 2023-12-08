@@ -65,10 +65,10 @@ const SERVICE_ERRORS = {
     type: "/auth/signup-failed",
     title: "internal server error",
   },
-  existingUser: {
+  existingEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
-    title: "invalid email or username",
+    title: "Existing email",
   },
   invalidEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
@@ -83,14 +83,13 @@ const SERVICE_ERRORS = {
 };
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-// TODO: validate username + password
 const signup = async (req: Request, res: Response) => {
   try {
 
     if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
       return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-    if (await getAppUser(req.body.email, req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUser);
+    if (await getAppUser(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
     if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
