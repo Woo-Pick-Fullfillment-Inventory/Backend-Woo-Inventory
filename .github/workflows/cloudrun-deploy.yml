@@ -29,16 +29,13 @@ jobs:
           token_format: access_token
           export_environment_variables: true
 
-      - name: Prepare YAML
+      - name: Prepare and Deploy to Cloud Run
         run: |
-          sed -e "s|\$PROJECT_ID|$PROJECT_ID|g" \
-              -e "s|\$IMAGE_NAME|$IMAGE_NAME|g" \
-              -e "s|\$PORT_PLACEHOLDER|${{ secrets.PORT }}|g" \
-              -e "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" \
-              -e "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" \
-              -e "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" \
-              deployment-template.yaml > deployment.yaml
+          sed -i "s|\$PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yaml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yaml
+          sed -i "s|\$PORT_PLACEHOLDER|${{ secrets.PORT }}|g" cloudrun_deployment.yaml
+          sed -i "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yaml
+          sed -i "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" cloudrun_deployment.yaml
+          sed -i "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" cloudrun_deployment.yaml
 
-      - name: Deploy to Cloud Run
-        run: |
           gcloud run services replace cloudrun_deployment.yaml
