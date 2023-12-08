@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   application:
-    image: $IMAGE_NAME
+    image: test-image:latest
     depends_on:
       gcloud-spanner-run-up:
         condition: service_completed_successfully
@@ -14,3 +14,5 @@ services:
       SPANNER_PROJECT_ID: test-project
       SPANNER_INSTANCE_ID: test-instance
       SPANNER_DATABASE_ID: woo-app-users
+      WOO_BASE_URL: http://wiremock:8080
+      JWT_SECRET: secret

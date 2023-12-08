@@ -50,6 +50,11 @@ const SERVICE_ERRORS = {
     type: "/auth/signup-failed",
     title: "invalid token",
   },
+  invalidJwtToken: {
+    statusCode: StatusCodes.UNAUTHORIZED,
+    type: "/auth/signup-failed",
+    title: "invalid jwt token",
+  },
   databaseError: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
@@ -105,7 +110,6 @@ const signup = async (req: Request, res: Response) => {
         req.body.token.split("|")[1],
       ),
     );
-    console.log("products", products);
     if (!products) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
 
     const appUserId = randomUUID();
@@ -134,7 +138,7 @@ const signup = async (req: Request, res: Response) => {
     if (!insertAppUserToWooUserResult)
       return createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
-    if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
+    if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
     const token = jwt.sign({ appUserId }, process.env["JWT_SECRET"]);
 
     return res.status(200).send({ token: token });
