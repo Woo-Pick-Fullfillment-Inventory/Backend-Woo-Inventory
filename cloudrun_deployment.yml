@@ -6,8 +6,6 @@ metadata:
     cloud.googleapis.com/location: europe-west3
 spec:
   template:
-    metadata:
-      name: woopick-backend
     spec:
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
