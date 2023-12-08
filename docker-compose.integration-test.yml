@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  application:
+    image: $IMAGE_NAME
+    depends_on:
+      gcloud-spanner-init:
+        condition: service_completed_successfully
+    ports:
+      - 8080:8080
+    environment:
+      SERVICE_PORT: 8080
+      SPANNER_EMULATOR_HOST: spanner-emulator:9010
+      SPANNER_PROJECT_ID: test-project
+      SPANNER_INSTANCE_ID: test-instance
+      SPANNER_DATABASE_ID: woo-app-users
