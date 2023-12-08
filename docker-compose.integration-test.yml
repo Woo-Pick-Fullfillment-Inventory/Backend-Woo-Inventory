@@ -4,7 +4,7 @@ services:
   application:
     image: $IMAGE_NAME
     depends_on:
-      gcloud-spanner-init:
+      gcloud-spanner-run-up:
         condition: service_completed_successfully
     ports:
       - 8080:8080

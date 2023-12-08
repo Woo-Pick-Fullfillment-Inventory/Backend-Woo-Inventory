@@ -63,6 +63,8 @@ jobs:
       id-token: write
 
     steps:
+      - name: Use exported image-name
+        run: echo "The exported image-name is ${{ needs.build-push-gcr.outputs.image-name }}"
       - uses: actions/checkout@v3
 
       - name: Replace Docker image
