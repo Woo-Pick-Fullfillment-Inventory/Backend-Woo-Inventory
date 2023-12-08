@@ -53,7 +53,7 @@ jobs:
           docker build -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
           docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
           docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG
-          echo "image-name=eu.gcr.io/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest" >> $GITHUB_OUTPUT
+          echo "image-name=europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest" >> $GITHUB_OUTPUT
   
   check-test:
     needs:
