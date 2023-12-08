@@ -7,6 +7,7 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: $SA_GH_ACTIONS
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
         env:
