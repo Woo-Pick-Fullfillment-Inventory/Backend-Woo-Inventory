@@ -1,7 +1,6 @@
 import assert from "assert";
 
 import database from "./index.js";
-import logger from "../../modules/logger.js";
 
 export async function updateAuthenticatedStatus(appUserId: string, isAuthenticated: boolean): Promise<boolean> {
   const query = "UPDATE app_users SET authenticated = @isAuthenticated WHERE app_user_id = @appUserId";
@@ -21,7 +20,6 @@ export async function updateAuthenticatedStatus(appUserId: string, isAuthenticat
 
     return true;
   } catch (error) {
-    logger.error("updateAuthenticatedStatus", error);
     return false;
   }
 }

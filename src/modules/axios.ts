@@ -7,7 +7,7 @@ const axiosGetRequest = async <T>(
   authenticationToken: string,
 ): Promise<T | undefined> => {
   try {
-    const response: AxiosResponse<T> = await axios.get<T>(url, { headers: { Authorization: authenticationToken } });
+    const response: AxiosResponse<T> = await axios.get(url, { headers: { Authorization: authenticationToken } });
     return response.data;
   } catch (error) {
     return undefined;

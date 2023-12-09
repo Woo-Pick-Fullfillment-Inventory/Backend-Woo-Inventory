@@ -1,7 +1,3 @@
-import {
-  type Static,
-  Type,
-} from "@sinclair/typebox";
 import dotenv from "dotenv";
 import * as EmailValidator from "email-validator";
 import { StatusCodes } from "http-status-codes";
@@ -9,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
 import { axiosGetRequest } from "../../modules/axios.js";
-import logger from "../../modules/logger.js";
 import { getAppUser } from "../../repository/spanner/get-app-user.js";
 import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
 import { insertAppUser } from "../../repository/spanner/insert-app-user.js";
@@ -24,15 +19,27 @@ import type {
 } from "express";
 dotenv.config();
 
-const Product = Type.Object({
-  id: Type.String(),
-  name: Type.String(),
-  permaLink: Type.String(),
-});
-
-const ProductList= Type.Array(Product);
-
-type ProductListTye = Static<typeof ProductList>;
+const systemStatusSchema = {
+  type: "object",
+  properties: {
+    environment: {
+      type: "object",
+      properties: {
+        home_url: { type: "string" },
+        site_url: { type: "string" },
+        version: { type: "string" },
+      },
+      required: [
+        "home_url",
+        "site_url",
+        "version",
+      ],
+      additionalProperties: true,
+    },
+  },
+  required: [ "environment" ],
+  additionalProperties: true,
+};
 
 const createUrlRequestBodySchema = {
   type: "object",
@@ -100,6 +107,7 @@ const SERVICE_ERRORS = {
     title: "invalid password",
   },
 };
+// empty array products validtor??
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const signup = async (req: Request, res: Response) => {
@@ -116,14 +124,15 @@ const signup = async (req: Request, res: Response) => {
 
     const base_url =
     process.env["NODE_ENV"] === "production" ? req.body.appURL : process.env["WOO_BASE_URL"];
-    const products = await axiosGetRequest<ProductListTye>(
-      `${base_url}/wp-json/wc/v3/products`,
+    const systemStatus = await axiosGetRequest(
+      `${base_url}/wp-json/wc/v3/system_status`,
       createBasicAuthHeaderToken(
         req.body.token.split("|")[0],
         req.body.token.split("|")[1],
       ),
     );
-    if (!products) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
+    console.log(validateTypeFactory(systemStatus, systemStatusSchema));
+    if (!systemStatus || !validateTypeFactory(systemStatus, systemStatusSchema)) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
 
     const appUserId = randomUUID();
     const wooUserId = randomUUID();
@@ -156,7 +165,6 @@ const signup = async (req: Request, res: Response) => {
 
     return res.status(200).send({ token: token });
   } catch (error) {
-    logger.error("signup", error);
     return createErrorResponse(res, SERVICE_ERRORS.internalServerError);
   }
 };
