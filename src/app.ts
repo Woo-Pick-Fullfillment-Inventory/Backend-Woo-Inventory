@@ -5,6 +5,7 @@ import helmet from "helmet";
 import createError from "http-errors";
 
 import authRouter from "./business/authentication/index.js";
+import { getAllAppUser } from "./repository/spanner/get-app-user.js";
 import webhookRouter from "./webhook/index.js";
 
 import type {
@@ -26,6 +27,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/webhook", webhookRouter);
 app.use("/api/v1", authRouter);
+
+app.get("/health", async (_req: Request, res: Response) => {
+  try {
+    const users = await getAllAppUser();
+    return res.status(200).json(users);
+  }
+  catch (error) {
+    return res.status(500).json("hehe");
+  }
+});
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory");
