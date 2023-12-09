@@ -1,10 +1,14 @@
+import {
+  type Static,
+  Type,
+} from "@sinclair/typebox";
 import dotenv from "dotenv";
 import * as EmailValidator from "email-validator";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { getAxiosWithBasicAuth } from "../../modules/axios.js";
+import { axiosGetRequest } from "../../modules/axios.js";
 import logger from "../../modules/logger.js";
 import { getAppUser } from "../../repository/spanner/get-app-user.js";
 import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
@@ -19,6 +23,16 @@ import type {
   Response,
 } from "express";
 dotenv.config();
+
+const Product = Type.Object({
+  id: Type.String(),
+  name: Type.String(),
+  permaLink: Type.String(),
+});
+
+const ProductList= Type.Array(Product);
+
+type ProductListTye = Static<typeof ProductList>;
 
 const createUrlRequestBodySchema = {
   type: "object",
@@ -102,8 +116,7 @@ const signup = async (req: Request, res: Response) => {
 
     const base_url =
     process.env["NODE_ENV"] === "production" ? req.body.appURL : process.env["WOO_BASE_URL"];
-
-    const products = await getAxiosWithBasicAuth(
+    const products = await axiosGetRequest<ProductListTye>(
       `${base_url}/wp-json/wc/v3/products`,
       createBasicAuthHeaderToken(
         req.body.token.split("|")[0],
