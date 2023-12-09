@@ -31,8 +31,9 @@ app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory");
 });
 
+const server = app.listen(PORT, () => console.log(`Running on ${PORT}`));
+server.setTimeout(0); // Set the timeout to 60 seconds (adjust as needed)
+
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
   next(createError(404));
 });
-
-app.listen(PORT, () => console.log(`Running on ${PORT}`));
