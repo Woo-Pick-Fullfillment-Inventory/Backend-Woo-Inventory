@@ -1,5 +1,4 @@
 import database from "./index.js";
-import logger from "../../modules/logger.js";
 
 export async function getAppUser(email: string): Promise<boolean> {
   try {
@@ -13,7 +12,6 @@ export async function getAppUser(email: string): Promise<boolean> {
     });
     return rows.length === 1;
   } catch (error) {
-    logger.error("getAppUser with email and username", error);
     return false;
   }
 }

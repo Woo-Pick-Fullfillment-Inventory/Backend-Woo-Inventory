@@ -1,7 +1,6 @@
 import assert from "node:assert";
 
 import database from "./index.js";
-import logger from "../../modules/logger.js";
 
 type UserModel = {
     woo_user_id: string;
@@ -19,7 +18,6 @@ export async function insertWooUser(user: UserModel): Promise<boolean> {
     assert (result.length === 1, "Expected exactly one row to be affected");
     return true;
   } catch (error) {
-    logger.error("insertWooUser", error);
     return false;
   }
 }

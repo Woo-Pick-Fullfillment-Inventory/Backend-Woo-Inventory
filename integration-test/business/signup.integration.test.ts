@@ -27,7 +27,7 @@ describe("Signup test", () => {
     expect(response.status).toEqual(200);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
-      url: "/wp-json/wc/v3/products",
+      url: "/wp-json/wc/v3/system_status",
     })).count).toEqual(1);
   });
 
@@ -44,7 +44,7 @@ describe("Signup test", () => {
     expect(response.status).toEqual(401);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
-      url: "/wp-json/wc/v3/products",
+      url: "/wp-json/wc/v3/system_status",
     })).count).toEqual(1);
   });
 
