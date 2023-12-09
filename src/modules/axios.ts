@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import logger from "./logger.js";
-
 import type { AxiosResponse } from "axios";
 
 const getAxiosWithBasicAuth = async <T>(
@@ -12,7 +10,6 @@ const getAxiosWithBasicAuth = async <T>(
     const response: AxiosResponse<T> = await axios.get(url, { headers: { Authorization: token } });
     return response.data;
   } catch (error) {
-    logger.error("axios error", error);
     return undefined;
   }
 };
