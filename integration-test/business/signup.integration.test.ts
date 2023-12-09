@@ -10,6 +10,10 @@ describe("Signup test", () => {
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
+  // write a test for url validator.
+  // if url is not valid, return 400 and axios error. please work on the logger
+  // if url is true but not, return 200 and some fucking html
+
   it("should return token when signup is successful", async () => {
     const email = randomUUID();
     const response = await httpClient.post("api/v1/auth/signup",
@@ -28,10 +32,11 @@ describe("Signup test", () => {
   });
 
   it("should return error when token is invalid", async () => {
+    const email = randomUUID();
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
-        email: "test456@gmail.com",
+        email: `${email}@gmail.com`,
         username: "test",
         password: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",

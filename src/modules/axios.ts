@@ -2,16 +2,16 @@ import axios from "axios";
 
 import type { AxiosResponse } from "axios";
 
-const getAxiosWithBasicAuth = async <T>(
+const axiosGetRequest = async <T>(
   url: string,
-  token: string,
+  authenticationToken: string,
 ): Promise<T | undefined> => {
   try {
-    const response: AxiosResponse<T> = await axios.get(url, { headers: { Authorization: token } });
+    const response: AxiosResponse<T> = await axios.get<T>(url, { headers: { Authorization: authenticationToken } });
     return response.data;
   } catch (error) {
     return undefined;
   }
 };
 
-export { getAxiosWithBasicAuth };
+export { axiosGetRequest };

@@ -1,18 +1,13 @@
 import { LoggingWinston } from "@google-cloud/logging-winston";
 import winston from "winston";
 
-// Imports the Google Cloud client library for Winston
+const loggingWinston = new LoggingWinston({ projectId: process.env["SPANNER_PROJECT_ID"] });
 
-// Replace 'YOUR_PROJECT_ID' with your actual Google Cloud project ID
-const loggingWinston = new LoggingWinston({ projectId: "cst-pbag-aiml-test" });
-
-// Create a Winston logger that streams to Cloud Logging
-// Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
 const logger = winston.createLogger({
-  level: "info",
+  level: "info", // Set the logging level to "error"
+  format: winston.format.simple(), // Use a simple log format
   transports: [
     new winston.transports.Console(),
-    // Add Cloud Logging
     loggingWinston,
   ],
 });

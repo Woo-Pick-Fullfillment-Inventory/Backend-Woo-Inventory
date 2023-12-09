@@ -2,16 +2,22 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: woopick-backend
+  labels:
+    cloud.googleapis.com/location: europe-west3
 spec:
   template:
-    metadata:
-      name: woopick-backend
     spec:
+      serviceAccountName: $SA_GH_ACTIONS
       containers:
       - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+        ports:
+        - name: http1
+          containerPort: 8080
         env:
-        - name: PORT
-          value: $PORT
+        - name: NODE_ENV
+          value: "production"
+        - name: SERVICE_PORT
+          value: "8080"
         - name: SPANNER_PROJECT_ID
           value: $SPANNER_PROJECT_ID
         - name: SPANNER_INSTANCE_ID
@@ -21,4 +27,9 @@ spec:
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
+              key: latest
               name: JWT_SECRET
+  traffic:
+  - percent: 100
+    latestRevision: true
+      
