@@ -29,11 +29,6 @@ spec:
             secretKeyRef:
               key: latest
               name: JWT_SECRET
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          valueFrom:
-            secretKeyRef:
-              key: latest
-              name: GOOGLE_APPLICATION_CREDENTIALS
   traffic:
   - percent: 100
     latestRevision: true
