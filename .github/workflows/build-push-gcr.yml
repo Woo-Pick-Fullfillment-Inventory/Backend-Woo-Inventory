@@ -61,6 +61,6 @@ jobs:
           sed -i "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yml
           sed -i "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" cloudrun_deployment.yml
           sed -i "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" cloudrun_deployment.yml
-          sed -i "s|\$SA_GH_ACTIONS|${{ secrets.SA_GH_ACTIONS }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment.yml
 
           gcloud run services replace cloudrun_deployment.yml
