@@ -54,6 +54,11 @@ jobs:
         - build-push-gcr
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write 
+      contents: read  
+
+
     steps:
         - uses: actions/checkout@v3
 
