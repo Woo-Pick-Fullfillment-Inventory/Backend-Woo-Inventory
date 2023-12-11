@@ -16,7 +16,7 @@ export async function getAppUser(email: string): Promise<boolean> {
   }
 }
 
-export async function getAllAppUser(): Promise<unknown> {
+/* export async function getAllAppUser(): Promise<unknown> {
   try {
     const sqlQuery = "SELECT * FROM app_users";
 
@@ -25,4 +25,4 @@ export async function getAllAppUser(): Promise<unknown> {
   } catch (error) {
     return false;
   }
-}
+} */
