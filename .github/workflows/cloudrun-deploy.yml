@@ -3,20 +3,15 @@ on:
     branches:
       - 'main'
 
-env:
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  IMAGE_NAME: woopick-backend
-  REGION: europe-west3
-  DEPLOYMENT_NAME: woopick-backend
-
 jobs:
-  deploy:
+  deploy-to-cloudrun:
+    name: Deploy to Cloud Run
     runs-on: ubuntu-latest
 
     permissions:
       id-token: write 
       contents: read  
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -31,11 +26,11 @@ jobs:
 
       - name: Prepare and Deploy to Cloud Run
         run: |
-          sed -i "s|\$PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yml
-          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yml
-          sed -i "s|\$SPANNER_PROJECT_ID|$PROJECT_ID|g" cloudrun_deployment.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
+          sed -i "s|\$IMAGE_NAME|${{ secrets.IMAGE_NAME }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SPANNER_PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
           sed -i "s|\$SPANNER_INSTANCE_ID|${{ secrets.SPANNER_INSTANCE_ID }}|g" cloudrun_deployment.yml
           sed -i "s|\$SPANNER_DATABASE_ID|${{ secrets.SPANNER_DATABASE_ID }}|g" cloudrun_deployment.yml
-          sed -i "s|\$SA_GH_ACTIONS|${{ secrets.SA_GH_ACTIONS }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment.yml
 
           gcloud run services replace cloudrun_deployment.yml

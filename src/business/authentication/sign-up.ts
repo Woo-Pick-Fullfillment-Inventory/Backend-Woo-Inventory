@@ -66,10 +66,10 @@ const SERVICE_ERRORS = {
     type: "/auth/signup-failed",
     title: "invalid request",
   },
-  invalidToken: {
+  invalidTokenOrAppUrl: {
     statusCode: StatusCodes.UNAUTHORIZED,
     type: "/auth/signup-failed",
-    title: "invalid token",
+    title: "invalid token or app url",
   },
   invalidJwtToken: {
     statusCode: StatusCodes.UNAUTHORIZED,
@@ -132,7 +132,7 @@ const signup = async (req: Request, res: Response) => {
       ),
     );
     console.log(validateTypeFactory(systemStatus, systemStatusSchema));
-    if (!systemStatus || !validateTypeFactory(systemStatus, systemStatusSchema)) return createErrorResponse(res, SERVICE_ERRORS.invalidToken);
+    if (!systemStatus || !validateTypeFactory(systemStatus, systemStatusSchema)) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
     const appUserId = randomUUID();
     const wooUserId = randomUUID();
