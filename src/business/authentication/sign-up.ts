@@ -12,6 +12,7 @@ import { getSystemStatus } from "../../repository/woo-api/get-system-status.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createBasicAuthHeaderToken } from "../../util/createBasicAuthHeader.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
+import { hashPasswordAsync } from "../../util/hashPassword.js";
 
 import type {
   Request,
@@ -112,11 +113,14 @@ const signup = async (req: Request, res: Response) => {
   const appUserId = randomUUID();
   const wooUserId = randomUUID();
 
+  const hashedPassword = await hashPasswordAsync(req.body.password, 10);
+  if (!hashedPassword) return createErrorResponse(res, SERVICE_ERRORS.internalServerError);
+
   const insertAppUserResult = await insertAppUser({
     app_user_id: appUserId,
     app_email: req.body.email,
     app_username: req.body.username,
-    app_password: req.body.password,
+    app_password: hashedPassword,
     app_url: req.body.appURL,
     authenticated: true,
   });

@@ -8,6 +8,7 @@ import {
 } from "../../repository/spanner/get-app-user.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
+import { hashPasswordAsync } from "../../util/hashPassword.js";
 
 import type {
   Request,
@@ -57,6 +58,11 @@ const SERVICE_ERRORS = {
     type: "/auth/signin-failed",
     title: "cannot generate response",
   },
+  internalServerError: {
+    statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+    type: "/auth/signin-failed",
+    title: "internal server error",
+  },
 };
 
 const signin = async (req: Request, res: Response) => {
@@ -67,14 +73,17 @@ const signin = async (req: Request, res: Response) => {
   if (req.body.username && !req.body.email && !validateTypeFactory(req.body, createSignInBodyRequestWithUsername))
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-  if (req.body.email && !getExistingAppUserByEmailandPassword(req.body.email, req.body.password))
+  const hashedPassword = await hashPasswordAsync(req.body.password, 10);
+  if (!hashedPassword) return createErrorResponse(res, SERVICE_ERRORS.internalServerError);
+
+  if (req.body.email && !getExistingAppUserByEmailandPassword(req.body.email, hashedPassword))
     return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (req.body.username && !getExistingAppUserByUsernamelandPassword(req.body.username, req.body.password))
+  if (req.body.username && !getExistingAppUserByUsernamelandPassword(req.body.username, hashedPassword))
     return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (req.body.email) appUserId = await getExistingAppUserByEmailandPassword(req.body.email, req.body.password);
-  if (req.body.username) appUserId = await getExistingAppUserByUsernamelandPassword(req.body.username, req.body.password);
+  if (req.body.email) appUserId = await getExistingAppUserByEmailandPassword(req.body.email, hashedPassword);
+  if (req.body.username) appUserId = await getExistingAppUserByUsernamelandPassword(req.body.username, hashedPassword);
 
   if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
   const token = jwt.sign({ appUserId }, process.env["JWT_SECRET"]);

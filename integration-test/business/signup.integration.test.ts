@@ -56,7 +56,7 @@ describe("Signup test", () => {
     expect(response.status).toEqual(400);
   });
 
-  it.only("should return 400 when user already exists", async () => {
+  it("should return 400 when user already exists", async () => {
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
