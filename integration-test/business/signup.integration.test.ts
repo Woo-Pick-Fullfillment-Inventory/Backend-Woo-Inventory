@@ -18,7 +18,7 @@ describe("Signup test", () => {
     const email = randomUUID();
     const response = await httpClient.post("api/v1/auth/signup",
       {
-        appURL: "https://testwebsite.com",
+        appURL: "https://testwebsite.commm",
         email: `${email}@gmail.com`,
         username: "test",
         password: "Test123abcjs",
