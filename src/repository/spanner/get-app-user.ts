@@ -34,11 +34,10 @@ export async function getExistingAppUserByEmailandPassword(email: string, passwo
   const [ rows ] = await database.run({
     sql: sqlQuery,
     params,
-  });
-  const result: AppUser[] = rows as AppUser[];
-  assert(result.length === 1, "expect one user with this email and password");
-  if (result[0] === undefined) return undefined;
-  return result[0].app_user_id;
+  }) as unknown as [AppUser[]];
+  assert(rows.length === 1, "expect one user with this email and password");
+  if (!rows[0]) return undefined;
+  return rows[0].app_user_id;
 }
 
 export async function getExistingAppUserByUsernamelandPassword(username: string, password: string): Promise<string | undefined> {
