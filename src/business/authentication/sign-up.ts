@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { getAppUser } from "../../repository/spanner/get-app-user.js";
+import { getExistingAppUserByEmail } from "../../repository/spanner/get-app-user.js";
 import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
 import { insertAppUser } from "../../repository/spanner/insert-app-user.js";
 import { insertWooUser } from "../../repository/spanner/insert-woo-user.js";
@@ -92,7 +92,7 @@ const signup = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-  if (await getAppUser(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await getExistingAppUserByEmail(req.body.email) === false) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
   if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
