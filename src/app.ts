@@ -31,10 +31,10 @@ app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory");
 });
 
-app.listen(PORT, () => console.log(`Running on ${PORT}`));
-
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
-  next(createError(500));
+  next(createError(404));
 });
+
+app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
 // TODO: add cors
