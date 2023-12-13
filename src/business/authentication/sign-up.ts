@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { getExistingAppUserByEmail } from "../../repository/spanner/get-app-user.js";
+import { getAppUserByEmail } from "../../repository/spanner/get-app-user.js";
 import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
 import { insertAppUser } from "../../repository/spanner/insert-app-user.js";
 import { insertWooUser } from "../../repository/spanner/insert-woo-user.js";
@@ -12,7 +12,6 @@ import { getSystemStatus } from "../../repository/woo-api/get-system-status.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createBasicAuthHeaderToken } from "../../util/createBasicAuthHeader.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
-import { hashPasswordAsync } from "../../util/hashPassword.js";
 
 import type {
   Request,
@@ -25,14 +24,12 @@ const createUrlRequestBodySchema = {
   properties: {
     appURL: { type: "string" },
     email: { type: "string" },
-    username: { type: "string" },
     password: { type: "string" },
     token: { type: "string" },
   },
   required: [
     "appURL",
     "email",
-    "username",
     "password",
     "token",
   ],
@@ -93,7 +90,7 @@ const signup = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-  if (await getExistingAppUserByEmail(req.body.email) === false) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (undefined !== await getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
   if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
@@ -113,14 +110,10 @@ const signup = async (req: Request, res: Response) => {
   const appUserId = randomUUID();
   const wooUserId = randomUUID();
 
-  const hashedPassword = await hashPasswordAsync(req.body.password, 10);
-  if (!hashedPassword) return createErrorResponse(res, SERVICE_ERRORS.internalServerError);
-
   const insertAppUserResult = await insertAppUser({
     app_user_id: appUserId,
     app_email: req.body.email,
-    app_username: req.body.username,
-    app_password: hashedPassword,
+    app_password: req.body.password,
     app_url: req.body.appURL,
     authenticated: true,
   });
