@@ -1,28 +1,27 @@
 import database from "./index.js";
+import { fromJsonArrayToObject } from "../../util/fromJsonArrayToObject.js";
 
-export async function getAppUser(email: string): Promise<boolean> {
-  try {
-    const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email";
+type AppUserSpannerType = {
+  app_user_id: string;
+  app_email: string;
+  app_password: string;
+  app_url: string;
+  authenticated: boolean;
+};
 
-    const params = { email };
+const isResultAppUserSpannerType = (result: unknown): result is AppUserSpannerType => result!== undefined;
 
-    const [ rows ] = await database.run({
-      sql: sqlQuery,
-      params,
-    });
-    return rows.length === 1;
-  } catch (error) {
-    return false;
-  }
+export async function getAppUserByEmail(email: string): Promise<AppUserSpannerType | undefined> {
+  const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email";
+
+  const params = { email };
+
+  const [ rows ] = await database.run({
+    sql: sqlQuery,
+    params,
+  });
+  const appUser = fromJsonArrayToObject(rows);
+  if (appUser === undefined) return undefined;
+  if (!isResultAppUserSpannerType(appUser)) return undefined;
+  return appUser;
 }
-
-/* export async function getAllAppUser(): Promise<unknown> {
-  try {
-    const sqlQuery = "SELECT * FROM app_users";
-
-    const [ rows ]= await database.run({ sql: sqlQuery });
-    return rows;
-  } catch (error) {
-    return false;
-  }
-} */

@@ -8,18 +8,12 @@ export async function updateAuthenticatedStatus(appUserId: string, isAuthenticat
     isAuthenticated: isAuthenticated,
     appUserId: appUserId,
   };
+  const [ result ] = await database.run({
+    sql: query,
+    params,
+  });
 
-  try {
-    const [ result ] = await database.run({
-      sql: query,
-      params,
-    });
-
-    const rowsAffected = result.length;
-    assert(rowsAffected === 1, "Expected exactly one row to be affected");
-
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const rowsAffected = result.length;
+  assert(rowsAffected === 1, "Expected exactly one row to be affected");
+  return true;
 }

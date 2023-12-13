@@ -9,15 +9,11 @@ type UserModel = {
   };
 
 export async function insertWooUser(user: UserModel): Promise<boolean> {
-  try {
-    const result = await database.table("woo_users").insert({
-      woo_user_id: user.woo_user_id,
-      woo_token: user.woo_token,
-      woo_secret: user.woo_secret,
-    });
-    assert (result.length === 1, "Expected exactly one row to be affected");
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const result = await database.table("woo_users").insert({
+    woo_user_id: user.woo_user_id,
+    woo_token: user.woo_token,
+    woo_secret: user.woo_secret,
+  });
+  assert (result.length === 1, "Expected exactly one row to be affected");
+  return true;
 }

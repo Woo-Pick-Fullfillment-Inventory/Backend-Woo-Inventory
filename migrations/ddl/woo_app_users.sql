@@ -1,7 +1,6 @@
 CREATE TABLE app_users (
     app_user_id STRING(255) NOT NULL,
     app_email STRING(255) NOT NULL,
-    app_username STRING(255) NOT NULL,
     app_password STRING(255) NOT NULL,
     app_url STRING(255) NOT NULL,
     authenticated BOOL NOT NULL

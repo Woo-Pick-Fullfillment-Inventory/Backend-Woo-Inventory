@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { getAppUser } from "../../repository/spanner/get-app-user.js";
+import { getAppUserByEmail } from "../../repository/spanner/get-app-user.js";
 import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
 import { insertAppUser } from "../../repository/spanner/insert-app-user.js";
 import { insertWooUser } from "../../repository/spanner/insert-woo-user.js";
@@ -24,14 +24,12 @@ const createUrlRequestBodySchema = {
   properties: {
     appURL: { type: "string" },
     email: { type: "string" },
-    username: { type: "string" },
     password: { type: "string" },
     token: { type: "string" },
   },
   required: [
     "appURL",
     "email",
-    "username",
     "password",
     "token",
   ],
@@ -92,7 +90,7 @@ const signup = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-  if (await getAppUser(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (undefined !== await getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
   if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
@@ -115,7 +113,6 @@ const signup = async (req: Request, res: Response) => {
   const insertAppUserResult = await insertAppUser({
     app_user_id: appUserId,
     app_email: req.body.email,
-    app_username: req.body.username,
     app_password: req.body.password,
     app_url: req.body.appURL,
     authenticated: true,
