@@ -4,10 +4,12 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { getAppUserByEmail } from "../../repository/spanner/get-app-user.js";
-import { insertAppUserToWooUser } from "../../repository/spanner/insert-app-user-to-woo-user.js";
-import { insertAppUser } from "../../repository/spanner/insert-app-user.js";
-import { insertWooUser } from "../../repository/spanner/insert-woo-user.js";
+import {
+  _getAppUserByEmail,
+  _insertAppUser,
+  _insertAppUserToWooUser,
+  _insertWooUser,
+} from "../../repository/spanner/index.js";
 import { getSystemStatus } from "../../repository/woo-api/get-system-status.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createBasicAuthHeaderToken } from "../../util/createBasicAuthHeader.js";
@@ -90,7 +92,7 @@ const signup = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
 
-  if (undefined !== await getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (undefined !== await _getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
   if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
@@ -110,7 +112,7 @@ const signup = async (req: Request, res: Response) => {
   const appUserId = randomUUID();
   const wooUserId = randomUUID();
 
-  const insertAppUserResult = await insertAppUser({
+  const insertAppUserResult = await _insertAppUser({
     app_user_id: appUserId,
     app_email: req.body.email,
     app_password: req.body.password,
@@ -119,14 +121,14 @@ const signup = async (req: Request, res: Response) => {
   });
   if (!insertAppUserResult)
     return createErrorResponse(res, SERVICE_ERRORS.databaseError);
-  const insertWooUserResult = await insertWooUser({
+  const insertWooUserResult = await _insertWooUser({
     woo_user_id: wooUserId,
     woo_token: req.body.token.split("|")[0],
     woo_secret: req.body.token.split("|")[1],
   });
   if (!insertWooUserResult)
     return createErrorResponse(res, SERVICE_ERRORS.databaseError);
-  const insertAppUserToWooUserResult = await insertAppUserToWooUser({
+  const insertAppUserToWooUserResult = await _insertAppUserToWooUser({
     app_user_id: appUserId,
     woo_user_id: wooUserId,
   });

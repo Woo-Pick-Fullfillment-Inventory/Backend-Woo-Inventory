@@ -1,5 +1,6 @@
-import database from "./index.js";
 import { fromJsonArrayToObject } from "../../util/fromJsonArrayToObject.js";
+
+import type { SpannerClientWooAppUsers } from "./index.js";
 
 type AppUserSpannerType = {
   app_user_id: string;
@@ -11,17 +12,19 @@ type AppUserSpannerType = {
 
 const isResultAppUserSpannerType = (result: unknown): result is AppUserSpannerType => result!== undefined;
 
-export async function getAppUserByEmail(email: string): Promise<AppUserSpannerType | undefined> {
-  const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email";
+export const getAppUserByEmailFactory = (spanner: SpannerClientWooAppUsers) => {
+  return async (email: string): Promise<AppUserSpannerType | undefined> => {
+    const sqlQuery = "SELECT * FROM app_users WHERE app_email = @email";
 
-  const params = { email };
+    const params = { email };
 
-  const [ rows ] = await database.run({
-    sql: sqlQuery,
-    params,
-  });
-  const appUser = fromJsonArrayToObject(rows);
-  if (appUser === undefined) return undefined;
-  if (!isResultAppUserSpannerType(appUser)) return undefined;
-  return appUser;
-}
+    const [ rows ] = await spanner.database.run({
+      sql: sqlQuery,
+      params,
+    });
+    const appUser = fromJsonArrayToObject(rows);
+    if (appUser === undefined) return undefined;
+    if (!isResultAppUserSpannerType(appUser)) return undefined;
+    return appUser;
+  };
+};
