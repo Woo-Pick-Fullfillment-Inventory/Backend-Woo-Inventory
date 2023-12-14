@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
-import { getAppUserByEmail } from "../../repository/spanner/get-app-user.js";
+import { _getAppUserByEmail } from "../../repository/spanner/index.js";
 import { validateTypeFactory } from "../../util/ajvValidator.js";
 import { createErrorResponse } from "../../util/errorReponse.js";
 
@@ -57,7 +57,7 @@ const signin = async (req: Request, res: Response) => {
 
   if (!validateTypeFactory(req.body, createSignInBodyRequest)) return SERVICE_ERRORS.invalidRequest;
 
-  const appUser = await getAppUserByEmail(req.body.email);
+  const appUser = await _getAppUserByEmail(req.body.email);
 
   if (!appUser) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
