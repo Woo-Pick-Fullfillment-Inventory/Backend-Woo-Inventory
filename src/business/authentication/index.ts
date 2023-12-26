@@ -2,7 +2,7 @@ import express from "express";
 
 import signin from "./sign-in.js";
 import signup from "./sign-up.js";
-import { use } from "../../util/errorFunction.js";
+import { use } from "../../modules/create-error-function.js";
 
 const authRouter = express.Router();
 

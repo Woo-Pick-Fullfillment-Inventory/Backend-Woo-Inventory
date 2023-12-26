@@ -1,5 +1,3 @@
-import assert from "assert";
-
 import type { SpannerClientWooAppUsers } from "./index.js";
 
 export const updateAuthenticatedStatusFactory = (spanner: SpannerClientWooAppUsers) => {
@@ -14,8 +12,7 @@ export const updateAuthenticatedStatusFactory = (spanner: SpannerClientWooAppUse
       params,
     });
 
-    const rowsAffected = result.length;
-    assert(rowsAffected === 1, "Expected exactly one row to be affected");
+    if (result.length !== 1) return false;
     return true;
   };
 };

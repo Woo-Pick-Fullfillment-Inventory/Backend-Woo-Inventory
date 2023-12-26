@@ -1,5 +1,5 @@
 {
-  "name": "expressnodetemplate",
+  "name": "backendwoopickinventory",
   "version": "1.0.0",
   "description": "Node.js setup with Express and TypeScript",
   "main": "app.js",
