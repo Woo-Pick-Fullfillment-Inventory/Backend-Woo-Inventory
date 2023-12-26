@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 
-import createAxiosClient from "../../modules/axios.js";
+import createAxiosClient from "../../modules/create-axios-client.js";
 
 import type { Static } from "@sinclair/typebox";
 
@@ -14,7 +14,9 @@ const SystemStatus = Type.Object({
 
 type SystemStatusType = Static<typeof SystemStatus>;
 
-export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType> => {
+const isWooResultSystemStatusType = (result: unknown): result is SystemStatusType => result!== undefined;
+
+export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType | undefined> => {
   const { get } = createAxiosClient<SystemStatusType>({
     config: {
       baseURL: baseUrl,
@@ -31,5 +33,6 @@ export const getSystemStatus = async (baseUrl: string, token: string): Promise<S
     ],
   });
   const { data } = await get("/wp-json/wc/v3/system_status", { headers: { Authorization: token } });
+  if (!isWooResultSystemStatusType(data)) return undefined;
   return data;
 };

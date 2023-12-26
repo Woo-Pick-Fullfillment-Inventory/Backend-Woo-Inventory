@@ -1,5 +1,3 @@
-import assert from "node:assert";
-
 import type { SpannerClientWooAppUsers } from ".";
 
 type UserModel = {
@@ -18,7 +16,7 @@ export const insertAppUserFactory = (spanner: SpannerClientWooAppUsers) => {
       app_url: user.app_url,
       authenticated: user.authenticated,
     });
-    assert (result.length === 1, "Expected exactly one row to be affected");
+    if (result.length !== 1) return false;
     return true;
   };
 };

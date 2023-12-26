@@ -6,8 +6,8 @@ import {
   _insertWooUser,
   _updateAuthenticatedStatus,
 } from "../repository/spanner/index.js";
-import { validateTypeFactory } from "../util/ajvValidator.js";
-import { createErrorResponse } from "../util/errorReponse.js";
+import { validateTypeFactory } from "../modules/create-ajv-validator.js";
+import { createErrorResponse } from "../util/create-error-response.js";
 
 import type {
   Request,

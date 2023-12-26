@@ -1,4 +1,4 @@
-import { fromJsonArrayToObject } from "../../util/fromJsonArrayToObject.js";
+import { fromJsonArrayToObject } from "../../modules/convert-from-jsonArray-to-object.js";
 
 import type { SpannerClientWooAppUsers } from "./index.js";
 
@@ -10,7 +10,7 @@ type AppUserSpannerType = {
   authenticated: boolean;
 };
 
-const isResultAppUserSpannerType = (result: unknown): result is AppUserSpannerType => result!== undefined;
+const isQueryResultAppUserSpannerType = (result: unknown): result is AppUserSpannerType => result!== undefined;
 
 export const getAppUserByEmailFactory = (spanner: SpannerClientWooAppUsers) => {
   return async (email: string): Promise<AppUserSpannerType | undefined> => {
@@ -23,8 +23,7 @@ export const getAppUserByEmailFactory = (spanner: SpannerClientWooAppUsers) => {
       params,
     });
     const appUser = fromJsonArrayToObject(rows);
-    if (appUser === undefined) return undefined;
-    if (!isResultAppUserSpannerType(appUser)) return undefined;
+    if (!appUser || !isQueryResultAppUserSpannerType(appUser)) return undefined;
     return appUser;
   };
 };
