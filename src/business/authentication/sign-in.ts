@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
-import { _getAppUserByEmail } from "../../repository/spanner/index.js";
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
+import { _getAppUserByEmail } from "../../repository/spanner/index.js";
 import { createErrorResponse } from "../../util/create-error-response.js";
 
 import type {
@@ -54,7 +54,6 @@ const SERVICE_ERRORS = {
 };
 
 const signin = async (req: Request, res: Response) => {
-
   if (!validateTypeFactory(req.body, createSignInBodyRequest)) return SERVICE_ERRORS.invalidRequest;
 
   const appUser = await _getAppUserByEmail(req.body.email);
@@ -67,7 +66,6 @@ const signin = async (req: Request, res: Response) => {
   const token = jwt.sign({ appUserId: appUser.app_user_id }, process.env["JWT_SECRET"]);
 
   return res.status(200).send({ jwtToken: token });
-
 };
 
 export default signin;
