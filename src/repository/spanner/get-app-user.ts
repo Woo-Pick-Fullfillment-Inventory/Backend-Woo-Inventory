@@ -1,4 +1,4 @@
-import { fromJsonArrayToObject } from "../../modules/convert-from-jsonArray-to-object.js";
+import { fromJsonArrayToObject } from "../../modules/convert-from-json-array-to-object.js";
 
 import type { SpannerClientWooAppUsers } from "./index.js";
 

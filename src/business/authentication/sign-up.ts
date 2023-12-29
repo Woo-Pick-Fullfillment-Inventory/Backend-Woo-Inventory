@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import * as EmailValidator from "email-validator";
+import * as emailValidator from "email-validator";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
@@ -94,7 +94,7 @@ const signup = async (req: Request, res: Response) => {
 
   if (undefined !== await _getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (!EmailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
+  if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
   if (!passwordRegex.test(req.body.password)) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 

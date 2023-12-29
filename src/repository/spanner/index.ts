@@ -26,13 +26,10 @@ export type SpannerClientWooAppUsers = {
 }
 
 const spannerClient: SpannerClientWooAppUsers = {
-  spanner: new Spanner({ projectId: process.env["SPANNER_PROJECT_ID"] || "test-project" }),
-  instance: spanner.instance(process.env["SPANNER_INSTANCE_ID"] || "test-instance"),
-  database: instance.database(process.env["SPANNER_DATABASE_ID"] || "woo-app-users"),
+  spanner,
+  instance,
+  database,
 };
-
-// TODO : make database abstract
-export default database;
 
 export const _getAppUserByEmail = getAppUserByEmailFactory(spannerClient);
 export const _insertAppUserToWooUser = insertAppUserToWooUserFactory(spannerClient);
