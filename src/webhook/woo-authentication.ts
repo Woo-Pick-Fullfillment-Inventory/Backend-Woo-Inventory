@@ -47,7 +47,6 @@ const SERVICE_ERRORS = {
 };
 
 const wooAuthenticator = async (req: Request, res: Response) => {
-  console.log("hello webhook ...");
   if (!validateTypeFactory(req.body, wooWebHookSchema)) {
     throw createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
   }
