@@ -29,7 +29,7 @@ const createUrlRequestBodySchema = {
     email: { type: "string" },
     username: { type: "string" },
     password: { type: "string" },
-    passwwordConfirmation: { type: "string" },
+    passwordConfirmation: { type: "string" },
     token: { type: "string" },
   },
   required: [
@@ -37,7 +37,7 @@ const createUrlRequestBodySchema = {
     "email",
     "username",
     "password",
-    "passwwordConfirmation",
+    "passwordConfirmation",
     "token",
   ],
   additionalProperties: false,
@@ -98,7 +98,7 @@ const signup = async (req: Request, res: Response) => {
 
   if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
-  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.passwwordConfirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
+  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.passwordConfirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
     process.env["NODE_ENV"] === "production" ? req.body.appURL : process.env["WOO_BASE_URL"];

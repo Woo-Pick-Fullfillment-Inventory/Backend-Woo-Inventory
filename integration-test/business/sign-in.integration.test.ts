@@ -17,7 +17,7 @@ describe("Signin test", () => {
         email: email,
         username: username,
         password: "Test123abcjs",
-        passwwordConfirmation: "Test123abcjs",
+        passwordConfirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
       });
     expect(signUpResponse.status).toEqual(200);
