@@ -6,8 +6,6 @@ import { httpClient } from "../common/http-client";
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 
 describe("Signup test", () => {
-
-  const email = randomUUID();
   afterEach(async () => {
     await mambuApiMockServer.requests.deleteAllRequests();
   });
@@ -16,10 +14,13 @@ describe("Signup test", () => {
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
-        email: `${email}@email.com`,
+        email: `${randomUUID()}@email.com`,
+        username: randomUUID(),
         password: "Test123abcjs",
+        passwwordConfirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
       });
+
     expect(response.status).toEqual(200);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
@@ -31,8 +32,10 @@ describe("Signup test", () => {
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
-        email: `${email}@gmail.com`,
+        email: `${randomUUID()}@email.com`,
+        username: randomUUID(),
         password: "Test123abcjs",
+        passwwordConfirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
       });
     expect(response.status).toEqual(401);
@@ -46,8 +49,10 @@ describe("Signup test", () => {
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
-        email: "test@email.com",
+        email: `${randomUUID()}@email.com`,
+        username: "someone",
         password: "Test123abcjs",
+        passwwordConfirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
       });
     expect(response.status).toEqual(400);
@@ -58,7 +63,9 @@ describe("Signup test", () => {
       {
         appURL: "https://testwebsite.com",
         email: "test456@.com",
+        username: randomUUID(),
         password: "Test123abcjs",
+        passwordConfirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
       });
     expect(response.status).toEqual(400);
@@ -68,8 +75,10 @@ describe("Signup test", () => {
     const response = await httpClient.post("api/v1/auth/signup",
       {
         appURL: "https://testwebsite.com",
-        email: "tes789t@email.com",
+        email: `${randomUUID()}@email.com`,
+        username: randomUUID(),
         password: "123",
+        passwordConfirmation: "123",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
       });
     expect(response.status).toEqual(400);

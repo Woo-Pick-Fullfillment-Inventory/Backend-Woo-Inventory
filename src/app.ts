@@ -1,5 +1,4 @@
 import bodyParser from "body-parser";
-import timeout from "connect-timeout";
 import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
@@ -24,8 +23,6 @@ const PORT = process.env["SERVICE_PORT"] || 8080;
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(timeout(10000));
-
 app.use("/webhook", webhookRouter);
 app.use("/api/v1", authRouter);
 

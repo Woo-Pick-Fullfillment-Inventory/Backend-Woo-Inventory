@@ -1,7 +1,10 @@
 import { Spanner } from "@google-cloud/spanner";
 import dotenv from "dotenv";
 
-import { getAppUserByEmailFactory } from "./get-app-user.js";
+import {
+  getAppUserByEmailFactory,
+  getAppUserByUsernameFactory,
+} from "./get-app-user.js";
 import { insertAppUserToWooUserFactory } from "./insert-app-user-to-woo-user.js";
 import { insertAppUserFactory } from "./insert-app-user.js";
 import { insertWooUserFactory } from "./insert-woo-user.js";
@@ -32,6 +35,7 @@ const spannerClient: SpannerClientWooAppUsers = {
 };
 
 export const _getAppUserByEmail = getAppUserByEmailFactory(spannerClient);
+export const _getAppUserByUsername = getAppUserByUsernameFactory(spannerClient);
 export const _insertAppUserToWooUser = insertAppUserToWooUserFactory(spannerClient);
 export const _insertAppUser = insertAppUserFactory(spannerClient);
 export const _insertWooUser = insertWooUserFactory(spannerClient);

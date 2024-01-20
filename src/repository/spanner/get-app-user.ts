@@ -27,3 +27,19 @@ export const getAppUserByEmailFactory = (spanner: SpannerClientWooAppUsers) => {
     return appUser;
   };
 };
+
+export const getAppUserByUsernameFactory = (spanner: SpannerClientWooAppUsers) => {
+  return async (username: string): Promise<AppUserSpannerType | undefined> => {
+    const sqlQuery = "SELECT * FROM app_users WHERE app_username = @username";
+
+    const params = { username };
+
+    const [ rows ] = await spanner.database.run({
+      sql: sqlQuery,
+      params,
+    });
+    const appUser = fromJsonArrayToObject(rows);
+    if (!appUser || !isQueryResultAppUserSpannerType(appUser)) return undefined;
+    return appUser;
+  };
+};

@@ -1,8 +1,10 @@
 import { Type } from "@sinclair/typebox";
 
 import createAxiosClient from "../../modules/create-axios-client.js";
+import logger from "../../modules/create-logger.js";
 
 import type { Static } from "@sinclair/typebox";
+import type { AxiosError } from "axios";
 
 const SystemStatus = Type.Object({
   environment: Type.Object({
@@ -28,7 +30,12 @@ export const getSystemStatus = async (baseUrl: string, token: string): Promise<S
     interceptors: [
       {
         onTrue: (response) => response,
-        onError: (error) => error,
+        onError: (error: AxiosError) => {
+          if (error.config) {
+            logger.log("error", `Intercepted: request ${error.config.url}:`, error);
+          }
+          return error;
+        },
       },
     ],
   });

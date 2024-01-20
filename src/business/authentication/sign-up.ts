@@ -6,14 +6,15 @@ import { randomUUID } from "node:crypto";
 
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
+import { createErrorResponse } from "../../modules/create-error-response.js";
 import {
   _getAppUserByEmail,
+  _getAppUserByUsername,
   _insertAppUser,
   _insertAppUserToWooUser,
   _insertWooUser,
 } from "../../repository/spanner/index.js";
 import { getSystemStatus } from "../../repository/woo-api/get-system-status.js";
-import { createErrorResponse } from "../../util/create-error-response.js";
 
 import type {
   Request,
@@ -26,13 +27,17 @@ const createUrlRequestBodySchema = {
   properties: {
     appURL: { type: "string" },
     email: { type: "string" },
+    username: { type: "string" },
     password: { type: "string" },
+    passwwordConfirmation: { type: "string" },
     token: { type: "string" },
   },
   required: [
     "appURL",
     "email",
+    "username",
     "password",
+    "passwwordConfirmation",
     "token",
   ],
   additionalProperties: false,
@@ -59,20 +64,15 @@ const SERVICE_ERRORS = {
     type: "/auth/signup-failed",
     title: "database error",
   },
-  invalidSecret: {
-    statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/auth/signup-failed",
-    title: "cannot generate response",
-  },
-  internalServerError: {
-    statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    type: "/auth/signup-failed",
-    title: "internal server error",
-  },
   existingEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
     title: "Existing email",
+  },
+  existingUsername: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/auth/signup-failed",
+    title: "Existing username",
   },
   invalidEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
@@ -94,9 +94,11 @@ const signup = async (req: Request, res: Response) => {
 
   if (undefined !== await _getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
+  if (undefined !== await _getAppUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+
   if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
-  if (!passwordRegex.test(req.body.password)) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
+  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.passwwordConfirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
     process.env["NODE_ENV"] === "production" ? req.body.appURL : process.env["WOO_BASE_URL"];
@@ -115,6 +117,7 @@ const signup = async (req: Request, res: Response) => {
   const insertAppUserResult = await _insertAppUser({
     app_user_id: appUserId,
     app_email: req.body.email,
+    app_username: req.body.username,
     app_password: req.body.password,
     app_url: req.body.appURL,
     authenticated: true,

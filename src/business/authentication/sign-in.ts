@@ -3,8 +3,11 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
-import { _getAppUserByEmail } from "../../repository/spanner/index.js";
-import { createErrorResponse } from "../../util/create-error-response.js";
+import { createErrorResponse } from "../../modules/create-error-response.js";
+import {
+  _getAppUserByEmail,
+  _getAppUserByUsername,
+} from "../../repository/spanner/index.js";
 
 import type {
   Request,
@@ -15,11 +18,11 @@ dotenv.config();
 const createSignInBodyRequest = {
   type: "object",
   properties: {
-    email: { type: "string" },
+    emailOrUsername: { type: "string" },
     password: { type: "string" },
   },
   required: [
-    "email",
+    "emailOrUsername",
     "password",
   ],
   additionalProperties: false,
@@ -41,22 +44,15 @@ const SERVICE_ERRORS = {
     type: "/auth/signin-failed",
     title: "cannot generate response",
   },
-  internalServerError: {
-    statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    type: "/auth/signin-failed",
-    title: "internal server error",
-  },
-  databaseError: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/signin-failed",
-    title: "database error",
-  },
 };
 
 const signin = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createSignInBodyRequest)) return SERVICE_ERRORS.invalidRequest;
 
-  const appUser = await _getAppUserByEmail(req.body.email);
+  const appUserByEmail = await _getAppUserByEmail(req.body.emailOrUsername);
+  const appUserByUsername = await _getAppUserByUsername(req.body.emailOrUsername);
+
+  const appUser = appUserByEmail ? appUserByEmail : appUserByUsername;
 
   if (!appUser) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 

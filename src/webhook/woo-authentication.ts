@@ -2,12 +2,12 @@ import { randomUUID } from "crypto";
 import { StatusCodes } from "http-status-codes";
 
 import { validateTypeFactory } from "../modules/create-ajv-validator.js";
+import { createErrorResponse } from "../modules/create-error-response.js";
 import {
   _insertAppUserToWooUser,
   _insertWooUser,
   _updateAuthenticatedStatus,
 } from "../repository/spanner/index.js";
-import { createErrorResponse } from "../util/create-error-response.js";
 
 import type {
   Request,
