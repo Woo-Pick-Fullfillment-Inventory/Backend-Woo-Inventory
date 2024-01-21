@@ -6,7 +6,7 @@ import { httpClient } from "../common/http-client";
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 
 describe("Signup test", () => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
