@@ -35,11 +35,11 @@ export const getSystemStatus = async (baseUrl: string, token: string): Promise<S
         onTrue: (response: AxiosResponse) => {
           if (response.status !== 200) {
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`);
-            throw new Error(`Intercepted: request ${response.config.url} with status code ${response.status} is not expected`);
+            throw new Error("Response not expected");
           }
           if (!isWooResultSystemStatusType(response.data)) {
-            logger.log("error", `onTrue Intercepted: request ${response.config.url} does not return expected system status type`);
-            throw new Error(`Intercepted: request ${response.config.url} does not return expected system status type`);
+            logger.log("error", `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`);
+            throw new Error("Response not expected");
           }
           return response;
         },
