@@ -56,3 +56,6 @@ docker-compose.local.yaml
 **/local*.json
 
 .vscode/
+
+# in case of log files accidentally committed
+.log
