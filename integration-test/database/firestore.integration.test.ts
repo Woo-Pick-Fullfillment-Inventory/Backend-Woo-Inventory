@@ -1,8 +1,4 @@
-import {
-  apps,
-  clearFirestoreData,
-  initializeAdminApp,
-} from "@firebase/rules-unit-testing";
+import { initializeAdminApp } from "@firebase/rules-unit-testing";
 
 import {
   getDb,
@@ -48,12 +44,12 @@ beforeAll(async () => {
   await getDb().collection("test-collection").add(record);
 });
 
-afterAll(async () => {
+/* afterAll(async () => {
   // Clear the database before each test
   await clearFirestoreData({ projectId: "bunny" });
   // Clean up the apps between tests.
   await Promise.all(apps().map((app) => app.delete()));
-});
+}); */
 
 it("should properly retrieve all items for a user", async () => {
   const resp = await listItems(userId);
