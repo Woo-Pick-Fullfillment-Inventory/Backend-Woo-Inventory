@@ -3,12 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 import { validateTypeFactory } from "../modules/create-ajv-validator.js";
 import { createErrorResponse } from "../modules/create-error-response.js";
-import {
-  _insertAppUserToWooUser,
-  _insertWooUser,
-  _updateAuthenticatedStatus,
-} from "../repository/spanner/index.js";
-
 import type {
   Request,
   Response,
@@ -46,28 +40,8 @@ const SERVICE_ERRORS = {
   },
 };
 
+// implement later
 const wooAuthenticator = async (req: Request, res: Response) => {
-  if (!validateTypeFactory(req.body, wooWebHookSchema)) {
-    throw createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
-  }
-
-  const wooUserId = randomUUID();
-  const isInsertedWooUserToAppUser = await _insertAppUserToWooUser({
-    app_user_id: req.body.user_id,
-    woo_user_id: wooUserId,
-  });
-  if (!isInsertedWooUserToAppUser) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
-
-  const isInsertedWooUser = await _insertWooUser({
-    woo_user_id: wooUserId,
-    woo_token: req.body.consumer_key,
-    woo_secret: req.body.consumer_secret,
-  });
-  if (!isInsertedWooUser) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
-
-  const isUpdated = await _updateAuthenticatedStatus(req.body.user_id, true);
-  if (!isUpdated) throw createErrorResponse(res, SERVICE_ERRORS.databaseError);
-
   res.send("Webhook is listening...");
 };
 

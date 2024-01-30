@@ -1,6 +1,6 @@
 {
   "roots": ["<rootDir>"],
-  "testMatch": ["**/firestore.integration.test.ts"],
+  "testMatch": ["**/*.integration.test.ts"],
   "extensionsToTreatAsEsm": [".ts"],
   "moduleNameMapper": {
     "^(\\.{1,2}/.*)\\.js$": "$1"

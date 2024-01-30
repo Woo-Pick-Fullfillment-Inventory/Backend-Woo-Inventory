@@ -4,10 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
-import {
-  _getAppUserByEmail,
-  _getAppUserByUsername,
-} from "../../repository/spanner/index.js";
+import { getUserByAttribute } from "../../repository/firestore/index.js";
 
 import type {
   Request,
@@ -49,17 +46,17 @@ const SERVICE_ERRORS = {
 const signin = async (req: Request, res: Response) => {
   if (!validateTypeFactory(req.body, createSignInBodyRequest)) return SERVICE_ERRORS.invalidRequest;
 
-  const appUserByEmail = await _getAppUserByEmail(req.body.emailOrUsername);
-  const appUserByUsername = await _getAppUserByUsername(req.body.emailOrUsername);
+  const userByEmail = await getUserByAttribute("email", req.body.emailOrUsername);
+  const userByUsername = await getUserByAttribute("username", req.body.emailOrUsername);
 
-  const appUser = appUserByEmail ? appUserByEmail : appUserByUsername;
+  const user = userByEmail ? userByEmail : userByUsername;
 
-  if (!appUser) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
+  if (!user) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (appUser.app_password !== req.body.password) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
+  if (user.password !== req.body.password) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
   if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
-  const token = jwt.sign({ appUserId: appUser.app_user_id }, process.env["JWT_SECRET"]);
+  const token = jwt.sign({ userId: user.user_id }, process.env["JWT_SECRET"]);
 
   return res.status(200).send({ jwtToken: token });
 };
