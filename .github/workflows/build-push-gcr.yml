@@ -19,4 +19,4 @@ jobs:
           run: |-
             npm install -g firebase-tools
             npm install --force
-            firebase emulators:exec --project=bunny 'npm run test:firestore'
+            firebase emulators:exec --project=test-project 'npm run test:firestore'

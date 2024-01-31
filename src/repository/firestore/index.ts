@@ -1,21 +1,16 @@
 import admin from "firebase-admin";
-
+import { initializeAdminApp } from "@firebase/rules-unit-testing";
 import { getUserByAttributeFactory } from "./get-user.js";
 import { insertUserFactory } from "./insert-user.js";
 
-let db: FirebaseFirestore.Firestore;
+let dbClient: FirebaseFirestore.Firestore;
 
-if (process.env["NODE_ENV"] !== "test") {
-  db = admin.firestore();
+if (process.env["NODE_ENV"] !== "production") {
+  const app = initializeAdminApp({ projectId: "test-project" });
+  dbClient = app.firestore();
+} else {
+  dbClient = admin.firestore();
 }
-
-export const getDb = () => {
-  return db;
-};
-
-export const setDbEmulator = (database: FirebaseFirestore.Firestore) => {
-  db = database;
-};
-
-export const getUserByAttribute = getUserByAttributeFactory(getDb());
-export const insertUser = insertUserFactory(getDb());
+console.log("dbClient", dbClient);
+export const getUserByAttribute = getUserByAttributeFactory(dbClient);
+export const insertUser = insertUserFactory(dbClient);

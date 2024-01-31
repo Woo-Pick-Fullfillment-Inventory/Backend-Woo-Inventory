@@ -1,10 +1,11 @@
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
-
 import { httpClient } from "../common/http-client";
+
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Signin test", () => {
+
   beforeEach(async () => {
     await mambuApiMockServer.requests.deleteAllRequests();
   });
