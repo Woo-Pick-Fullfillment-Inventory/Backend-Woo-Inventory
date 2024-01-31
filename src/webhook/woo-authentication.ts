@@ -36,13 +36,13 @@ const wooWebHookSchema = {
 const SERVICE_ERRORS = {
   invalidRequest: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/createURL-failed",
-    title: "invalid request",
+    type: "/auth/woo-auth-failed",
+    message: "invalid request",
   },
   databaseError: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/createURL-failed",
-    title: "database error",
+    type: "/auth/woo-auth-failed",
+    message: "database error",
   },
 };
 

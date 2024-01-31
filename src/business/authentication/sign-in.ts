@@ -32,17 +32,17 @@ const SERVICE_ERRORS = {
   invalidRequest: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signin-failed",
-    title: "invalid request",
+    message: "invalid request",
   },
   invalidCredentials: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signin-failed",
-    title: "invalid credentials",
+    message: "invalid credentials",
   },
   invalidJwtToken: {
     statusCode: StatusCodes.UNAUTHORIZED,
     type: "/auth/signin-failed",
-    title: "cannot generate response",
+    message: "cannot generate response",
   },
 };
 
