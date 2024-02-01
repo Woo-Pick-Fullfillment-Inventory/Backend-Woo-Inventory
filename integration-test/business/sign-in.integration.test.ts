@@ -1,14 +1,23 @@
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 import { httpClient } from "../common/http-client";
-
+import { apps, clearFirestoreData, initializeAdminApp } from "@firebase/rules-unit-testing";
+import { setDbClient } from "../../src/repository/firestore";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Signin test", () => {
+  
+  afterEach(async () => {
+    await clearFirestoreData({ projectId: "test-project" });
+    await Promise.all(apps().map((app) => app.delete()));
+  }); 
 
   beforeEach(async () => {
+    const app = initializeAdminApp({ projectId: "test-project" }).firestore();
+    setDbClient(app);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
+
   it("should return a token when log in was succesful", async () => {
     const email = `${randomUUID()}@test.com`;
     const username = randomUUID();
