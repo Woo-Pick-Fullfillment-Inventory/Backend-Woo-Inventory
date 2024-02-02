@@ -17,6 +17,7 @@ import type {
   Request,
   Response,
 } from "express";
+import logger from "../../modules/create-logger.js";
 dotenv.config();
 
 const createUrlRequestBodySchema = {
@@ -41,20 +42,10 @@ const createUrlRequestBodySchema = {
 };
 
 const SERVICE_ERRORS = {
-  invalidRequest: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/signup-failed",
-    title: "invalid request",
-  },
   invalidTokenOrAppUrl: {
     statusCode: StatusCodes.UNAUTHORIZED,
     type: "/auth/signup-failed",
     title: "invalid token or app url",
-  },
-  invalidJwtToken: {
-    statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/auth/signup-failed",
-    title: "invalid jwt token",
   },
   existingEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
@@ -81,8 +72,10 @@ const SERVICE_ERRORS = {
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const signup = async (req: Request, res: Response) => {
 
-  if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
-    return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
+  if (!validateTypeFactory(req.body, createUrlRequestBodySchema)){
+    logger.log("error", `req.body ${JSON.stringify(req.body)} does not match the expected type`);
+    return res.send(500);
+  }
 
   if (await getUserByAttribute("email", req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
@@ -121,10 +114,12 @@ const signup = async (req: Request, res: Response) => {
     },
   });
 
-  if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
-  const token = jwt.sign({ userId }, process.env["JWT_SECRET"]);
+  if (!process.env["JWT_SECRET"]){
+    logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
+    return res.send(500);
+  }
 
-  return res.status(200).send({ jwtToken: token });
+  return res.status(200).send({ jwtToken: jwt.sign({ userId }, process.env["JWT_SECRET"]) });
 };
 
 export default signup;
