@@ -1,6 +1,10 @@
-import { apps, clearFirestoreData } from "@firebase/rules-unit-testing";
+import {
+  apps,
+  clearFirestoreData,
+} from "@firebase/rules-unit-testing";
+
 import { listItemsFactory } from "./firestore-mock-operation";
-import { dbClient } from "../../src/repository/firestore";
+import { firestoreClient } from "../../src/repository/firestore";
 
 const userId = "123";
 const record = {
@@ -11,16 +15,16 @@ const record = {
 };
 
 beforeEach(async () => {
-  await dbClient.collection("test-collection").add(record);
+  await firestoreClient.collection("test-collection").add(record);
 });
 
 afterEach(async () => {
   await clearFirestoreData({ projectId: "test-project" });
   await Promise.all(apps().map((app) => app.delete()));
-}); 
+});
 
 it("should properly retrieve all items for a user", async () => {
-  const resp = await listItemsFactory(dbClient)(userId);
+  const resp = await listItemsFactory(firestoreClient)(userId);
   expect(resp).toBeDefined();
   expect(resp.length).toEqual(1);
   expect(resp[0]).toEqual(
@@ -28,8 +32,8 @@ it("should properly retrieve all items for a user", async () => {
       name: "Test item",
       type: "Page",
       created: "1000000",
-    })
+    }),
   );
-  const resp2 = await listItemsFactory(dbClient)("124");
+  const resp2 = await listItemsFactory(firestoreClient)("124");
   expect(resp2.length).toEqual(0);
 });

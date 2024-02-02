@@ -10,8 +10,7 @@
     "lint:fix": "npx eslint 'src/**/*' 'integration-test/**/*' --fix",
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules SPANNER_EMULATOR_HOST=localhost:9010 jest -c integration-test/jest.config.json --detectOpenHandles",
-    "test:firestore": "FIRESTORE_EMULATOR_HOST='127.0.0.1:8080' jest -c integration-test/jest.config.json --detectOpenHandles",
+    "test": "FIRESTORE_EMULATOR_HOST='127.0.0.1:8888' jest -c integration-test/jest.config.json --detectOpenHandles",
     "dev": "nodemon"
   },
   "author": "",

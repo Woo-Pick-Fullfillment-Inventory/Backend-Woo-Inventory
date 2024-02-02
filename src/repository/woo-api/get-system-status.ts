@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-check.js";
 
 import type { Static } from "@sinclair/typebox";
 import type {
@@ -19,8 +20,6 @@ const SystemStatus = Type.Object({
 
 type SystemStatusType = Static<typeof SystemStatus>;
 
-const isWooResultSystemStatusType = (result: unknown): result is SystemStatusType => result!== undefined;
-
 export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType | undefined> => {
   const { get } = createAxiosClient<SystemStatusType>({
     config: {
@@ -37,7 +36,7 @@ export const getSystemStatus = async (baseUrl: string, token: string): Promise<S
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`);
             throw new Error("Response not expected");
           }
-          if (!isWooResultSystemStatusType(response.data)) {
+          if (!isResponseTypeTrue<SystemStatusType>(response.data)) {
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`);
             throw new Error("Response not expected");
           }

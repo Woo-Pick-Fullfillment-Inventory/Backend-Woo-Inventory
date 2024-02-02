@@ -1,25 +1,7 @@
-type AuthenticationMethodType = "woo_credentials" | "woo_token";
+import type { UserFireStoreType } from "./models/user.type.js";
 
-type UserFireStoreType = {
-  user_id: string;
-  store: {
-    app_url: string;
-  }
-  email: string;
-  username: string;
-  password: string;
-  woo_credentials: {
-    token: string;
-    secret: string;
-  }
-  authentication: {
-    method: AuthenticationMethodType;
-    isAuthorized: boolean;
-  }
-};
-
-export const insertUserFactory = (db: FirebaseFirestore.Firestore) => {
+export const insertUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
   return async (user: UserFireStoreType): Promise<void> => {
-    await db.collection("users").doc(user.user_id).set(user);
+    await firestoreClient.collection("users").doc(user.user_id).set(user);
   };
 };

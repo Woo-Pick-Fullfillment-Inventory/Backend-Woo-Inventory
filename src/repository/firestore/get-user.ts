@@ -1,33 +1,28 @@
-type UserAttributeType = "userId" | "email" | "username";
+import { isResponseTypeTrue } from "../../modules/create-response-type-check.js";
 
-type AuthenticationMethodType = "woo_credentials" | "woo_token";
+import type {
+  UserAttributeType,
+  UserFireStoreType,
+} from "./models/user.type.js";
 
-type UserFireStoreType = {
-  user_id: string;
-  store: {
-    app_url: string;
-  }
-  email: string;
-  username: string;
-  password: string;
-  woo_credentials: {
-    token: string;
-    secret: string;
-  }
-  authentication: {
-    method: AuthenticationMethodType;
-    isAuthorized: boolean;
-  }
-};
+export const getUserByAttributeFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
+  return async (
+    userAttribute: UserAttributeType,
+    value: string,
+  ): Promise<UserFireStoreType | undefined> => {
+    const snapshot = await firestoreClient.collection("users").where(userAttribute, "==", value).get();
 
-export const getUserByAttributeFactory = (db: FirebaseFirestore.Firestore) => {
-  return async (userAttribute: UserAttributeType, value: string): Promise<UserFireStoreType> => {
-    const snapshot = await db.collection("users").where(userAttribute, "==", value).get();
-
-    if (!snapshot || !snapshot.docs[0] || !snapshot.docs[0].data()) {
-      throw new Error("No User Found");
+    if (
+      snapshot.empty ||
+      !snapshot ||
+      !snapshot.docs[0] ||
+      !snapshot.docs[0].data() ||
+      !isResponseTypeTrue<UserFireStoreType>(
+        snapshot.docs[0].data() as UserFireStoreType,
+      )
+    ) {
+      return undefined;
     }
-
     return snapshot.docs[0].data() as UserFireStoreType;
   };
 };

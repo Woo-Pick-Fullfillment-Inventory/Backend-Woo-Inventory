@@ -19,7 +19,13 @@ export const listItemsFactory = (dbClient: FirebaseFirestore.Firestore) => {
 
     const result: dataType[] = [];
     snapshot.forEach((doc) => {
-      const { name, created, type, description, url } = doc.data();
+      const {
+        name,
+        created,
+        type,
+        description,
+        url,
+      } = doc.data();
 
       result.push({
         name,
