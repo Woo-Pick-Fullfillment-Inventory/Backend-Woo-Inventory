@@ -1,7 +1,7 @@
 FROM node:18 AS ts-builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --force
 COPY tsconfig-build.json ./
 COPY src/ src/
 RUN npm run build
@@ -9,7 +9,7 @@ RUN npm run build
 FROM node:18 AS prod-dependencies
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --force
 
 FROM node:18-alpine3.16
 WORKDIR /app
