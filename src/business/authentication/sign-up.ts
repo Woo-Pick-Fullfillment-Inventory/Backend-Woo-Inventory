@@ -7,6 +7,7 @@ import { randomUUID } from "node:crypto";
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
+import logger from "../../modules/create-logger.js";
 import {
   getUserByAttribute,
   insertUser,
@@ -17,7 +18,6 @@ import type {
   Request,
   Response,
 } from "express";
-import logger from "../../modules/create-logger.js";
 dotenv.config();
 
 const createUrlRequestBodySchema = {
@@ -72,7 +72,7 @@ const SERVICE_ERRORS = {
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const signup = async (req: Request, res: Response) => {
 
-  if (!validateTypeFactory(req.body, createUrlRequestBodySchema)){
+  if (!validateTypeFactory(req.body, createUrlRequestBodySchema)) {
     logger.log("error", `req.body ${JSON.stringify(req.body)} does not match the expected type`);
     return res.send(500);
   }
@@ -114,7 +114,7 @@ const signup = async (req: Request, res: Response) => {
     },
   });
 
-  if (!process.env["JWT_SECRET"]){
+  if (!process.env["JWT_SECRET"]) {
     logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
     return res.send(500);
   }

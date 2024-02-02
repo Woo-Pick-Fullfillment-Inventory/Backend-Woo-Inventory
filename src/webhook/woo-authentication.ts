@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+/* import { randomUUID } from "crypto";
 import { StatusCodes } from "http-status-codes";
 
 import { validateTypeFactory } from "../modules/create-ajv-validator.js";
@@ -46,4 +46,4 @@ const wooAuthenticator = async (req: Request, res: Response) => {
   res.send("Webhook is listening...");
 };
 
-export default wooAuthenticator;
+export default wooAuthenticator; */
