@@ -7,10 +7,10 @@
   "scripts": {
     "lint": "eslint .",
     "lint-docker": "docker run --rm -i hadolint/hadolint < Dockerfile",
-    "lint:fix": "npx eslint 'src/**/*' 'integration-test/**/*' --fix",
+    "lint:fix": "npx eslint 'src/**/*' '__test__/**/*' --fix",
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
-    "test": "FIRESTORE_EMULATOR_HOST='127.0.0.1:8888' jest -c integration-test/jest.config.json --detectOpenHandles",
+    "test": "FIRESTORE_EMULATOR_HOST='127.0.0.1:8888' jest -c __test__/jest.config.json --detectOpenHandles",
     "dev": "nodemon"
   },
   "author": "",

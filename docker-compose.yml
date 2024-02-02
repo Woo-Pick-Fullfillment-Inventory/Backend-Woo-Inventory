@@ -8,4 +8,4 @@ services:
     ports:
       - "1080:8080"
     volumes:
-      - ${PWD}/integration-test/wiremock:/home/wiremock
+      - ${PWD}/__test__/wiremock:/home/wiremock
