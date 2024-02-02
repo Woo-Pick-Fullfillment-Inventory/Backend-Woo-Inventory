@@ -50,13 +50,13 @@ jobs:
 
 
   check-test:
-    name: Execute integrations test
+    name: Execute tests
     runs-on: ubuntu-latest
 
     steps:
         - uses: actions/checkout@v3
 
-        - name: Execute integration tests
+        - name: Execute tests
           run: |-
             npm install -g firebase-tools
             npm install 
