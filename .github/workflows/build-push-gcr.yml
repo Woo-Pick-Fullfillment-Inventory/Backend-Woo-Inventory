@@ -51,34 +51,14 @@ jobs:
 
   check-test:
     name: Execute tests
-    needs: 
-      - build-push-gcr
     runs-on: ubuntu-latest
-
-    permissions:
-      id-token: write 
-      contents: read  
 
     steps:
         - uses: actions/checkout@v3
 
-        - name: Authenticate to WIF
-          uses: google-github-actions/auth@v1
-          with:
-            workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-            service_account: ${{ secrets.SA_GH_ACTIONS }}
-            token_format: access_token
-            export_environment_variables: true
-
-        - name: Replace Docker image
-          run: |
-            gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
-            sed -i 's#\$IMAGE_NAME#europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest#g' 'docker-compose.integration-test.yml'
-
-
         - name: start wiremock
           run: |
-            docker-compose -f docker-compose.yml -f docker-compose.integration-test.yml up -d
+            docker-compose -f docker-compose.yml up -d
 
         - name: Execute tests
           run: |-
@@ -89,4 +69,4 @@ jobs:
         - name: stop wiremock
           if: always()
           run: |
-            docker-compose down
+            docker-compose -f docker-compose.yml down
