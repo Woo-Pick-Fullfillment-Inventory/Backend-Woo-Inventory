@@ -56,9 +56,9 @@ jobs:
     steps:
         - uses: actions/checkout@v3
 
-        - name: start wiremock
+        - name: start wiremock and application
           run: |
-            docker-compose -f docker-compose.yml up -d
+            docker-compose -f docker-compose.yml -f docker-compose.github.yml up -d
 
         - name: Execute tests
           run: |-
@@ -66,7 +66,7 @@ jobs:
             npm install 
             firebase emulators:exec --project=test-project 'npm run test'
 
-        - name: stop wiremock
+        - name: stop wiremock and application
           if: always()
           run: |
-            docker-compose -f docker-compose.yml down
+            docker-compose -f docker-compose.yml -f docker-compose.github.yml down
