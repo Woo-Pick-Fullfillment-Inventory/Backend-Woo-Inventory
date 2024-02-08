@@ -1,0 +1,29 @@
+name: Check for Tests
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  IMAGE_NAME: woopick-backend
+
+jobs:
+
+  check-test:
+    name: Execute tests
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v3
+
+        - name: start wiremock
+          run: docker-compose -f docker-compose.yml -f up -d
+
+        - name: Execute tests
+          run: |-
+            npm install -g firebase-tools
+            npm install 
+            npm run dev
+            firebase emulators:exec --project=test-project 'npm run test'

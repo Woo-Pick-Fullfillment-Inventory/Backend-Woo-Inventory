@@ -10,3 +10,4 @@ services:
       SERVICE_PORT: 8080
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8888
