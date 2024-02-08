@@ -1,4 +1,4 @@
-import { isResponseTypeTrue } from "../../modules/create-response-type-check.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
 import type {
   UserAttributeType,

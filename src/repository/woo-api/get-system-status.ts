@@ -2,7 +2,7 @@ import { Type } from "@sinclair/typebox";
 
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-check.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
 import type { Static } from "@sinclair/typebox";
 import type {
