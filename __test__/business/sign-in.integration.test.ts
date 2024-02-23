@@ -1,29 +1,25 @@
 import {
   apps,
   clearFirestoreData,
-  initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { setfirestoreClient } from "../../src/repository/firestore";
-import { insertUserFactory } from "../../src/repository/firestore/insert-user";
+import { insertUser } from "../../src/repository/firestore";
 import { httpClient } from "../common/http-client";
 import { mockUser } from "../common/mock-data";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Signin test", () => {
 
+  beforeEach(async () => {
+    await insertUser(mockUser);
+    await mambuApiMockServer.requests.deleteAllRequests();
+  });
+
   afterEach(async () => {
     await clearFirestoreData({ projectId: "test-project" });
     await Promise.all(apps().map((app) => app.delete()));
-  });
-
-  beforeEach(async () => {
-    const app = initializeAdminApp({ projectId: "test-project" }).firestore();
-    setfirestoreClient(app);
-    await insertUserFactory(app)(mockUser);
-    await mambuApiMockServer.requests.deleteAllRequests();
   });
 
   it("should return a token when log in was succesful", async () => {

@@ -1,13 +1,11 @@
 import {
   apps,
   clearFirestoreData,
-  initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { setfirestoreClient } from "../../src/repository/firestore";
-import { insertUserFactory } from "../../src/repository/firestore/insert-user";
+import { insertUser } from "../../src/repository/firestore";
 import { httpClient } from "../common/http-client";
 import { mockUser } from "../common/mock-data";
 
@@ -21,9 +19,7 @@ describe("Signup test", () => {
   });
 
   beforeEach(async () => {
-    const app = initializeAdminApp({ projectId: "test-project" }).firestore();
-    setfirestoreClient(app);
-    await insertUserFactory(app)(mockUser);
+    await insertUser(mockUser);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
