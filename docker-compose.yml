@@ -1,34 +1,10 @@
 version: '3.8'
 
 services:
-  spanner-emulator:
-    image: gcr.io/cloud-spanner-emulator/emulator:1.5.4
-    ports:
-      - 9010:9010
-      - 9020:9020
-  
-  gcloud-spanner-run-up:
-    depends_on:
-      spanner-emulator:
-        condition: service_started
-    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-    volumes:
-      - type: bind
-        source: ${PWD}/scripts/run_up_spanner.sh
-        target: /scripts/run_up_spanner.sh
-      - ${PWD}/migrations:/home/spanner
-    environment:
-      - SPANNER_EMULATOR_HOST=http://spanner-emulator:9020/
-      - SPANNER_PROJECT_ID=test-project
-      - SPANNER_INSTANCE_ID=test-instance
-      - SPANNER_DATABASE_ID=woo-app-users
-    command: |
-      bash -c 'source /scripts/run_up_spanner.sh'
-
   wiremock:
     image: wiremock/wiremock:3.1.0
     command: --verbose
     ports:
       - "1080:8080"
     volumes:
-      - ${PWD}/integration-test/wiremock:/home/wiremock
+      - ${PWD}/__test__/wiremock:/home/wiremock

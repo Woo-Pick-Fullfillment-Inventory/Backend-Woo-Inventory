@@ -7,13 +7,11 @@ import { randomUUID } from "node:crypto";
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
+import logger from "../../modules/create-logger.js";
 import {
-  _getAppUserByEmail,
-  _getAppUserByUsername,
-  _insertAppUser,
-  _insertAppUserToWooUser,
-  _insertWooUser,
-} from "../../repository/spanner/index.js";
+  getUserByAttribute,
+  insertUser,
+} from "../../repository/firestore/index.js";
 import { getSystemStatus } from "../../repository/woo-api/get-system-status.js";
 
 import type {
@@ -44,25 +42,10 @@ const createUrlRequestBodySchema = {
 };
 
 const SERVICE_ERRORS = {
-  invalidRequest: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/signup-failed",
-    message: "invalid request",
-  },
   invalidTokenOrAppUrl: {
     statusCode: StatusCodes.UNAUTHORIZED,
     type: "/auth/signup-failed",
     message: "invalid token or app url",
-  },
-  invalidJwtToken: {
-    statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/auth/signup-failed",
-    message: "invalid jwt token",
-  },
-  databaseError: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/signup-failed",
-    message: "database error",
   },
   existingEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
@@ -89,12 +72,14 @@ const SERVICE_ERRORS = {
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const signup = async (req: Request, res: Response) => {
 
-  if (!validateTypeFactory(req.body, createUrlRequestBodySchema))
-    return createErrorResponse(res, SERVICE_ERRORS.invalidRequest);
+  if (!validateTypeFactory(req.body, createUrlRequestBodySchema)) {
+    logger.log("error", `req.body ${JSON.stringify(req.body)} does not match the expected type`);
+    return res.send(500);
+  }
 
-  if (undefined !== await _getAppUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await getUserByAttribute("email", req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (undefined !== await _getAppUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await getUserByAttribute("username", req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
@@ -111,37 +96,30 @@ const signup = async (req: Request, res: Response) => {
   );
   if (!systemStatus) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
-  const appUserId = randomUUID();
-  const wooUserId = randomUUID();
+  const userId = randomUUID();
 
-  const insertAppUserResult = await _insertAppUser({
-    app_user_id: appUserId,
-    app_email: req.body.email,
-    app_username: req.body.username,
-    app_password: req.body.password,
-    app_url: req.body.appURL,
-    authenticated: true,
+  await insertUser({
+    user_id: userId,
+    store: { app_url: req.body.appURL },
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password,
+    woo_credentials: {
+      token: req.body.token.split("|")[0],
+      secret: req.body.token.split("|")[1],
+    },
+    authentication: {
+      method: "woo_token",
+      isAuthorized: true,
+    },
   });
-  if (!insertAppUserResult)
-    return createErrorResponse(res, SERVICE_ERRORS.databaseError);
-  const insertWooUserResult = await _insertWooUser({
-    woo_user_id: wooUserId,
-    woo_token: req.body.token.split("|")[0],
-    woo_secret: req.body.token.split("|")[1],
-  });
-  if (!insertWooUserResult)
-    return createErrorResponse(res, SERVICE_ERRORS.databaseError);
-  const insertAppUserToWooUserResult = await _insertAppUserToWooUser({
-    app_user_id: appUserId,
-    woo_user_id: wooUserId,
-  });
-  if (!insertAppUserToWooUserResult)
-    return createErrorResponse(res, SERVICE_ERRORS.databaseError);
 
-  if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
-  const token = jwt.sign({ appUserId }, process.env["JWT_SECRET"]);
+  if (!process.env["JWT_SECRET"]) {
+    logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
+    return res.send(500);
+  }
 
-  return res.status(200).send({ jwtToken: token });
+  return res.status(200).send({ jwtToken: jwt.sign({ userId }, process.env["JWT_SECRET"]) });
 };
 
 export default signup;

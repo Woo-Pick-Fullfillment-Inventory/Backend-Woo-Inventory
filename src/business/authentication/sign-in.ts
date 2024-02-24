@@ -4,10 +4,8 @@ import jwt from "jsonwebtoken";
 
 import { validateTypeFactory } from "../../modules/create-ajv-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
-import {
-  _getAppUserByEmail,
-  _getAppUserByUsername,
-} from "../../repository/spanner/index.js";
+import logger from "../../modules/create-logger.js";
+import { getUserByAttribute } from "../../repository/firestore/index.js";
 
 import type {
   Request,
@@ -29,39 +27,35 @@ const createSignInBodyRequest = {
 };
 
 const SERVICE_ERRORS = {
-  invalidRequest: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/auth/signin-failed",
-    message: "invalid request",
-  },
   invalidCredentials: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signin-failed",
     message: "invalid credentials",
   },
-  invalidJwtToken: {
-    statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/auth/signin-failed",
-    message: "cannot generate response",
-  },
 };
 
+// todo: add bcrypt
 const signin = async (req: Request, res: Response) => {
-  if (!validateTypeFactory(req.body, createSignInBodyRequest)) return SERVICE_ERRORS.invalidRequest;
+  if (!validateTypeFactory(req.body, createSignInBodyRequest)) {
+    logger.log("error", `req.body ${JSON.stringify(req.body)} does not match the expected type`);
+    return res.send(500);
+  }
 
-  const appUserByEmail = await _getAppUserByEmail(req.body.emailOrUsername);
-  const appUserByUsername = await _getAppUserByUsername(req.body.emailOrUsername);
+  const userFoundByEmail = await getUserByAttribute("email", req.body.emailOrUsername);
+  const userFoundByUsername = await getUserByAttribute("username", req.body.emailOrUsername);
 
-  const appUser = appUserByEmail ? appUserByEmail : appUserByUsername;
+  const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
 
-  if (!appUser) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
+  if (!userFound) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (appUser.app_password !== req.body.password) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
+  if (userFound.password !== req.body.password) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (!process.env["JWT_SECRET"]) return createErrorResponse(res, SERVICE_ERRORS.invalidJwtToken);
-  const token = jwt.sign({ appUserId: appUser.app_user_id }, process.env["JWT_SECRET"]);
+  if (!process.env["JWT_SECRET"]) {
+    logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
+    return res.send(500);
+  }
 
-  return res.status(200).send({ jwtToken: token });
+  return res.status(200).send({ jwtToken: jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) });
 };
 
 export default signin;
