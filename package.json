@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/firestore": "^7.3.0",
     "@sinclair/typebox": "^0.24.31",
     "@types/express": "^4.17.20",
     "@types/http-errors": "^2.0.3",
