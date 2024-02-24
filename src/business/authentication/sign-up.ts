@@ -45,27 +45,27 @@ const SERVICE_ERRORS = {
   invalidTokenOrAppUrl: {
     statusCode: StatusCodes.UNAUTHORIZED,
     type: "/auth/signup-failed",
-    title: "invalid token or app url",
+    message: "invalid token or app url",
   },
   existingEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
-    title: "Existing email",
+    message: "Existing email",
   },
   existingUsername: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
-    title: "Existing username",
+    message: "Existing username",
   },
   invalidEmail: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
-    title: "invalid email",
+    message: "invalid email",
   },
   invalidPassword: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signup-failed",
-    title: "invalid password",
+    message: "invalid password",
   },
 };
 

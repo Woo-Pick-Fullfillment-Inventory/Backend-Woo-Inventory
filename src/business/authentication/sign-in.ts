@@ -30,7 +30,7 @@ const SERVICE_ERRORS = {
   invalidCredentials: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/auth/signin-failed",
-    title: "invalid credentials",
+    message: "invalid credentials",
   },
 };
 
