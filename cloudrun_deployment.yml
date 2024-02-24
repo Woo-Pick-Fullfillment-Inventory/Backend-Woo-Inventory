@@ -25,11 +25,6 @@ spec:
             secretKeyRef:
               key: latest
               name: JWT_SECRET
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          valueFrom:
-            secretKeyRef:
-              key: latest
-              name: CLOUDRUN_SA_KEY
   traffic:
   - percent: 100
     latestRevision: true
