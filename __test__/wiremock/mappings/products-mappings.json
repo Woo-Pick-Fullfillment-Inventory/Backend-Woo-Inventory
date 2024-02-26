@@ -1,0 +1,20 @@
+{
+    "mappings": [
+      {
+        "scenarioName": "get first 10 products",
+        "request": {
+          "method": "GET",
+          "url": "/wp-json/wc/v3/products?per_page=10&page=1",
+          "basicAuth":{
+              "username":"ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
+              "password":"cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb"
+          }
+        },
+        "response": {
+          "status": 200,
+          "bodyFileName": "products/GET-all-products-10.json"
+        }
+      }
+    ]
+  }
+  

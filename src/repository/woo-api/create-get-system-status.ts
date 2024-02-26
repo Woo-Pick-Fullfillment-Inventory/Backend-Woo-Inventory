@@ -1,24 +1,12 @@
-import { Type } from "@sinclair/typebox";
-
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
-import type { Static } from "@sinclair/typebox";
+import type { SystemStatusType } from "./models/system-status.type.js";
 import type {
   AxiosError,
   AxiosResponse,
 } from "axios";
-
-const SystemStatus = Type.Object({
-  environment: Type.Object({
-    home_url: Type.String(),
-    site_url: Type.String(),
-    version: Type.String(),
-  }),
-});
-
-type SystemStatusType = Static<typeof SystemStatus>;
 
 export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType | undefined> => {
   const { get } = createAxiosClient<SystemStatusType>({

@@ -5,6 +5,7 @@ import helmet from "helmet";
 import createError from "http-errors";
 
 import authRouter from "./business/authentication/index.js";
+import productRouter from "./business/products/index.js";
 import webhookRouter from "./webhook/index.js";
 
 import type {
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/webhook", webhookRouter);
 app.use("/api/v1", authRouter);
+app.use("/api/v1", productRouter);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory!");

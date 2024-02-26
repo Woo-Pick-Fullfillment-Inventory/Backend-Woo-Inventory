@@ -1,4 +1,4 @@
-export type UserAttributeType = "userId" | "email" | "username";
+export type UserAttributeType = "user_id" | "email" | "username";
 
 type AuthenticationMethodType = "woo_credentials" | "woo_token";
 
