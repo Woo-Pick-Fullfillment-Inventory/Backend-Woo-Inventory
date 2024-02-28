@@ -5,9 +5,11 @@ import type {
 
 export const convertWooProductToClient = (product: ProductFromWooType): ProductType => {
   return {
+    id: product.id,
     name: product.name,
     sku: product.sku,
     price: product.price,
+    stock_quantity: product.stock_quantity,
   };
 };
 
