@@ -17,6 +17,7 @@ const Product = Type.Object({
   })),
   price: Type.String(),
   sku: Type.String(),
+  stock_quantity: Type.Number(),
 });
 
 export type ProductFromWooType = Static<typeof Product>;
@@ -26,9 +27,11 @@ const Products = Type.Array(Product);
 export type ProductsFromWooType = Static<typeof Products>;
 
 export type ProductType = {
+    id: number;
     name: string;
     sku: string;
     price: string;
+    stock_quantity: number | null;
 }
 
 export type ProductsType = ProductType[];
