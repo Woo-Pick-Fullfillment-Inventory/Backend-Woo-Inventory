@@ -10,6 +10,10 @@ export const convertWooProductToClient = (product: ProductFromWooType): ProductT
     sku: product.sku,
     price: product.price,
     stock_quantity: product.stock_quantity,
+    images: product.images.map((image) => ({
+      id: image.id,
+      src: image.src,
+    })),
   };
 };
 

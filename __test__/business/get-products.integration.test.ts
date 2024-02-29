@@ -25,7 +25,8 @@ describe("Get products test", () => {
   it("should return a product list", async () => {
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUser.user_id) } });
     expect(response.status).toBe(200);
-    expect(response.data).toEqual(
+    expect(response.data.products.length).toEqual(response.data.itemsCount);
+    expect(response.data.products).toEqual(
       [
         {
           id: 2897,
@@ -33,6 +34,7 @@ describe("Get products test", () => {
           sku: "S123",
           price: "3",
           stock_quantity: 100,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/vegetable.jpg",
         },
         {
           id: 2893,
@@ -40,6 +42,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tyj-spring-roll-pastry.jpg",
         },
         {
           id: 2889,
@@ -47,6 +50,7 @@ describe("Get products test", () => {
           sku: "",
           price: "1.8",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/trai-sau-dong-lanh-2.jpg",
         },
         {
           id: 2887,
@@ -54,6 +58,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tower-red-pepper-power.jpg",
         },
         {
           id: 2884,
@@ -61,6 +66,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tomaten-mark.jpg",
         },
         {
           id: 2880,
@@ -68,6 +74,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tom-the-hap-2.jpg",
         },
         {
           id: 2876,
@@ -75,6 +82,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/thit-trai-gac.jpg",
         },
         {
           id: 2873,
@@ -82,6 +90,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tamarind-concentrate.jpg",
         },
         {
           id: 2871,
@@ -89,6 +98,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/taekyung-red-pepper-powder.jpg",
         },
         {
           id: 2868,
@@ -96,6 +106,7 @@ describe("Get products test", () => {
           sku: "",
           price: "",
           stock_quantity: null,
+          imageSrc: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/swamp-eel-fillet.jpg",
         },
       ],
     );

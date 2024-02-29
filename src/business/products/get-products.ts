@@ -49,7 +49,7 @@ export const getProducts = async (req: Request, res: Response) => {
 
   const userId = createVerifyBasicAuthHeaderToken(headers);
   if (!userId) {
-    logger.log("error", "no decoded token");
+    logger.log("error", `no decoded token from ${userId} header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
@@ -66,10 +66,20 @@ export const getProducts = async (req: Request, res: Response) => {
 
   const products = await getAllProductsPagination(base_url, wooBasicAuth, perPage, page);
 
-  if (!products) {
-    logger.log("error", "no products found");
+  if (!products || products.length === 0) {
+    logger.log("error", `no products found by user ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  return res.status(200).send(products);
+  return res.status(200).send({
+    itemsCount: products.length,
+    products: products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      sku: product.sku,
+      price: product.price,
+      stock_quantity: product.stock_quantity,
+      imageSrc: product.images.length > 0 ? product.images[0]?.src : "",
+    })),
+  });
 };
