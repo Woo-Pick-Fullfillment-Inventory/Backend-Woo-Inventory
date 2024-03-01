@@ -12,6 +12,6 @@ export const mockUser: UserFireStoreType = {
   },
   authentication: {
     method: "woo_credentials",
-    isAuthorized: true,
+    is_authorized: true,
   },
 };

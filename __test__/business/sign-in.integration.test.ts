@@ -22,13 +22,13 @@ describe("Signin test", () => {
   it("should return a token when log in was succesful", async () => {
     const responseEmail = await httpClient.post("api/v1/auth/signin",
       {
-        emailOrUsername: "someone@gmail.com",
+        email_or_username: "someone@gmail.com",
         password: "Test123abcjs",
       });
     expect(responseEmail.status).toEqual(200);
     const responseUsername = await httpClient.post("api/v1/auth/signin",
       {
-        emailOrUsername: "someone",
+        email_or_username: "someone",
         password: "Test123abcjs",
       });
     expect(responseUsername.status).toEqual(200);
@@ -37,7 +37,7 @@ describe("Signin test", () => {
   it("should return a error when credentials are falsy", async () => {
     const response = await httpClient.post("api/v1/auth/signin",
       {
-        emailOrUsername: `${randomUUID()}@email.com`,
+        email_or_username: `${randomUUID()}@email.com`,
         password: "Test123abcjsasdasd",
       });
     expect(response.status).toEqual(400);

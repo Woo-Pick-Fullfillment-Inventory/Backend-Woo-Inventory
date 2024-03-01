@@ -66,20 +66,15 @@ export const getProducts = async (req: Request, res: Response) => {
 
   const products = await getAllProductsPagination(base_url, wooBasicAuth, perPage, page);
 
-  if (!products || products.length === 0) {
-    logger.log("error", `no products found by user ${userId}`);
-    return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
-  }
-
   return res.status(200).send({
-    itemsCount: products.length,
+    items_count: products.length,
     products: products.map((product) => ({
       id: product.id,
       name: product.name,
       sku: product.sku,
       price: product.price,
       stock_quantity: product.stock_quantity,
-      imageSrc: product.images.length > 0 ? product.images[0]?.src : "",
+      image_src: product.images.length > 0 ? product.images[0]?.src : "",
     })),
   });
 };

@@ -12,7 +12,7 @@ import type {
   AxiosResponse,
 } from "axios";
 
-export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<ProductType[] | undefined> => {
+export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<ProductType[]> => {
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
