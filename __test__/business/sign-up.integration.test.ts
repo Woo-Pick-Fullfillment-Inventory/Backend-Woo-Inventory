@@ -95,4 +95,17 @@ describe("Signup test", () => {
       });
     expect(response.status).toEqual(400);
   });
+
+  it("should return 400 when passwords not matched", async () => {
+    const response = await httpClient.post("api/v1/auth/signup",
+      {
+        app_url: "https://testwebsite.com",
+        email: `${randomUUID()}@email.com`,
+        username: randomUUID(),
+        password: "Test123abcjs",
+        password_confirmation: "Test321abcjs",
+        token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
+      });
+    expect(response.status).toEqual(400);
+  });
 });
