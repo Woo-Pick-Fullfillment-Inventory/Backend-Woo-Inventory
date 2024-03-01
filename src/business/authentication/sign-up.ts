@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import * as emailValidator from "email-validator";
 import { StatusCodes } from "http-status-codes";
@@ -69,13 +70,14 @@ export const signup = async (req: Request, res: Response) => {
   if (!systemStatus) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   await insertUser({
     user_id: userId,
     store: { app_url: req.body.app_url },
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password,
+    password: hashedPassword,
     woo_credentials: {
       token: req.body.token.split("|")[0],
       secret: req.body.token.split("|")[1],

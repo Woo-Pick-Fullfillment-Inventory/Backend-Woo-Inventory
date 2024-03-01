@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
@@ -29,7 +30,8 @@ export const signin = async (req: Request, res: Response) => {
 
   if (!userFound) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (userFound.password !== req.body.password) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
+  const isPasswordMatch = await bcrypt.compare(req.body.password, userFound.password);
+  if (!isPasswordMatch) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
   if (!process.env["JWT_SECRET"]) {
     logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);

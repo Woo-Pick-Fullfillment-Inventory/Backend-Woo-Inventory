@@ -6,12 +6,12 @@ import { randomUUID } from "crypto";
 
 import { insertUser } from "../../src/repository/firestore";
 import { httpClient } from "../common/http-client";
-import { mockUser } from "../common/mock-data";
+import { mockUserWithHashedPassword } from "../common/mock-data";
 
 describe("Signin test", () => {
 
   beforeEach(async () => {
-    await insertUser(mockUser);
+    await insertUser(mockUserWithHashedPassword);
   });
 
   afterEach(async () => {
