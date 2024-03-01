@@ -12,7 +12,11 @@
         },
         "response": {
           "status": 200,
-          "bodyFileName": "products/GET-all-products-10.json"
+          "bodyFileName": "products/GET-all-products-10.json",
+          "headers": {
+            "X-WP-Total": "163",
+            "X-WP-TotalPages": "17"
+          }
         }
       }
     ]

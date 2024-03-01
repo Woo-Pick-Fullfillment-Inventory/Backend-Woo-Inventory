@@ -64,11 +64,15 @@ export const getProducts = async (req: Request, res: Response) => {
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
-  const products = await getAllProductsPagination(base_url, wooBasicAuth, perPage, page);
+  const productsResult = await getAllProductsPagination(base_url, wooBasicAuth, perPage, page);
+
+  const hasNextPage = productsResult.totalPages >= page;
 
   return res.status(200).send({
-    items_count: products.length,
-    products: products.map((product) => ({
+    total_items: productsResult.totalItems,
+    total_pages: productsResult.totalPages,
+    items_count: productsResult.products.length,
+    products: productsResult.products.map((product) => ({
       id: product.id,
       name: product.name,
       sku: product.sku,
@@ -76,5 +80,6 @@ export const getProducts = async (req: Request, res: Response) => {
       stock_quantity: product.stock_quantity,
       image_src: product.images.length > 0 ? product.images[0]?.src : "",
     })),
+    has_next_page: hasNextPage,
   });
 };
