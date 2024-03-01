@@ -26,6 +26,7 @@ describe("Get products test", () => {
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUser.user_id) } });
     expect(response.status).toBe(200);
     expect(response.data.products.length).toEqual(response.data.items_count);
+    expect(response.data.has_next_page).toEqual(true);
     expect(response.data.products).toEqual(
       [
         {

@@ -12,7 +12,13 @@ import type {
   AxiosResponse,
 } from "axios";
 
-export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<ProductType[]> => {
+type getAllProductsPaginationResponse = {
+  products: ProductType[];
+  totalItems: number;
+  totalPages: number;
+};
+
+export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<getAllProductsPaginationResponse> => {
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -43,7 +49,14 @@ export const getAllProductsPagination = async (baseUrl: string, token: string, p
       },
     ],
   });
-  const { data } = await get(`/wp-json/wc/v3/products?per_page=${perPage}&page=${page}`, { headers: { Authorization: token } });
+  const {
+    data,
+    headers,
+  } = await get(`/wp-json/wc/v3/products?per_page=${perPage}&page=${page}`, { headers: { Authorization: token } });
 
-  return convertWooProductsToClient(data);
+  return {
+    products: convertWooProductsToClient(data),
+    totalItems: parseInt(headers["x-wp-total"] as string, 10),
+    totalPages: parseInt(headers["x-wp-totalpages"] as string, 10),
+  };
 };
