@@ -16,6 +16,6 @@ export type UserFireStoreType = {
   };
   authentication: {
     method: AuthenticationMethodType;
-    isAuthorized: boolean;
+    is_authorized: boolean;
   };
 };

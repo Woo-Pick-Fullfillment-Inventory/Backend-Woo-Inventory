@@ -22,8 +22,8 @@ const SERVICE_ERRORS = {
 
 // todo: add bcrypt
 export const signin = async (req: Request, res: Response) => {
-  const userFoundByEmail = await getUserByAttribute("email", req.body.emailOrUsername);
-  const userFoundByUsername = await getUserByAttribute("username", req.body.emailOrUsername);
+  const userFoundByEmail = await getUserByAttribute("email", req.body.email_or_username);
+  const userFoundByUsername = await getUserByAttribute("username", req.body.email_or_username);
 
   const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
 

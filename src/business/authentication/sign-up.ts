@@ -55,10 +55,10 @@ export const signup = async (req: Request, res: Response) => {
 
   if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
-  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.passwordConfirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
+  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.password_confirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
-    process.env["NODE_ENV"] === "production" ? req.body.appURL : process.env["WOO_BASE_URL"];
+    process.env["NODE_ENV"] === "production" ? req.body.app_url : process.env["WOO_BASE_URL"];
   const systemStatus = await getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(
@@ -72,7 +72,7 @@ export const signup = async (req: Request, res: Response) => {
 
   await insertUser({
     user_id: userId,
-    store: { app_url: req.body.appURL },
+    store: { app_url: req.body.app_url },
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
@@ -82,7 +82,7 @@ export const signup = async (req: Request, res: Response) => {
     },
     authentication: {
       method: "woo_token",
-      isAuthorized: true,
+      is_authorized: true,
     },
   });
 
