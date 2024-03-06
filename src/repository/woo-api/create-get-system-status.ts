@@ -1,3 +1,4 @@
+import { SystemStatusSchema } from "./models/system-status.type.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -24,7 +25,7 @@ export const getSystemStatus = async (baseUrl: string, token: string): Promise<S
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`);
             throw new Error("Response not expected");
           }
-          if (!isResponseTypeTrue<SystemStatusType>(response.data)) {
+          if (!isResponseTypeTrue(SystemStatusSchema, response.data, true)) {
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`);
             throw new Error("Response not expected");
           }

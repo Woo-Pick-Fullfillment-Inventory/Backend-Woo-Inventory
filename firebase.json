@@ -28,5 +28,8 @@
     "hosting": {
       "port": 5002
     }
+  },
+  "import": {
+    "data": "firestore-persist-data.json"
   }
 }

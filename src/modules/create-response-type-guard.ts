@@ -1,14 +1,20 @@
-import Ajv, { Schema, ValidateFunction, ErrorObject } from "ajv";
+import Ajv from "ajv";
+
+import type {
+  ErrorObject,
+  Schema,
+  ValidateFunction,
+} from "ajv";
 
 export type ValidationResult = {
   isValid: boolean;
-  errors: ErrorObject[]; // Errors should always be an array
+  errors: ErrorObject[];
 };
 
 export const isResponseTypeTrue = <T extends Schema>(
   schema: T,
-  data: Record<string, any>,
-  areAdditionalPropertiesRequired: boolean
+  data: Record<string, unknown>,
+  areAdditionalPropertiesRequired: boolean,
 ): ValidationResult=> {
   const ajv = new Ajv();
   const validate: ValidateFunction = ajv.compile({
@@ -16,6 +22,9 @@ export const isResponseTypeTrue = <T extends Schema>(
     additionalProperties: areAdditionalPropertiesRequired,
   });
   const isValid = validate(data) as boolean;
-  const errors = isValid ? [] : validate.errors || []; 
-  return { isValid, errors };
+  const errors = isValid ? [] : validate.errors || [];
+  return {
+    isValid,
+    errors,
+  };
 };

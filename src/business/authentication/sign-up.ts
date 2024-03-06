@@ -1,3 +1,4 @@
+import { Type } from "@sinclair/typebox";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import * as emailValidator from "email-validator";
@@ -8,6 +9,7 @@ import { randomUUID } from "node:crypto";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import {
   getUserByAttribute,
   insertUser,
@@ -18,6 +20,7 @@ import type {
   Request,
   Response,
 } from "express";
+
 dotenv.config();
 
 const SERVICE_ERRORS = {
@@ -46,10 +49,30 @@ const SERVICE_ERRORS = {
     type: "/auth/signup-failed",
     message: "invalid password",
   },
+  invalidRequestType: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/auth/signup-failed",
+    message: "invalid request",
+  },
 };
+
+const SignupRequest = Type.Object({
+  app_url: Type.String(),
+  email: Type.String(),
+  username: Type.String(),
+  password: Type.String(),
+  password_confirmation: Type.String(),
+  token: Type.String(),
+});
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 export const signup = async (req: Request, res: Response) => {
+  const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);
+  if (!isSignupRequestTypeValid.isValid) {
+    logger.log("error", `invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
+  }
+
   if (await getUserByAttribute("email", req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
   if (await getUserByAttribute("username", req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
@@ -60,14 +83,14 @@ export const signup = async (req: Request, res: Response) => {
 
   const base_url =
     process.env["NODE_ENV"] === "production" ? req.body.app_url : process.env["WOO_BASE_URL"];
-  const systemStatus = await getSystemStatus(
+  const systemStatusResult = await getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
       req.body.token.split("|")[1],
     ),
   );
-  if (!systemStatus) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
+  if (!systemStatusResult) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -91,7 +114,7 @@ export const signup = async (req: Request, res: Response) => {
 
   if (!process.env["JWT_SECRET"]) {
     logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
-    return res.send(500);
+    throw new Error("JWT_SECRET is not defined");
   }
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"]) }` });

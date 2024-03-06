@@ -7,10 +7,10 @@ import {
   getUserByAttribute,
   insertUser,
 } from "../../src/repository/firestore";
-import { mockUser } from "../common/mock-data";
+import { mockUserWithHashedPassword } from "../common/mock-data";
 
 beforeEach(async () => {
-  await insertUser(mockUser);
+  await insertUser(mockUserWithHashedPassword);
 });
 
 afterEach(async () => {
@@ -19,6 +19,6 @@ afterEach(async () => {
 });
 
 it("should return mock user", async () => {
-  const resp = await getUserByAttribute("username", mockUser.username);
-  expect(resp).toEqual(mockUser);
+  const resp = await getUserByAttribute("username", mockUserWithHashedPassword.username);
+  expect(resp).toEqual(mockUserWithHashedPassword);
 });

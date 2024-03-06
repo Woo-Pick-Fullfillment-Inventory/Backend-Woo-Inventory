@@ -6,7 +6,7 @@ dotenv.config();
 export const createVerifyBasicAuthHeaderToken = (
   authorizationHeader: string | undefined,
 ): string => {
-  if(!authorizationHeader) throw new Error("no authorization header found");
+  if (!authorizationHeader) throw new Error("no authorization header found");
 
   const token = authorizationHeader.split(" ")[1];
   if (!token || !process.env["JWT_SECRET"])

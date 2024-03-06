@@ -7,7 +7,7 @@ import { WireMockRestClient } from "wiremock-rest-client";
 
 import { insertUser } from "../../src/repository/firestore";
 import { httpClient } from "../common/http-client";
-import { mockUser } from "../common/mock-data";
+import { mockUserWithHashedPassword } from "../common/mock-data";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 
@@ -19,7 +19,7 @@ describe("Signup test", () => {
   });
 
   beforeEach(async () => {
-    await insertUser(mockUser);
+    await insertUser(mockUserWithHashedPassword);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 

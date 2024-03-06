@@ -1,3 +1,4 @@
+import { Type } from "@sinclair/typebox";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
@@ -5,18 +6,15 @@ import jwt from "jsonwebtoken";
 
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { getUserByAttribute } from "../../repository/firestore/index.js";
-
-import { Type } from "@sinclair/typebox";
+import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
 
 import type { Static } from "@sinclair/typebox";
-
 import type {
   Request,
   Response,
 } from "express";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { UserFireStore } from "../../repository/firestore/models/user.type.js";
 dotenv.config();
 
 const SERVICE_ERRORS = {
@@ -40,8 +38,8 @@ const SigninRequest = Type.Object({
 export type SigninRequestType = Static<typeof SigninRequest>;
 
 export const signin = async (req: Request, res: Response) => {
-  const isSignInRequestTypeValid = isResponseTypeTrue(SigninRequest,req.body,false);
-  if(!isSignInRequestTypeValid.isValid) {
+  const isSignInRequestTypeValid = isResponseTypeTrue(SigninRequest, req.body, false);
+  if (!isSignInRequestTypeValid.isValid) {
     logger.log("error", `invalid signin request type  ${isSignInRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SigninRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
@@ -52,9 +50,9 @@ export const signin = async (req: Request, res: Response) => {
   const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
 
   if (!userFound) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
-  const isUserFoundTypeValid = isResponseTypeTrue(UserFireStore,userFound,false);
-  if(!isUserFoundTypeValid.isValid) {
-    logger.log("error", `invalid user found type ${isUserFoundTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(UserFireStore)} **RECEIVED**  ${JSON.stringify(userFound)}`);
+  const isUserFoundTypeValid = isResponseTypeTrue(UserFireStoreSchema, userFound, true);
+  if (!isUserFoundTypeValid.isValid) {
+    logger.log("error", `invalid user found type ${isUserFoundTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(UserFireStoreSchema)} **RECEIVED** ${JSON.stringify(userFound)}`);
     throw new Error("invalid user found type");
   }
 
@@ -63,7 +61,7 @@ export const signin = async (req: Request, res: Response) => {
 
   if (!process.env["JWT_SECRET"]) {
     logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
-    return res.send(500);
+    throw new Error("JWT_SECRET is not defined");
   }
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });

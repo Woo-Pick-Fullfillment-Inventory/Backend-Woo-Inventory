@@ -1,5 +1,7 @@
-import type { UserAttributeType, UserFireStoreType } from "./models/user.type";
-
+import type {
+  UserAttributeType,
+  UserFireStoreType,
+} from "./models/user.type.js";
 
 export const getUserByAttributeFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
   return async (

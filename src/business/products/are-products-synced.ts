@@ -3,10 +3,13 @@ import { StatusCodes } from "http-status-codes";
 
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
+import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import { getUserByAttribute } from "../../repository/firestore/index.js";
 
-import type { Request, Response } from "express";
-import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
+import type {
+  Request,
+  Response,
+} from "express";
 dotenv.config();
 
 const SERVICE_ERRORS = {
