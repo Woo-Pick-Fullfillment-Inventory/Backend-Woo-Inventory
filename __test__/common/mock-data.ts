@@ -14,6 +14,7 @@ export const mockUser: UserFireStoreType = {
     method: "woo_credentials",
     is_authorized: true,
   },
+  are_products_synced: false,
 };
 
 export const mockUserWithHashedPassword: UserFireStoreType = {
@@ -30,4 +31,5 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
     method: "woo_credentials",
     is_authorized: true,
   },
+  are_products_synced: false,
 };

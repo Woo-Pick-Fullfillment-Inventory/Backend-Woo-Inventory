@@ -1,21 +1,26 @@
+import { Type } from "@sinclair/typebox";
+
+import type { Static } from "@sinclair/typebox";
+
 export type UserAttributeType = "user_id" | "email" | "username";
 
-type AuthenticationMethodType = "woo_credentials" | "woo_token";
+export const UserFireStore = Type.Object({
+  user_id: Type.String(),
+  email: Type.String(),
+  username: Type.String(),
+  password: Type.String(),
+  store: Type.Object({
+    app_url: Type.String(),
+  }),
+  woo_credentials: Type.Object({
+    token: Type.String(),
+    secret: Type.String(),
+  }),
+  authentication: Type.Object({
+    method: Type.Union([Type.Literal("woo_credentials"), Type.Literal("woo_token")]),
+    is_authorized: Type.Boolean(),
+  }),
+  are_products_synced: Type.Boolean({ default: false }),
+});
 
-export type UserFireStoreType = {
-  user_id: string;
-  email: string;
-  username: string;
-  password: string;
-  store: {
-    app_url: string;
-  };
-  woo_credentials: {
-    token: string;
-    secret: string;
-  };
-  authentication: {
-    method: AuthenticationMethodType;
-    is_authorized: boolean;
-  };
-};
+export type UserFireStoreType = Static<typeof UserFireStore>;

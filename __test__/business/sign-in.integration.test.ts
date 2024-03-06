@@ -34,11 +34,21 @@ describe("Signin test", () => {
     expect(responseUsername.status).toEqual(200);
   });
 
-  it("should return a error when credentials are falsy", async () => {
+  it("should return a 400 error when credentials are falsy", async () => {
     const response = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: `${randomUUID()}@email.com`,
         password: "Test123abcjsasdasd",
+      });
+    expect(response.status).toEqual(400);
+  });
+
+  it("should return a 400 error when request body is falsy", async () => {
+    const response = await httpClient.post("api/v1/auth/signin",
+      {
+        email_or_username: `${randomUUID()}@email.com`,
+        password: "Test123abcjsasdasd",
+        some_fucking_attribute: "something"
       });
     expect(response.status).toEqual(400);
   });

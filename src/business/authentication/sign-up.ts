@@ -86,6 +86,7 @@ export const signup = async (req: Request, res: Response) => {
       method: "woo_token",
       is_authorized: true,
     },
+    are_products_synced: false,
   });
 
   if (!process.env["JWT_SECRET"]) {

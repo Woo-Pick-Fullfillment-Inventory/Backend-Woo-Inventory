@@ -4,9 +4,11 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 export const createVerifyBasicAuthHeaderToken = (
-  jwtToken: string,
+  authorizationHeader: string | undefined,
 ): string => {
-  const token = jwtToken.split(" ")[1];
+  if(!authorizationHeader) throw new Error("no authorization header found");
+
+  const token = authorizationHeader.split(" ")[1];
   if (!token || !process.env["JWT_SECRET"])
     throw new Error("no token or secret found");
 

@@ -18,7 +18,7 @@ type getAllProductsPaginationResponse = {
   totalPages: number;
 };
 
-export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<getAllProductsPaginationResponse> => {
+export const getProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<getAllProductsPaginationResponse> => {
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
