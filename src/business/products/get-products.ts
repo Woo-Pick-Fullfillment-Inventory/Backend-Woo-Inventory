@@ -55,11 +55,8 @@ export const getProducts = async (req: Request, res: Response) => {
 
   const wooBasicAuth = createBasicAuthHeaderToken(userFoundInFirestore.woo_credentials.token, userFoundInFirestore.woo_credentials.secret);
 
-  if(!process.env["WOO_BASE_URL"]) {
-    throw new Error("WOO_BASE_URL is not defined");
-  }
   const base_url =
-  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"];
+  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
   const productsResult = await getProductsPagination(base_url, wooBasicAuth, perPage, page);
 

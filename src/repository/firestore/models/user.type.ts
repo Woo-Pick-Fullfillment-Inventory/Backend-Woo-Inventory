@@ -1,4 +1,5 @@
 import { Type } from "@sinclair/typebox";
+
 import type { Static } from "@sinclair/typebox";
 
 export type UserAttributeType = "user_id" | "email" | "username";

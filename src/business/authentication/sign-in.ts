@@ -7,7 +7,10 @@ import jwt from "jsonwebtoken";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { getUserByAttribute, updateUserLastLogin } from "../../repository/firestore/index.js";
+import {
+  getUserByAttribute,
+  updateUserLastLogin,
+} from "../../repository/firestore/index.js";
 import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
 
 import type { Static } from "@sinclair/typebox";
