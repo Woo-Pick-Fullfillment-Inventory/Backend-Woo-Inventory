@@ -7,13 +7,13 @@ import { WireMockRestClient } from "wiremock-rest-client";
 import { createAuthorizationHeader } from "../../src/modules/create-authorization-header";
 import { insertUser } from "../../src/repository/firestore";
 import { httpClient } from "../common/http-client";
-import { mockUser } from "../common/mock-data";
+import { mockUserWithHashedPassword } from "../common/mock-data";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
   beforeEach(async () => {
-    await insertUser(mockUser);
+    await insertUser(mockUserWithHashedPassword);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
@@ -23,7 +23,7 @@ describe("Get products test", () => {
   });
 
   it("should return a product list", async () => {
-    const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUser.user_id) } });
+    const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
     expect(response.status).toBe(200);
     expect(response.data.products.length).toEqual(response.data.items_count);
     expect(response.data.has_next_page).toEqual(true);

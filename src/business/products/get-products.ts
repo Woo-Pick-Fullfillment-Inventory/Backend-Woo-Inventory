@@ -6,7 +6,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import { getUserByAttribute } from "../../repository/firestore/index.js";
-import { getAllProductsPagination } from "../../repository/woo-api/create-get-all-products-pagination.js";
+import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
 
 import type {
   Request,
@@ -37,19 +37,13 @@ export const getProducts = async (req: Request, res: Response) => {
   const perPage = typeof req.query["per_page"] === "string" ? parseInt(req.query["per_page"], 10) : undefined;
   const page = typeof req.query["page"] === "string" ? parseInt(req.query["page"], 10) : undefined;
   if (!perPage || !page) {
-    logger.log("error", "query per_page or page parameter is missing or invalid");
+    logger.log("error", `query per_page ${JSON.stringify(req.query["per_page"])} or page ${JSON.stringify(req.query["page"])} parameter is missing or invalid`);
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const headers = req.headers["authorization"];
-  if (!headers) {
-    logger.log("error", "no authorization header");
-    return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
-  }
-
-  const userId = createVerifyBasicAuthHeaderToken(headers);
+  const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
   if (!userId) {
-    logger.log("error", `no decoded token from ${userId} header`);
+    logger.log("error", `no decoded token from ${JSON.stringify(req.headers["authorization"])} authorization header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
@@ -64,9 +58,7 @@ export const getProducts = async (req: Request, res: Response) => {
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
-  const productsResult = await getAllProductsPagination(base_url, wooBasicAuth, perPage, page);
-
-  const hasNextPage = productsResult.totalPages >= page;
+  const productsResult = await getProductsPagination(base_url, wooBasicAuth, perPage, page);
 
   return res.status(200).send({
     total_items: productsResult.totalItems,
@@ -78,8 +70,8 @@ export const getProducts = async (req: Request, res: Response) => {
       sku: product.sku,
       price: product.price,
       stock_quantity: product.stock_quantity,
-      image_src: product.images.length > 0 ? product.images[0]?.src : "",
+      image_src: product.images[0] ? product.images[0].src : "",
     })),
-    has_next_page: hasNextPage,
+    has_next_page: productsResult.totalPages >= page,
   });
 };

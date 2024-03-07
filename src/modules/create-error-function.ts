@@ -1,5 +1,3 @@
-import logger from "./create-logger.js";
-
 import type {
   NextFunction,
   Request,
@@ -12,7 +10,6 @@ export const handleErrorFunction = (fn: (req: Request, res: Response, next: Next
   next: NextFunction,
 ): Promise<unknown> => {
   return Promise.resolve(fn(req, res, next)).catch((error) => {
-    logger.log("error", `Error in ${req.method} request ${ req.originalUrl || req.url}:`, error);
     res.sendStatus(500);
     next(error);
   });

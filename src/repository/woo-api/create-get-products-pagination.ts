@@ -1,4 +1,5 @@
 import { convertWooProductsToClient } from "./converter/convert-woo-product-to-client.js";
+import { ProductsSchema } from "./models/products.type.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -18,7 +19,7 @@ type getAllProductsPaginationResponse = {
   totalPages: number;
 };
 
-export const getAllProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<getAllProductsPaginationResponse> => {
+export const getProductsPagination = async (baseUrl: string, token: string, perPage: number, page: number): Promise<getAllProductsPaginationResponse> => {
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -34,7 +35,7 @@ export const getAllProductsPagination = async (baseUrl: string, token: string, p
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`);
             throw new Error("Response not expected");
           }
-          if (!isResponseTypeTrue<ProductsFromWooType>(response.data)) {
+          if (!isResponseTypeTrue(ProductsSchema, response.data, true)) {
             logger.log("error", `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`);
             throw new Error("Response not expected");
           }
