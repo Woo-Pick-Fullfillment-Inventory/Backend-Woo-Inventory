@@ -37,13 +37,13 @@ export const getProducts = async (req: Request, res: Response) => {
   const perPage = typeof req.query["per_page"] === "string" ? parseInt(req.query["per_page"], 10) : undefined;
   const page = typeof req.query["page"] === "string" ? parseInt(req.query["page"], 10) : undefined;
   if (!perPage || !page) {
-    logger.log("error", "query per_page or page parameter is missing or invalid");
+    logger.log("error", `query per_page ${JSON.stringify(req.query["per_page"])} or page ${JSON.stringify(req.query["page"])} parameter is missing or invalid`);
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
   if (!userId) {
-    logger.log("error", `no decoded token from ${userId} header`);
+    logger.log("error", `no decoded token from ${JSON.stringify(req.headers["authorization"])} authorization header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
@@ -55,8 +55,11 @@ export const getProducts = async (req: Request, res: Response) => {
 
   const wooBasicAuth = createBasicAuthHeaderToken(userFoundInFirestore.woo_credentials.token, userFoundInFirestore.woo_credentials.secret);
 
+  if(!process.env["WOO_BASE_URL"]) {
+    throw new Error("WOO_BASE_URL is not defined");
+  }
   const base_url =
-  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
+  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"];
 
   const productsResult = await getProductsPagination(base_url, wooBasicAuth, perPage, page);
 

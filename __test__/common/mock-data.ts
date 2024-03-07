@@ -14,6 +14,7 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
     method: "woo_credentials",
     is_authorized: true,
   },
+  last_login: "2024-02-06T00:00:00.000Z",
   are_products_synced: false,
 };
 
@@ -27,6 +28,7 @@ export const mockUserWrongType = {
     token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
     secret: "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
   },
+  last_login: "2024-02-06T00:00:00.000Z",
   authentication: {
     method: "woo_credentials",
     is_authorized: true,

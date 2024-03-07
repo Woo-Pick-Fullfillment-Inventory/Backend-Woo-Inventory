@@ -1,5 +1,4 @@
 import { Type } from "@sinclair/typebox";
-
 import type { Static } from "@sinclair/typebox";
 
 export type UserAttributeType = "user_id" | "email" | "username";
@@ -21,6 +20,7 @@ export const UserFireStoreSchema = Type.Object({
     ]),
     is_authorized: Type.Boolean(),
   }),
+  last_login: Type.String(),
   are_products_synced: Type.Boolean({ default: false }),
 });
 

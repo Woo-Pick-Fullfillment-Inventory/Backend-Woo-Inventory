@@ -109,11 +109,11 @@ export const signup = async (req: Request, res: Response) => {
       method: "woo_token",
       is_authorized: true,
     },
+    last_login: new Date().toISOString(),
     are_products_synced: false,
   });
 
   if (!process.env["JWT_SECRET"]) {
-    logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
     throw new Error("JWT_SECRET is not defined");
   }
 

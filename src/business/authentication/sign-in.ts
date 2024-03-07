@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { getUserByAttribute } from "../../repository/firestore/index.js";
+import { getUserByAttribute, updateUserLastLogin } from "../../repository/firestore/index.js";
 import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
 
 import type { Static } from "@sinclair/typebox";
@@ -60,9 +60,10 @@ export const signin = async (req: Request, res: Response) => {
   if (!isPasswordMatched) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
   if (!process.env["JWT_SECRET"]) {
-    logger.log("error", `JWT_SECRET ${process.env["JWT_SECRET"]} is not defined`);
     throw new Error("JWT_SECRET is not defined");
   }
+
+  await updateUserLastLogin(userFound.user_id);
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });
 };
