@@ -36,6 +36,6 @@ app.use(function (_req: Request, _res: Response, next: NextFunction) {
   next(createError(404));
 });
 
-app.listen(PORT, () => console.log(`Running on ${PORT}`));
+app.listen(8080, () => console.log(`Running on ${PORT}`));
 
 // TODO: add cors
