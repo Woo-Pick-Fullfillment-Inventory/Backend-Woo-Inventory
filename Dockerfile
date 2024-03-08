@@ -1,7 +1,7 @@
 FROM node:18 AS ts-builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci 
+RUN npm ci
 COPY tsconfig-build.json ./
 COPY src/ src/
 RUN npm run build
