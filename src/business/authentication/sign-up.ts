@@ -1,12 +1,12 @@
 import { Type } from "@sinclair/typebox";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import * as emailValidator from "email-validator";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
+import { emailValidator } from "../../modules/create-email-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -77,7 +77,7 @@ export const signup = async (req: Request, res: Response) => {
 
   if (await getUserByAttribute("username", req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
-  if (!emailValidator.validate(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
+  if (!emailValidator(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
   if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.password_confirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
