@@ -40,6 +40,11 @@ const SERVICE_ERRORS = {
 
 const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
 
+// TODO:
+// 1. Add tracing
+// 2. Add error handling
+// 3. Add tests
+// 4. Cloud functions?
 export const syncProducts = async (req: Request, res: Response) => {
   let currentPage = 1;
   let allProductsToBeSynced: ProductType[] = [];
