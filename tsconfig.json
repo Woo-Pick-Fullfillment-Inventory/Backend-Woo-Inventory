@@ -1,9 +1,30 @@
 {
-  "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18 + ESM + Strictest",
   "compilerOptions": {
-    "declaration": true,
-    "exactOptionalPropertyTypes": false,
-    "ignoreDeprecations": "5.0"
+    "lib": [
+      "es2022"
+    ],
+    "module": "es2022",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "ignoreDeprecations": "5.0",
+    "importsNotUsedAsValues": "error",
+    "checkJs": true
   },
   "include": ["src/**/*", "__test__/**/*"]
 }
