@@ -9,13 +9,15 @@ RUN npm run build
 FROM node:18 AS prod-dependencies
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 FROM node:18-alpine3.16
 WORKDIR /app
 COPY --from=ts-builder /app/dist ./dist/
 COPY --from=prod-dependencies /app/node_modules /node_modules
 COPY package.json ./
+
+ENV FIRESTORE_EMULATOR_HOST="firestore:8888"
 
 USER 1000
 

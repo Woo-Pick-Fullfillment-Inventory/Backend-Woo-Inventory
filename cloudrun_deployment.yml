@@ -20,6 +20,8 @@ spec:
           value: "8080"
         - name: PROJECT_ID
           value: $PROJECT_ID
+        - name: FIRESTORE_EMULATOR_HOST
+          value: "localhost:8888"
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
