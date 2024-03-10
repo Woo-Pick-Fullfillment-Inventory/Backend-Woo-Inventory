@@ -17,6 +17,8 @@ export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_EN
   ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
   : initializeAdminApp({ projectId: "test-project" }).firestore();
 
+console.log("firestoreClient", firestoreClient);
+
 export const getUserByAttribute = getUserByAttributeFactory(firestoreClient);
 export const insertUser = insertUserFactory(firestoreClient);
 export const updateUserLastLogin = updateUserLastLoginFactory(firestoreClient);
