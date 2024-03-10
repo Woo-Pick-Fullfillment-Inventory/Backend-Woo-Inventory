@@ -9,7 +9,7 @@ import type {
   AxiosResponse,
 } from "axios";
 
-export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType | undefined> => {
+export const getSystemStatus = async (baseUrl: string, token: string): Promise<SystemStatusType> => {
   const { get } = createAxiosClient<SystemStatusType>({
     config: {
       baseURL: baseUrl,
