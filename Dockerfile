@@ -17,8 +17,6 @@ COPY --from=ts-builder /app/dist ./dist/
 COPY --from=prod-dependencies /app/node_modules /node_modules
 COPY package.json ./
 
-ENV FIRESTORE_EMULATOR_HOST="firestore:8888"
-
 USER 1000
 
 CMD ["node","./dist/app.js"]
