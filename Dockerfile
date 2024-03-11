@@ -9,7 +9,7 @@ RUN npm run build
 FROM node:18 AS prod-dependencies
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 
 FROM node:18-alpine3.16
 WORKDIR /app
