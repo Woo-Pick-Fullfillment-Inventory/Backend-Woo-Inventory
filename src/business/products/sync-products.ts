@@ -1,10 +1,12 @@
 import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
+import { performance } from "perf_hooks";
 
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
+import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import {
@@ -74,6 +76,8 @@ export const syncProducts = async (req: Request, res: Response) => {
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
+  const startTimeGettingProducts = performance.now();
+
   // 100 hardcode. maximal number of products allowed to be queried by WooCommerce
   while (shouldContinue) {
     const result = await getProductsPagination(base_url, wooBasicAuth, 100, currentPage);
@@ -89,9 +93,17 @@ export const syncProducts = async (req: Request, res: Response) => {
     currentPage += 1;
   }
 
+  const endTimeGettingProducts = performance.now();
+
+  logger.log("info", `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`);
+
+  const startTimeWritingToDb = performance.now();
   for (let i = 0; i < allProductsToBeSynced.length; i+=100) {
     await batchWriteProducts(allProductsToBeSynced.slice(i, i+100), userId);
   }
+  const endTimeWritingToDb = performance.now();
+
+  logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
 
   await updateUserProductsSynced(userId);
 
