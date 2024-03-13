@@ -1,3 +1,1 @@
-export const measureTime = (start: number, end: number) => {
-  return (end - start).toFixed(2);
-};
+export const measureTime = (start: number, end: number) => (end - start).toFixed(2);

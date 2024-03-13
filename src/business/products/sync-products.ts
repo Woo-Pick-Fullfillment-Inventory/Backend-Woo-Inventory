@@ -39,6 +39,11 @@ const SERVICE_ERRORS = {
     type: "/products/sync-process/invalid-request-type",
     message: "invalid request",
   },
+  dataSyncedAlready: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/sync-process/user-already-synced-products",
+    message: "invalid request",
+  },
 };
 
 const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
@@ -71,21 +76,21 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
+  if (userFoundInFirestore.are_products_synced) {
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`);
+    return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
+  }
+
   const wooBasicAuth = createBasicAuthHeaderToken(userFoundInFirestore.woo_credentials.token, userFoundInFirestore.woo_credentials.secret);
 
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
   const startTimeGettingProducts = performance.now();
-
   // 100 hardcode. maximal number of products allowed to be queried by WooCommerce
   while (shouldContinue) {
     const result = await getProductsPagination(base_url, wooBasicAuth, 100, currentPage);
-    if (result.products.length === 0) {
-      shouldContinue = false;
-      break;
-    }
-    if (result.totalPages === currentPage) {
+    if (result.products.length === 0 || result.totalPages === currentPage) {
       shouldContinue = false;
       break;
     }
@@ -94,15 +99,14 @@ export const syncProducts = async (req: Request, res: Response) => {
   }
 
   const endTimeGettingProducts = performance.now();
-
   logger.log("info", `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`);
 
+  // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
   for (let i = 0; i < allProductsToBeSynced.length; i+=100) {
     await batchWriteProducts(allProductsToBeSynced.slice(i, i+100), userId);
   }
   const endTimeWritingToDb = performance.now();
-
   logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
 
   await updateUserProductsSynced(userId);
