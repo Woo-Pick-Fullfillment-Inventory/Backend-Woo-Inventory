@@ -28,13 +28,13 @@ const SERVICE_ERRORS = {
 export const areProductsSynced = async (req: Request, res: Response) => {
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
   if (!userId) {
-    logger.log("error", `no decoded token from ${JSON.stringify(req.headers["authorization"])} authorization header`);
+    logger.log("warn", `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${JSON.stringify(req.headers["authorization"])} authorization header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
   const userFoundInFirestore = await getUserByAttribute("user_id", userId);
   if (!userFoundInFirestore) {
-    logger.log("error", `user not found by id ${userId}`);
+    logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 

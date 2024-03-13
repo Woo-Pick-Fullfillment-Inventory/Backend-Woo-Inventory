@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
+import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -52,25 +53,35 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   const isSyncProductsRequestTypeValid = isResponseTypeTrue(SyncProductsSchema, req.body, false);
   if (!isSyncProductsRequestTypeValid.isValid) {
-    logger.log("error", `invalid sync products request type  ${isSyncProductsRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
   if (!userId) {
-    logger.log("error", `no decoded token from ${userId} header`);
+    logger.log("warn", `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${userId} header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
   const userFoundInFirestore = await getUserByAttribute("user_id", userId);
   if (!userFoundInFirestore) {
-    logger.log("error", `user not found by id ${userId}`);
+    logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
+  const wooBasicAuth = createBasicAuthHeaderToken(userFoundInFirestore.woo_credentials.token, userFoundInFirestore.woo_credentials.secret);
+
+  const base_url =
+  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
+
+  // 100 hardcode. maximal number of products allowed to be queried by WooCommerce
   while (shouldContinue) {
-    const result = await getProductsPagination(userFoundInFirestore.store.app_url, userFoundInFirestore.woo_credentials.token, 100, currentPage);
+    const result = await getProductsPagination(base_url, wooBasicAuth, 100, currentPage);
     if (result.products.length === 0) {
+      shouldContinue = false;
+      break;
+    }
+    if (result.totalPages === currentPage) {
       shouldContinue = false;
       break;
     }

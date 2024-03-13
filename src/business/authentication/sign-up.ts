@@ -69,7 +69,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 export const signup = async (req: Request, res: Response) => {
   const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);
   if (!isSignupRequestTypeValid.isValid) {
-    logger.log("error", `invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
@@ -90,6 +90,7 @@ export const signup = async (req: Request, res: Response) => {
       req.body.token.split("|")[1],
     ),
   );
+  // actually useless
   if (!systemStatusResult) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
@@ -114,7 +115,8 @@ export const signup = async (req: Request, res: Response) => {
   });
 
   if (!process.env["JWT_SECRET"]) {
-    throw new Error("JWT_SECRET is not defined");
+    logger.log("error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`);
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"]) }` });

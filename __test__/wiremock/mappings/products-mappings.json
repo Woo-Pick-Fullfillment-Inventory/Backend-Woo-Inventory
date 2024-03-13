@@ -18,6 +18,44 @@
             "X-WP-TotalPages": "17"
           }
         }
+      },
+      {
+        "scenarioName": "retrieve first 100 products",
+        "request": {
+            "method": "GET",
+            "url": "/wp-json/wc/v3/products?per_page=100&page=1",
+            "basicAuth": {
+                "username": "ck_1111",
+                "password": "cs_2222"
+            }
+        },
+        "response": {
+            "status": 200,
+            "headers": {
+                "X-WP-Total": "163",
+                "X-WP-TotalPages": "2"
+            },
+            "bodyFileName": "products/GET-products-100-page-1.json"
+        }
+      },
+      {
+          "scenarioName": "retrieve second 100 products",
+          "request": {
+              "method": "GET",
+              "url": "/wp-json/wc/v3/products?per_page=100&page=2",
+              "basicAuth": {
+                  "username": "ck_1111",
+                  "password": "cs_2222"
+              }
+          },
+          "response": {
+              "status": 200,
+              "headers": {
+                  "X-WP-Total": "163",
+                  "X-WP-TotalPages": "2"
+              },
+              "bodyFileName": "products/GET-products-100-page-2.json"
+          }
       }
     ]
   }

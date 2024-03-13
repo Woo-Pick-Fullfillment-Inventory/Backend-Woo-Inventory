@@ -4,8 +4,8 @@ import {
 } from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { createAuthorizationHeader } from "../../src/modules/create-authorization-header";
 import { insertUser } from "../../src/repository/firestore";
+import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserWithHashedPassword } from "../common/mock-data";
 
