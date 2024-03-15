@@ -16,7 +16,7 @@ import {
 } from "../../repository/firestore/index.js";
 import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
 
-import type { ProductType } from "../../repository/woo-api/models/products.type.js";
+import type { ProductsType } from "../../repository/woo-api/models/products.type.js";
 import type {
   Request,
   Response,
@@ -54,9 +54,6 @@ const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync
 // 3. Add tests
 // 4. Cloud functions?
 export const syncProducts = async (req: Request, res: Response) => {
-  let currentPage = 1;
-  let allProductsToBeSynced: ProductType[] = [];
-  let shouldContinue = true;
 
   const isSyncProductsRequestTypeValid = isResponseTypeTrue(SyncProductsSchema, req.body, false);
   if (!isSyncProductsRequestTypeValid.isValid) {
@@ -86,25 +83,17 @@ export const syncProducts = async (req: Request, res: Response) => {
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
-  const startTimeGettingProducts = performance.now();
-  // 100 hardcode. maximal number of products allowed to be queried by WooCommerce
-  while (shouldContinue) {
-    const result = await getProductsPagination(base_url, wooBasicAuth, 100, currentPage);
-    if (result.products.length === 0 || result.totalPages === currentPage) {
-      shouldContinue = false;
-      break;
-    }
-    allProductsToBeSynced = allProductsToBeSynced.concat(result.products);
-    currentPage += 1;
-  }
+  const { totalItems } = await getProductsPagination(base_url, wooBasicAuth, 1, 1);
 
+  const startTimeGettingProducts = performance.now();
+  const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
   const endTimeGettingProducts = performance.now();
   logger.log("info", `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`);
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < allProductsToBeSynced.length; i+=100) {
-    await batchWriteProducts(allProductsToBeSynced.slice(i, i+100), userId);
+  for (let i = 0; i < products.length; i+=100) {
+    await batchWriteProducts(products.slice(i, i+100), userId);
   }
   const endTimeWritingToDb = performance.now();
   logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
@@ -112,4 +101,41 @@ export const syncProducts = async (req: Request, res: Response) => {
   await updateUserProductsSynced(userId);
 
   return res.status(200).send({ are_products_synced: true });
+};
+
+const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, pageSize: number, currentPage: number) => {
+  const result = await getProductsPagination(base_url, wooBasicAuth, pageSize, currentPage);
+  return result.products;
+};
+
+const fetchAllProducts = async (base_url: string, wooBasicAuth: string, totalItems: number) => {
+  let currentChunk = 1;
+  let shouldContinue = true;
+  let allProductsToBeSynced: ProductsType = [];
+  let totalChunks = Math.ceil(totalItems / 50);
+
+  while (shouldContinue) {
+    const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 50);
+
+    const promises: Promise<ProductsType>[] = [];
+
+    for (let i = 0; i < numBatches; i++) {
+      promises.push(fetchProductsBatch(base_url, wooBasicAuth, 50, currentChunk + 1));
+      currentChunk += 1;
+    }
+
+    const results = await Promise.all(promises);
+
+    allProductsToBeSynced = allProductsToBeSynced.concat(...results);
+
+    if (results.some(result => result.length === 0) || currentChunk > totalChunks) {
+      shouldContinue = false;
+      break;
+    }
+
+    totalChunks -= numBatches;
+    if (totalItems > 200) totalItems -= 200;
+  }
+
+  return allProductsToBeSynced;
 };
