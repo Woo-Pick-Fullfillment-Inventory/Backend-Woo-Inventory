@@ -103,8 +103,8 @@ export const syncProducts = async (req: Request, res: Response) => {
   return res.status(200).send({ are_products_synced: true });
 };
 
-const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, pageSize: number, currentPage: number) => {
-  const result = await getProductsPagination(base_url, wooBasicAuth, pageSize, currentPage);
+const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, currentPage: number) => {
+  const result = await getProductsPagination(base_url, wooBasicAuth, 50, currentPage);
   return result.products;
 };
 
@@ -120,7 +120,7 @@ const fetchAllProducts = async (base_url: string, wooBasicAuth: string, totalIte
     const promises: Promise<ProductsType>[] = [];
 
     for (let i = 0; i < numBatches; i++) {
-      promises.push(fetchProductsBatch(base_url, wooBasicAuth, 50, currentChunk + 1));
+      promises.push(fetchProductsBatch(base_url, wooBasicAuth, currentChunk));
       currentChunk += 1;
     }
 
