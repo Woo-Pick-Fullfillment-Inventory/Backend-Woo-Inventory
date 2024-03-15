@@ -87,6 +87,10 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   const startTimeGettingProducts = performance.now();
   const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
+  if (products.length !== totalItems) {
+    logger.log("Error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`);
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
   const endTimeGettingProducts = performance.now();
   logger.log("info", `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`);
 
