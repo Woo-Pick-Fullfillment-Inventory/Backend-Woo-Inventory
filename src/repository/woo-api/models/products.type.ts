@@ -11,11 +11,13 @@ const ProductSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
   slug: Type.String(),
-  categories: Type.Array(Type.Object({
-    id: Type.Number(),
-    name: Type.String(),
-    slug: Type.String(),
-  })),
+  categories: Type.Array(
+    Type.Object({
+      id: Type.Number(),
+      name: Type.String(),
+      slug: Type.String(),
+    }),
+  ),
   images: Type.Array(ImageSchema),
   price: Type.String(),
   sku: Type.String(),
@@ -28,16 +30,39 @@ export const ProductsSchema = Type.Array(ProductSchema);
 
 export type ProductsFromWooType = Static<typeof ProductsSchema>;
 
+// User receive this product type with id
 export type ProductType = {
+  id: number;
+  name: string;
+  sku: string;
+  price: string;
+  stock_quantity: number | null;
+  images: {
     id: number;
-    name: string;
-    sku: string;
-    price: string;
-    stock_quantity: number | null;
-    images: {
-      id: number;
-      src: string;
-    }[];
-}
+    src: string;
+  }[];
+};
 
 export type ProductsType = ProductType[];
+
+// When user create new product there is no id yet
+export type NewProductType = {
+  name: string;
+  product_group: string;
+  barcode: string | null;
+  imei: string | null;
+  description: string | null;
+  supplier: string | null;
+  sku: string;
+  price: string;
+  tax: string;
+  dimension: string | null;
+  weight: string | null;
+  activate: boolean | null;
+  expiry_data: string | null;
+  stock_quantity: number | null;
+  images: {
+    id: number;
+    src: string;
+  }[];
+};
