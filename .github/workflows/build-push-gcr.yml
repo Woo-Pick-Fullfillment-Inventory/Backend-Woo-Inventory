@@ -25,3 +25,4 @@ jobs:
         run: firebase emulators:exec --project=test-project 'npm run test'
         env: 
           JWT_SECRET: secret
+          SERVICE_PORT: 5000
