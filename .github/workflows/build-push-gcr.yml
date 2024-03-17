@@ -23,3 +23,5 @@ jobs:
         run: docker compose up -d
       - name: Run all the tests
         run: firebase emulators:exec --project=test-project 'npm run test'
+        env: 
+          JWT_SECRET: secret
