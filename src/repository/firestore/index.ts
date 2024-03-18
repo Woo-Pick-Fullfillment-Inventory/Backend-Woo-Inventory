@@ -1,4 +1,5 @@
 import { Firestore } from "@google-cloud/firestore";
+import dotenv from "dotenv";
 
 import { batchWriteProductsFactory } from "./batch-write-products.js";
 import { getUserByAttributeFactory } from "./get-user.js";
@@ -7,13 +8,22 @@ import {
   updateUserLastLoginFactory,
   updateUserProductsSyncedFactory,
 } from "./update-user.js";
+dotenv.config();
+
+if (!process.env["PROJECT_ID"]) {
+  throw new Error("PROJECT_ID environment variable is required");
+}
+
+if (!process.env["FIRESTORE_PORT"]) {
+  throw new Error("FIRESTORE_PORT environment variable is required");
+}
 
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
-  ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
+  ? new Firestore({ projectId: process.env["PROJECT_ID"] })
   : new Firestore({
-    projectId: "test-project",
+    projectId: process.env["PROJECT_ID"],
     host: "127.0.0.1",
-    port: 8888,
+    port: parseInt(process.env["FIRESTORE_PORT"]),
     ssl: false,
   });
 
