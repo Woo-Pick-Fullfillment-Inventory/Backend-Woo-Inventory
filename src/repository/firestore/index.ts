@@ -16,12 +16,14 @@ if (!process.env["FIRESTORE_PORT"]) {
   throw new Error("FIRESTORE_PORT is not defined");
 }
 
+console.log("process.env[\"NODE_ENV\"]", process.env["FIRESTORE_PORT"]);
+
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
   ? new Firestore({ projectId: process.env["PROJECT_ID"] })
   : new Firestore({
     projectId: process.env["PROJECT_ID"],
     host: "127.0.0.1",
-    port: parseInt(process.env["FIRESTORE_PORT"]),
+    port: Number(process.env["FIRESTORE_PORT"]),
     ssl: false,
   });
 

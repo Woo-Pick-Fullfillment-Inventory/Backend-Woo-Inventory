@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   application:
-    image: $IMAGE_NAME
+    image: hehe:latest
     ports:
       - 5000:5000
     environment:
