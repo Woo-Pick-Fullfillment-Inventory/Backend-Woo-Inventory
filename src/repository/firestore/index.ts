@@ -10,20 +10,15 @@ import {
 } from "./update-user.js";
 dotenv.config();
 
-if (!process.env["PROJECT_ID"]) {
-  throw new Error("PROJECT_ID environment variable is required");
-}
-
-if (!process.env["FIRESTORE_PORT"]) {
-  throw new Error("FIRESTORE_PORT environment variable is required");
-}
+const projectId = process.env["PROJECT_ID"] || "test-project";
+const firestorePort = process.env["NODE_ENV"] || "8888";
 
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
-  ? new Firestore({ projectId: process.env["PROJECT_ID"] })
+  ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
   : new Firestore({
-    projectId: process.env["PROJECT_ID"],
+    projectId: projectId,
     host: "127.0.0.1",
-    port: parseInt(process.env["FIRESTORE_PORT"]),
+    port: parseInt(firestorePort),
     ssl: false,
   });
 
