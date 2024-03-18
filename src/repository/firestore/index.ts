@@ -17,7 +17,7 @@ if (!process.env["FIRESTORE_PORT"]) {
 }
 
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
-  ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
+  ? new Firestore({ projectId: process.env["PROJECT_ID"] })
   : new Firestore({
     projectId: process.env["PROJECT_ID"],
     host: "127.0.0.1",

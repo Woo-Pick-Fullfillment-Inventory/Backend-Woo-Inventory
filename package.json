@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint-docker": "docker run --rm -i hadolint/hadolint < Dockerfile",
-    "lint-markdown": "markdownlint -i ./node_modules .",
+    "lint-markdown": "./node_modules/.bin/markdownlint -i ./node_modules .",
     "lint:fix": "npx eslint 'src/**/*' '__test__/**/*' --fix",
     "prettier:fix": "prettier --write .",
     "build": "tsc -p tsconfig-build.json",
