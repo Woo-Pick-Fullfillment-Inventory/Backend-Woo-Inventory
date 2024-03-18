@@ -10,14 +10,11 @@ import {
 } from "./update-user.js";
 dotenv.config();
 
-export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
-  ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
-  : new Firestore({
-    projectId: process.env["PROJECT_ID"] as string,
-    host: "127.0.0.1",
-    port: parseInt(process.env["FIRESTORE_PORT"] as string),
-    ssl: false,
-  });
+if (!process.env["PROJECT_ID"]) {
+  throw new Error("PROJECT_ID environment variable is required");
+}
+
+export const firestoreClient: FirebaseFirestore.Firestore = new Firestore({ projectId: process.env["PROJECT_ID"] });
 
 export const getUserByAttribute = getUserByAttributeFactory(firestoreClient);
 export const insertUser = insertUserFactory(firestoreClient);

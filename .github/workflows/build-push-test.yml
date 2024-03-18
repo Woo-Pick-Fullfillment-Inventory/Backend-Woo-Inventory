@@ -95,10 +95,7 @@ jobs:
         run: docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml logs
 
       - name: Run all the tests
-        run: firebase emulators:exec --project=test-project 'npm run test'
-
-      - name: Print test output
-        run: cat test-results.txt
+        run: firebase emulators:exec --project=test-project 'npm run test --exit'
 
       - name: Stop containers
         if: always()
