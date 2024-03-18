@@ -1,5 +1,7 @@
 import colors from "cli-color";
+import dotenv from "dotenv";
 import winston from "winston";
+dotenv.config();
 
 const logger =
   process.env["NODE_ENV"] !== "production"

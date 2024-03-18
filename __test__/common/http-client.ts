@@ -1,7 +1,8 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
 import type { AxiosRequestConfig } from "axios";
-
+dotenv.config();
 const PORT = process.env["SERVICE_PORT"] || 5000;
 
 export const instance = axios.create({
