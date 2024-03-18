@@ -107,7 +107,7 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml up -d
 
       - name: Run all the tests
-        run: FIRESTORE_EMULATOR_HOST='127.0.0.1:8888' firebase emulators:exec --project=test-project 'npm run test'
+        run: firebase emulators:exec --project=test-project 'npm run test'
 
       - name: Stop containers
         if: always()
