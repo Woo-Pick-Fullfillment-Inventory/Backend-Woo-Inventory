@@ -8,14 +8,10 @@ import {
   updateUserProductsSyncedFactory,
 } from "./update-user.js";
 
-if (!process.env["PROJECT_ID"]) {
-  throw new Error("PROJECT_ID is not defined");
-}
-
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
-  ? new Firestore({ projectId: process.env["PROJECT_ID"] })
+  ? new Firestore({ projectId: process.env["PROJECT_ID"] as string })
   : new Firestore({
-    projectId: process.env["PROJECT_ID"],
+    projectId: "test-project",
     host: "127.0.0.1",
     port: 8888,
     ssl: false,
