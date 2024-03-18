@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
+import { fetchAllProducts } from "./helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -16,7 +17,6 @@ import {
 } from "../../repository/firestore/index.js";
 import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
 
-import type { ProductsType } from "../../repository/woo-api/models/products.type.js";
 import type {
   Request,
   Response,
@@ -88,7 +88,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   const startTimeGettingProducts = performance.now();
   const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
   if (products.length !== totalItems) {
-    logger.log("Error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`);
+    logger.log("error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`);
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
   const endTimeGettingProducts = performance.now();
@@ -105,41 +105,4 @@ export const syncProducts = async (req: Request, res: Response) => {
   await updateUserProductsSynced(userId);
 
   return res.status(200).send({ are_products_synced: true });
-};
-
-const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, currentPage: number) => {
-  const result = await getProductsPagination(base_url, wooBasicAuth, 50, currentPage);
-  return result.products;
-};
-
-const fetchAllProducts = async (base_url: string, wooBasicAuth: string, totalItems: number) => {
-  let currentChunk = 1;
-  let shouldContinue = true;
-  let allProductsToBeSynced: ProductsType = [];
-  let totalChunks = Math.ceil(totalItems / 50);
-
-  while (shouldContinue) {
-    const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 50);
-
-    const promises: Promise<ProductsType>[] = [];
-
-    for (let i = 0; i < numBatches; i++) {
-      promises.push(fetchProductsBatch(base_url, wooBasicAuth, currentChunk));
-      currentChunk += 1;
-    }
-
-    const results = await Promise.all(promises);
-
-    allProductsToBeSynced = allProductsToBeSynced.concat(...results);
-
-    if (results.some(result => result.length === 0) || currentChunk > totalChunks) {
-      shouldContinue = false;
-      break;
-    }
-
-    totalChunks -= numBatches;
-    if (totalItems > 200) totalItems -= 200;
-  }
-
-  return allProductsToBeSynced;
 };

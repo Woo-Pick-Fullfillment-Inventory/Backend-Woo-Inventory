@@ -38,11 +38,23 @@ describe("Syncing products test", () => {
     expect(response.data.are_products_synced).toEqual(true);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
-      url: "/wp-json/wc/v3/products?per_page=100&page=1",
+      url: "/wp-json/wc/v3/products?per_page=1&page=1",
     })).count).toEqual(1);
     expect((await mambuApiMockServer.requests.getCount({
       method: "GET",
-      url: "/wp-json/wc/v3/products?per_page=100&page=2",
+      url: "/wp-json/wc/v3/products?per_page=50&page=1",
+    })).count).toEqual(1);
+    expect((await mambuApiMockServer.requests.getCount({
+      method: "GET",
+      url: "/wp-json/wc/v3/products?per_page=50&page=2",
+    })).count).toEqual(1);
+    expect((await mambuApiMockServer.requests.getCount({
+      method: "GET",
+      url: "/wp-json/wc/v3/products?per_page=50&page=3",
+    })).count).toEqual(1);
+    expect((await mambuApiMockServer.requests.getCount({
+      method: "GET",
+      url: "/wp-json/wc/v3/products?per_page=50&page=4",
     })).count).toEqual(1);
   });
 });
