@@ -12,18 +12,12 @@ if (!process.env["PROJECT_ID"]) {
   throw new Error("PROJECT_ID is not defined");
 }
 
-if (!process.env["FIRESTORE_PORT"]) {
-  throw new Error("FIRESTORE_PORT is not defined");
-}
-
-console.log("process.env[\"NODE_ENV\"]", process.env["FIRESTORE_PORT"]);
-
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
   ? new Firestore({ projectId: process.env["PROJECT_ID"] })
   : new Firestore({
     projectId: process.env["PROJECT_ID"],
     host: "127.0.0.1",
-    port: Number(process.env["FIRESTORE_PORT"]),
+    port: 8888,
     ssl: false,
   });
 
