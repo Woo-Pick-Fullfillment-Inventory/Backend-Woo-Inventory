@@ -92,7 +92,7 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml up -d
 
       - name: Run all the tests
-        run: firebase emulators:exec --project=test-project 'npm run test --exit'
+        run: firebase emulators:exec --project=test-project --only firestore 'npm run test --exit'
 
       - name: Check Docker container logs
         run: docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml logs
