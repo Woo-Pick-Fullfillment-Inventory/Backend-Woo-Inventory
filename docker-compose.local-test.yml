@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   application:
@@ -12,3 +12,11 @@ services:
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
       FIRESTORE_EMULATOR_HOST: host.docker.internal:8888
+
+  wiremock:
+    image: wiremock/wiremock:3.1.0
+    command: --verbose
+    ports:
+      - "1080:8080"
+    volumes:
+      - ${PWD}/__test__/wiremock:/home/wiremock
