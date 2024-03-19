@@ -85,7 +85,8 @@ jobs:
       - name: Replace Docker image
         run: |
           gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
-          sed -i "s#\${IMAGE_NAME}#europe-west3-docker.pkg.dev/${PROJECT_ID}/woopick-registry/${IMAGE_NAME}:latest#g" docker-compose.github-pipeline.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" docker-compose.github-pipeline.yml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" docker-compose.github-pipeline.yml
 
       - name: Start wiremock and application
         run: |-
