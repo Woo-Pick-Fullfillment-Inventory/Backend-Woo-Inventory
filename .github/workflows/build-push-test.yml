@@ -91,6 +91,13 @@ jobs:
       - name: Start wiremock and application
         run: |-
           docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml up -d
+        env:
+          NODE_ENV: test
+          SERVICE_PORT: 5000
+          PROJECT_ID: test-project
+          WOO_BASE_URL: http://wiremock:8080
+          JWT_SECRET: secret
+          FIRESTORE_EMULATOR_HOST: host.docker.internal:8888
 
       - name: Run all the tests
         run: firebase emulators:exec --project=test-project --only firestore 'npm run test --exit'
