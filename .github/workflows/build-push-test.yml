@@ -94,10 +94,6 @@ jobs:
 
       - name: Run all the tests
         run: firebase emulators:exec --project=test-project --only firestore 'npm run test --exit'
-      
-      - name: Setup tmate session
-        if: success() || failure()
-        uses: mxschmitt/action-tmate@v3
 
       - name: Check Docker container logs
         if: always()

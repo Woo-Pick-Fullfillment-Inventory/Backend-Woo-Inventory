@@ -11,7 +11,7 @@ services:
       PROJECT_ID: test-project
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
-      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8888
+      FIRESTORE_EMULATOR_HOST: 172.17.0.1:8888
 
   wiremock:
     image: wiremock/wiremock:3.1.0
