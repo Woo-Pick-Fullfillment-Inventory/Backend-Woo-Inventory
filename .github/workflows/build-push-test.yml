@@ -90,7 +90,7 @@ jobs:
         run: docker network ls
 
       - name: Run all the tests
-        run: firebase emulators:exec --project=test-project --only firestore 'npm run test --exit'
+        run: npm run test
 
       - name: Check Docker container logs
         if: always()
