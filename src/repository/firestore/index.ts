@@ -14,8 +14,6 @@ if (!process.env["PROJECT_ID"]) {
   throw new Error("PROJECT_ID environment variable is required");
 }
 
-console.log("process env", process.env);
-
 export const firestoreClient: FirebaseFirestore.Firestore = new Firestore({ projectId: process.env["PROJECT_ID"] });
 
 export const getUserByAttribute = getUserByAttributeFactory(firestoreClient);
