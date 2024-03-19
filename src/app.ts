@@ -17,6 +17,8 @@ import type {
 
 dotenv.config();
 
+console.log("env", process.env);
+
 const app: Express = express();
 
 const PORT = process.env["SERVICE_PORT"] || 5000;
