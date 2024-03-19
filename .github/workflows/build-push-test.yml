@@ -92,6 +92,9 @@ jobs:
         run: |-
           docker-compose -f docker-compose.github-pipeline.yml up -d
 
+      - name: Check Docker Network
+        run: docker network ls
+
       - name: Run all the tests
         run: firebase emulators:exec --project=test-project --only firestore 'npm run test --exit'
 
