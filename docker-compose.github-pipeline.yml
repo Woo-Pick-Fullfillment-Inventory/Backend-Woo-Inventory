@@ -4,7 +4,7 @@ services:
   firestore_emulator:
     image: mtlynch/firestore-emulator
     environment:
-      - FIRESTORE_PROJECT_ID=dummy-project-id
+      - FIRESTORE_PROJECT_ID=test-project
       - PORT=8888
     ports:
       - 8888:8888

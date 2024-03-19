@@ -94,8 +94,8 @@ jobs:
 
       - name: Check Docker container logs
         if: always()
-        run: docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml logs
+        run: docker-compose -f docker-compose.github-pipeline.yml logs
 
       - name: Stop containers
         if: always()
-        run: docker-compose -f docker-compose.yml -f docker-compose.github-pipeline.yml down
+        run: docker-compose -f docker-compose.github-pipeline.yml down
