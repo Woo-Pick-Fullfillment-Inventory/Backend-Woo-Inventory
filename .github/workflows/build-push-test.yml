@@ -87,7 +87,7 @@ jobs:
         run: docker network ls
 
       - name: Check Wiremock Mount
-        run: docker exec -it wiremock-container ls -al /home/wiremock/mappings
+        run: docker exec wiremock-container ls -al /home/wiremock/mappings
 
       - name: Run all the tests
         run: npm run test
