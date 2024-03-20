@@ -90,7 +90,7 @@ jobs:
         run: docker exec wiremock-container ls -al /home/wiremock/mappings
 
       - name: Run all the tests
-        run: npm run test
+        run: npm run test-pipeline
 
       - name: Check Docker container logs
         if: always()
