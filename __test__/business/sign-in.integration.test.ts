@@ -32,13 +32,11 @@ describe("Signin test", () => {
         password: "Test123abcjs",
       });
     expect(responseEmail.status).toEqual(200);
-    console.log("responseEmail", responseEmail);
     const responseUsername = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: "someone",
         password: "Test123abcjs",
       });
-    console.log("responseUsername", responseUsername);
     expect(responseUsername.status).toEqual(200);
   });
 
@@ -67,7 +65,6 @@ describe("Signin test", () => {
         email_or_username: "wrong@gmail.com",
         password: "Test123abcjs",
       });
-    console.log("response", response);
     expect(response.status).toEqual(500);
   });
 });
