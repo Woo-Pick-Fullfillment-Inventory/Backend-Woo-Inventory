@@ -13,12 +13,12 @@ import { getCollectionDocuments } from "../database/firestore-view-collection";
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     await insertUser(mockUserWithHashedPassword);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await clearFirestoreData({ projectId: "test-project" });
     await Promise.all(apps().map((app) => app.delete()));
   });
