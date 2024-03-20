@@ -13,17 +13,17 @@ import { getCollectionDocuments } from "../database/firestore-view-collection";
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
-  beforeAll(async () => {
-    await insertUser(mockUserWithHashedPassword);
+  beforeEach(async () => {
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await clearFirestoreData({ projectId: "test-project" });
     await Promise.all(apps().map((app) => app.delete()));
   });
 
   it("should return a product list", async () => {
+    await insertUser(mockUserWithHashedPassword);
     const users = await getCollectionDocuments("users");
     console.log(users);
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
