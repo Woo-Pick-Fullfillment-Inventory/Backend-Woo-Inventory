@@ -87,7 +87,7 @@ jobs:
         run: docker network ls
 
       - name: Check Wiremock Mount
-        run: docker exec -it woopick-backend-wiremock-1 ls -al /home/wiremock/mappings
+        run: docker exec -it backend-woo-inventory-wiremock-1 ls -al /home/wiremock/mappings
 
       - name: Run all the tests
         run: npm run test
