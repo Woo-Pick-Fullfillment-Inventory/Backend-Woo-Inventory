@@ -18,8 +18,6 @@ services:
       SERVICE_PORT: 5000
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
-      FIRESTORE_EMULATOR_HOST: host.docker.internal:8888
-      FIRESTORE_PROJECT_ID: test-project
       PROJECT_ID: test-project
 
     depends_on:
