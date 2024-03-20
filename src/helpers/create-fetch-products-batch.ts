@@ -1,6 +1,6 @@
-import { getProductsPagination } from "../../../repository/woo-api/create-get-products-pagination.js";
+import { getProductsPagination } from "../repository/woo-api/create-get-products-pagination.js";
 
-import type { ProductsType } from "../../../repository/woo-api/models/products.type.js";
+import type { ProductsType } from "../repository/woo-api/models/products.type.js";
 
 const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, currentPage: number) => {
   const result = await getProductsPagination(base_url, wooBasicAuth, 50, currentPage);

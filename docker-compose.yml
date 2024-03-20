@@ -4,10 +4,12 @@ services:
   firestore_emulator:
     image: mtlynch/firestore-emulator
     environment:
-      - FIRESTORE_PROJECT_ID=dummy-project-id
+      - FIRESTORE_PROJECT_ID=test-project
       - PORT=8888
     ports:
       - 8888:8888
+    volumes:
+      - ${PWD}/__test__/firestore:/opt/data
   wiremock:
     image: wiremock/wiremock:3.1.0
     command: --verbose

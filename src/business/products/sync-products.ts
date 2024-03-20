@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
-import { fetchAllProducts } from "./helpers/index.js";
+import { fetchAllProducts } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
