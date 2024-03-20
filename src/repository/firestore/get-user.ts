@@ -8,6 +8,8 @@ export const getUserByAttributeFactory = (firestoreClient: FirebaseFirestore.Fir
     userAttribute: UserAttributeType,
     value: string,
   ): Promise<UserFireStoreType | undefined> => {
+    console.log("firestoreClient", firestoreClient);
+
     const snapshotUsers = await firestoreClient
       .collection("users")
       .get();
