@@ -8,6 +8,7 @@ import { insertUser } from "../../src/repository/firestore";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserWithHashedPassword } from "../common/mock-data";
+import { getCollectionDocuments } from "../database/firestore-view-collection";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
@@ -23,6 +24,8 @@ describe("Get products test", () => {
   });
 
   it("should return a product list", async () => {
+    const users = await getCollectionDocuments("users");
+    console.log(users);
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
     console.log(response.data);
     expect(response.status).toBe(200);
