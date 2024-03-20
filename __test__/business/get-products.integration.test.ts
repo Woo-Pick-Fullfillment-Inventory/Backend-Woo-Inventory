@@ -24,6 +24,7 @@ describe("Get products test", () => {
 
   it("should return a product list", async () => {
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
+    console.log("response", response);
     expect(response.status).toBe(200);
     expect(response.data.products.length).toEqual(response.data.items_count);
     expect(response.data.has_next_page).toEqual(true);
