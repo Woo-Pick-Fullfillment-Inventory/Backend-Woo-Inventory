@@ -10,6 +10,7 @@ services:
       - 8888:8888
   wiremock:
     image: wiremock/wiremock:3.1.0
+    container_name: wiremock-container
     command: --verbose
     ports:
       - "1080:8080"
