@@ -5,9 +5,13 @@ services:
     image: mtlynch/firestore-emulator
     environment:
       - FIRESTORE_PROJECT_ID=test-project
+      - FIRESTORE_EMULATOR_HOST=firestore-emulator:8888
       - PORT=8888
     ports:
       - 8888:8888
+    volumes:
+      - ${PWD}/__test__/firestore-data:/opt/data
+
   wiremock:
     image: wiremock/wiremock:3.1.0
     container_name: wiremock-container
