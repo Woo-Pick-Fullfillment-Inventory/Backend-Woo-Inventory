@@ -16,10 +16,7 @@ import {
 } from "../../repository/firestore/index.js";
 import { getSystemStatus } from "../../repository/woo-api/create-get-system-status.js";
 
-import type {
-  Request,
-  Response,
-} from "express";
+import type { Request, Response } from "express";
 
 dotenv.config();
 
@@ -67,30 +64,51 @@ const SignupRequest = Type.Object({
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 export const signup = async (req: Request, res: Response) => {
-  const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);
+  const isSignupRequestTypeValid = isResponseTypeTrue(
+    SignupRequest,
+    req.body,
+    false
+  );
   if (!isSignupRequestTypeValid.isValid) {
-    logger.log("error", `invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log(
+      "error",
+      `invalid signup request type  ${
+        isSignupRequestTypeValid.errors[0]?.message
+      } **Expected** ${JSON.stringify(
+        SignupRequest
+      )} **RECEIVED** ${JSON.stringify(req.body)}`
+    );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await getUserByAttribute("email", req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await getUserByAttribute("email", req.body.email))
+    return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await getUserByAttribute("username", req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await getUserByAttribute("username", req.body.username))
+    return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
-  if (!emailValidator(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
+  if (!emailValidator(req.body.email))
+    return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
-  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.password_confirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
+  if (
+    !passwordRegex.test(req.body.password) ||
+    req.body.password !== req.body.password_confirmation
+  )
+    return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
-    process.env["NODE_ENV"] === "production" ? req.body.app_url : process.env["WOO_BASE_URL"];
+    process.env["NODE_ENV"] === "production"
+      ? req.body.app_url
+      : process.env["WOO_BASE_URL"];
   const systemStatusResult = await getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
-      req.body.token.split("|")[1],
-    ),
+      req.body.token.split("|")[1]
+    )
   );
-  if (!systemStatusResult) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
+  if (!systemStatusResult)
+    return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -117,7 +135,11 @@ export const signup = async (req: Request, res: Response) => {
     throw new Error("JWT_SECRET is not defined");
   }
 
-  return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"]) }` });
+  return res
+    .status(200)
+    .send({
+      jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}`,
+    });
 };
 
 export default signup;

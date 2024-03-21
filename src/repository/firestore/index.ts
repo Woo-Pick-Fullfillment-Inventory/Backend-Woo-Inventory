@@ -8,6 +8,7 @@ import {
   updateUserLastLoginFactory,
   updateUserProductsSyncedFactory,
 } from "./update-user.js";
+import { insertProductFactory } from "./add-product-firestore.js";
 
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
   ? new Firestore({ projectId: process.env["PROJECT_ID"] })
@@ -18,3 +19,4 @@ export const insertUser = insertUserFactory(firestoreClient);
 export const updateUserLastLogin = updateUserLastLoginFactory(firestoreClient);
 export const updateUserProductsSynced = updateUserProductsSyncedFactory(firestoreClient);
 export const batchWriteProducts = batchWriteProductsFactory(firestoreClient);
+export const insertProduct = insertProductFactory(firestoreClient);
