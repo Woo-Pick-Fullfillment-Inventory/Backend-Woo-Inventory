@@ -1,6 +1,7 @@
 import { initializeAdminApp } from "@firebase/rules-unit-testing";
 import { Firestore } from "@google-cloud/firestore";
 
+import { insertProductFactory } from "./add-product-firestore.js";
 import { batchWriteProductsFactory } from "./batch-write-products.js";
 import { getUserByAttributeFactory } from "./get-user.js";
 import { insertUserFactory } from "./insert-user.js";
@@ -8,7 +9,6 @@ import {
   updateUserLastLoginFactory,
   updateUserProductsSyncedFactory,
 } from "./update-user.js";
-import { insertProductFactory } from "./add-product-firestore.js";
 
 export const firestoreClient: FirebaseFirestore.Firestore = process.env["NODE_ENV"] === "production"
   ? new Firestore({ projectId: process.env["PROJECT_ID"] })

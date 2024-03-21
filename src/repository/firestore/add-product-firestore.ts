@@ -5,4 +5,3 @@ export const insertProductFactory = (firestoreClient: FirebaseFirestore.Firestor
     await firestoreClient.collection("products").doc(product.id).set(product);
   };
 };
-

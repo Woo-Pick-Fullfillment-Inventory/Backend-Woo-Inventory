@@ -16,7 +16,10 @@ import {
 } from "../../repository/firestore/index.js";
 import { getSystemStatus } from "../../repository/woo-api/create-get-system-status.js";
 
-import type { Request, Response } from "express";
+import type {
+  Request,
+  Response,
+} from "express";
 
 dotenv.config();
 
@@ -67,7 +70,7 @@ export const signup = async (req: Request, res: Response) => {
   const isSignupRequestTypeValid = isResponseTypeTrue(
     SignupRequest,
     req.body,
-    false
+    false,
   );
   if (!isSignupRequestTypeValid.isValid) {
     logger.log(
@@ -75,8 +78,8 @@ export const signup = async (req: Request, res: Response) => {
       `invalid signup request type  ${
         isSignupRequestTypeValid.errors[0]?.message
       } **Expected** ${JSON.stringify(
-        SignupRequest
-      )} **RECEIVED** ${JSON.stringify(req.body)}`
+        SignupRequest,
+      )} **RECEIVED** ${JSON.stringify(req.body)}`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
@@ -104,8 +107,8 @@ export const signup = async (req: Request, res: Response) => {
     `${base_url}`,
     createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
-      req.body.token.split("|")[1]
-    )
+      req.body.token.split("|")[1],
+    ),
   );
   if (!systemStatusResult)
     return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
@@ -137,9 +140,7 @@ export const signup = async (req: Request, res: Response) => {
 
   return res
     .status(200)
-    .send({
-      jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}`,
-    });
+    .send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}` });
 };
 
 export default signup;

@@ -1,9 +1,11 @@
+import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import {
   getUserByAttribute,
@@ -11,9 +13,10 @@ import {
 } from "../../repository/firestore/index.js";
 import { postProducts } from "../../repository/woo-api/create-post-product.js";
 
-import type { Request, Response } from "express";
-import { Type } from "@sinclair/typebox";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import type {
+  Request,
+  Response,
+} from "express";
 
 dotenv.config();
 
@@ -49,13 +52,13 @@ const AddProductRequest = Type.Object({
   name: Type.String(),
   sku: Type.String(),
   price: Type.String(),
-  stock_quantity: Type.Union([Type.Number()], Type.Null()), // string || null
+  stock_quantity: Type.Union([ Type.Number() ], Type.Null()), // string || null
   // Type.Optional(Type.Union([Type.Null(), Type.String()])) // string || null || undefined
   images: Type.Array(
     Type.Object({
       id: Type.Number(),
       src: Type.String(),
-    })
+    }),
   ),
 });
 
@@ -64,7 +67,7 @@ export const addProducts = async (req: Request, res: Response) => {
   const isAddProductTypeRequestValid = isResponseTypeTrue(
     AddProductRequest,
     req.body,
-    false
+    false,
   );
 
   if (!isAddProductTypeRequestValid.isValid) {
@@ -73,8 +76,8 @@ export const addProducts = async (req: Request, res: Response) => {
       `invalid add product request type  ${
         isAddProductTypeRequestValid.errors[0]?.message
       } **Expected** ${JSON.stringify(
-        AddProductRequest
-      )} **RECEIVED** ${JSON.stringify(req.body)}`
+        AddProductRequest,
+      )} **RECEIVED** ${JSON.stringify(req.body)}`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
@@ -87,8 +90,8 @@ export const addProducts = async (req: Request, res: Response) => {
     logger.log(
       "error",
       `no decoded token from ${JSON.stringify(
-        req.headers["authorization"]
-      )} authorization header`
+        req.headers["authorization"],
+      )} authorization header`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
@@ -101,7 +104,7 @@ export const addProducts = async (req: Request, res: Response) => {
 
   const wooBasicAuth = createBasicAuthHeaderToken(
     userFoundInFirestore.woo_credentials.token,
-    userFoundInFirestore.woo_credentials.secret
+    userFoundInFirestore.woo_credentials.secret,
   );
 
   const base_url =
@@ -113,7 +116,7 @@ export const addProducts = async (req: Request, res: Response) => {
     const addProductToWooResult = await postProducts(
       base_url,
       wooBasicAuth,
-      productDetails
+      productDetails,
     );
 
     await insertProduct({
