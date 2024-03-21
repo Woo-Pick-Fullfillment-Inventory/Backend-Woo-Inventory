@@ -72,9 +72,6 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-      
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
 
       - name: Replace Docker image
         run: |

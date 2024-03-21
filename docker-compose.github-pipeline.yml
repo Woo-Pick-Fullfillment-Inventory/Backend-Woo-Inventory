@@ -10,13 +10,14 @@ services:
     volumes:
       - ${PWD}/__test__/wiremock:/home/wiremock
   application:
-    image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+    image: hehe:latest
     ports:
       - 5000:5000
     environment:
       NODE_ENV: test
       SERVICE_PORT: 5000
       WOO_BASE_URL: http://wiremock:8080
+      FIRESTORE_EMULATOR_HOST: host.docker.internal:8888
       JWT_SECRET: secret
       PROJECT_ID: test-project
 
