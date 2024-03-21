@@ -21,7 +21,7 @@ services:
     volumes:
       - ${PWD}/__test__/wiremock:/home/wiremock
   application:
-    image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+    image: woopick-backend:latest
     ports:
       - 5000:5000
     environment:
