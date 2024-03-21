@@ -8,12 +8,15 @@ import { httpClient } from "../common/http-client"; describe("Signin test", () =
         email_or_username: "someone@gmail.com",
         password: "Test123abcjs",
       });
+    console.log(responseEmail.data);
+
     expect(responseEmail.status).toEqual(200);
     const responseUsername = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: "someone",
         password: "Test123abcjs",
       });
+    console.log(responseUsername.data);
     expect(responseUsername.status).toEqual(200);
   });
 
@@ -42,6 +45,7 @@ import { httpClient } from "../common/http-client"; describe("Signin test", () =
         email_or_username: "wrong@gmail.com",
         password: "Test123abcjs",
       });
+    console.log(response.data);
     expect(response.status).toEqual(500);
   });
 });

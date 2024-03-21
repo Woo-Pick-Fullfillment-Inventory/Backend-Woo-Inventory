@@ -1,10 +1,5 @@
-import {
-  apps,
-  clearFirestoreData,
-} from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { insertUser } from "../../src/repository/firestore";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserForSyncingProducts } from "../common/mock-data";
@@ -13,13 +8,7 @@ const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080",
 
 describe("Syncing products test", () => {
   beforeEach(async () => {
-    await insertUser(mockUserForSyncingProducts);
     await woocommerceApiMockServer.requests.deleteAllRequests();
-  });
-
-  afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
   });
 
   it("should have products synced", async () => {
