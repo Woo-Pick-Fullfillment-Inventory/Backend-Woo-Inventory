@@ -9,12 +9,12 @@ import { createAuthorizationHeader } from "../common/create-authorization-header
 import { httpClient } from "../common/http-client";
 import { mockUserForSyncingProducts } from "../common/mock-data";
 
-const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
+const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 
 describe("Syncing products test", () => {
   beforeEach(async () => {
     await insertUser(mockUserForSyncingProducts);
-    await mambuApiMockServer.requests.deleteAllRequests();
+    await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterEach(async () => {
@@ -36,23 +36,23 @@ describe("Syncing products test", () => {
     );
     expect(response.status).toEqual(200);
     expect(response.data.are_products_synced).toEqual(true);
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=1&page=1",
     })).count).toEqual(1);
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=50&page=1",
     })).count).toEqual(1);
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=50&page=2",
     })).count).toEqual(1);
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=50&page=3",
     })).count).toEqual(1);
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=50&page=4",
     })).count).toEqual(1);

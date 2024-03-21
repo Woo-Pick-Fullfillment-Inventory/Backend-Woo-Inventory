@@ -10,12 +10,12 @@ import { httpClient } from "../common/http-client";
 import { mockUserWithHashedPassword } from "../common/mock-data";
 import { getCollectionDocuments } from "../database/firestore-view-collection";
 
-const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
+const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
   beforeEach(async () => {
     await insertUser(mockUserWithHashedPassword);
-    await mambuApiMockServer.requests.deleteAllRequests();
+    await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterAll(async () => {
@@ -114,7 +114,7 @@ describe("Get products test", () => {
         },
       ],
     );
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=10&page=1",
     })).count).toEqual(1);
