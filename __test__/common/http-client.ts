@@ -1,11 +1,12 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
 import type { AxiosRequestConfig } from "axios";
-
-const PORT = process.env["SERVICE_PORT"] || 8080;
+dotenv.config();
+const PORT = process.env["SERVICE_PORT"] || 5000;
 
 export const instance = axios.create({
-  baseURL: `http://localhost:${PORT}`,
+  baseURL: `http://127.0.0.1:${PORT}`,
   validateStatus: () => true,
 });
 

@@ -3,11 +3,11 @@ import {
   clearFirestoreData,
 } from "@firebase/rules-unit-testing";
 
-import { getCollectionDocuments } from "./firestore-view-collection";
 import {
   batchWriteProducts,
   getUserByAttribute,
   insertUser,
+  viewCollection,
 } from "../../src/repository/firestore";
 import {
   mockProducts,
@@ -32,8 +32,8 @@ it("should return mock user", async () => {
 it("should batch write products", async () => {
   await batchWriteProducts(mockProducts, mockUserWithHashedPassword.user_id);
   await batchWriteProducts(mockProducts, mockUserWrongType.user_id);
-  const products_user1 = await getCollectionDocuments("users-products/users-1-products/products");
-  const products_user2 = await getCollectionDocuments("users-products/users-2-products/products");
+  const products_user1 = await viewCollection("users-products/users-1-products/products");
+  const products_user2 = await viewCollection("users-products/users-2-products/products");
   expect(products_user1).toEqual(mockProducts);
   expect(products_user2).toEqual(mockProducts);
 });

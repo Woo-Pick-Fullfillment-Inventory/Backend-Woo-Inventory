@@ -1,29 +1,6 @@
-import {
-  apps,
-  clearFirestoreData,
-} from "@firebase/rules-unit-testing";
 import { randomUUID } from "crypto";
 
-import { insertUser } from "../../src/repository/firestore";
-import { httpClient } from "../common/http-client";
-import {
-  mockUserWithHashedPassword,
-  mockUserWrongType,
-} from "../common/mock-data";
-
-import type { UserFireStoreType } from "../../src/repository/firestore/models/user.type";
-
-describe("Signin test", () => {
-
-  beforeEach(async () => {
-    await insertUser(mockUserWithHashedPassword);
-    await insertUser(mockUserWrongType as UserFireStoreType);
-  });
-
-  afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
-  });
+import { httpClient } from "../common/http-client"; describe("Signin test", () => {
 
   it("should return a token when log in was succesful", async () => {
     const responseEmail = await httpClient.post("api/v1/auth/signin",
@@ -31,12 +8,15 @@ describe("Signin test", () => {
         email_or_username: "someone@gmail.com",
         password: "Test123abcjs",
       });
+    console.log(responseEmail.data);
+
     expect(responseEmail.status).toEqual(200);
     const responseUsername = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: "someone",
         password: "Test123abcjs",
       });
+    console.log(responseUsername.data);
     expect(responseUsername.status).toEqual(200);
   });
 
@@ -60,11 +40,12 @@ describe("Signin test", () => {
   });
 
   it("should throw error when user type is falsy", async() => {
-    const responseEmail = await httpClient.post("api/v1/auth/signin",
+    const response = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: "wrong@gmail.com",
         password: "Test123abcjs",
       });
-    expect(responseEmail.status).toEqual(500);
+    console.log(response.data);
+    expect(response.status).toEqual(500);
   });
 });
