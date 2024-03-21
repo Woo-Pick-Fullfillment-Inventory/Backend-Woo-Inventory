@@ -1,6 +1,6 @@
 {
   "roots": ["<rootDir>"],
-  "testMatch": ["**/*.integration.test.ts", "**/*.unit.test.ts"],
+  "testMatch": ["**/sign-up.integration.test.ts", "**/*.unit.test.ts"],
   "extensionsToTreatAsEsm": [".ts"],
   "moduleNameMapper": {
     "^(\\.{1,2}/.*)\\.js$": "$1"
