@@ -16,7 +16,7 @@ export const isResponseTypeTrue = <T extends Schema>(
   data: Record<string, unknown>,
   areAdditionalPropertiesAllowed: boolean,
 ): ValidationResult=> {
-  const ajv = new Ajv();
+  const ajv = new Ajv({ strict: false });
   const validate: ValidateFunction = ajv.compile({
     ...(schema as Record<string, unknown>),
     additionalProperties: areAdditionalPropertiesAllowed,

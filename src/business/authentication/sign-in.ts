@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
+import { firestoreMock } from "../../helpers/index.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -39,6 +40,8 @@ const SigninRequest = Type.Object({
 });
 
 export type SigninRequestType = Static<typeof SigninRequest>;
+
+if (process.env["NODE_ENV"] === "test") firestoreMock.signIn();
 
 export const signin = async (req: Request, res: Response) => {
   const isSignInRequestTypeValid = isResponseTypeTrue(SigninRequest, req.body, false);

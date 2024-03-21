@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
+import { firestoreMock } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { emailValidator } from "../../modules/create-email-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
@@ -66,6 +67,9 @@ const SignupRequest = Type.Object({
 });
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+if (process.env["NODE_ENV"] === "test") firestoreMock.signUp();
+
 export const signup = async (req: Request, res: Response) => {
   const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);
   if (!isSignupRequestTypeValid.isValid) {

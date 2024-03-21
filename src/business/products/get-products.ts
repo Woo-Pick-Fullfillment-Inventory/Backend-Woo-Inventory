@@ -1,15 +1,12 @@
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
+import { firestoreMock } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
-import {
-  getUserByAttribute,
-  insertUser,
-  viewCollection,
-} from "../../repository/firestore/index.js";
+import { getUserByAttribute } from "../../repository/firestore/index.js";
 import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
 
 import type {
@@ -36,23 +33,7 @@ const SERVICE_ERRORS = {
   },
 };
 
-if (process.env["NODE_ENV"]==="test") insertUser({
-  user_id: "1",
-  email: "someone@gmail.com",
-  username: "someone",
-  password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
-  woo_credentials: {
-    token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
-    secret: "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
-  },
-  authentication: {
-    method: "woo_credentials",
-    is_authorized: true,
-  },
-  last_login: "2024-02-06T00:00:00.000Z",
-  are_products_synced: false,
-});
+if (process.env["NODE_ENV"] === "test") firestoreMock.getProducts();
 
 export const getProducts = async (req: Request, res: Response) => {
 
@@ -68,11 +49,6 @@ export const getProducts = async (req: Request, res: Response) => {
     logger.log("warn", `${req.method} ${req.url} - 400 - Not Authorized ***ERROR*** no decoded token from ${JSON.stringify(req.headers["authorization"])} authorization header`);
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
-
-  console.log("userId", userId);
-
-  const users = await viewCollection("users");
-  console.log("users in fucking get products", users);
 
   const userFoundInFirestore = await getUserByAttribute("user_id", userId);
   if (!userFoundInFirestore) {
