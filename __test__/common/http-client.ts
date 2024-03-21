@@ -6,7 +6,7 @@ dotenv.config();
 const PORT = process.env["SERVICE_PORT"] || 5000;
 
 export const instance = axios.create({
-  baseURL: `http://localhost:${PORT}`,
+  baseURL: `http://127.0.0.1:${PORT}`,
   validateStatus: () => true,
 });
 
