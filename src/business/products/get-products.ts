@@ -33,7 +33,7 @@ const SERVICE_ERRORS = {
   },
 };
 
-if (process.env["NODE_ENV"] === "test") firestoreMock.getProducts();
+if (process.env["NODE_ENV"] === "test") await firestoreMock.getProducts();
 
 export const getProducts = async (req: Request, res: Response) => {
 

@@ -68,7 +68,7 @@ const SignupRequest = Type.Object({
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-if (process.env["NODE_ENV"] === "test") firestoreMock.signUp();
+if (process.env["NODE_ENV"] === "test") await firestoreMock.signUp();
 
 export const signup = async (req: Request, res: Response) => {
   const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);

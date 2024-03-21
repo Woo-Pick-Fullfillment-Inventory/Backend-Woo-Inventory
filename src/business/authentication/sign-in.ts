@@ -41,7 +41,7 @@ const SigninRequest = Type.Object({
 
 export type SigninRequestType = Static<typeof SigninRequest>;
 
-if (process.env["NODE_ENV"] === "test") firestoreMock.signIn();
+if (process.env["NODE_ENV"] === "test") await firestoreMock.signIn();
 
 export const signin = async (req: Request, res: Response) => {
   const isSignInRequestTypeValid = isResponseTypeTrue(SigninRequest, req.body, false);

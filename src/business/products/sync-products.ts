@@ -51,7 +51,7 @@ const SERVICE_ERRORS = {
 
 const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
 
-if (process.env["NODE_ENV"] === "test") firestoreMock.syncProducts();
+if (process.env["NODE_ENV"] === "test") await firestoreMock.syncProducts();
 // TODO:
 // 1. Add tracing
 // 2. Add error handling
