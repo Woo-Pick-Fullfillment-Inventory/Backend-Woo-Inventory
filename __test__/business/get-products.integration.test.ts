@@ -4,17 +4,18 @@ import {
 } from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { insertUser } from "../../src/repository/firestore";
+import {
+  insertUser,
+  viewCollection,
+} from "../../src/repository/firestore";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserWithHashedPassword } from "../common/mock-data";
-import { getCollectionDocuments } from "../database/firestore-view-collection";
 
 const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
   beforeEach(async () => {
-    await insertUser(mockUserWithHashedPassword);
     await mambuApiMockServer.requests.deleteAllRequests();
   });
 
@@ -24,8 +25,9 @@ describe("Get products test", () => {
   });
 
   it("should return a product list", async () => {
-    const users = await getCollectionDocuments("users");
-    console.log(users);
+    await insertUser(mockUserWithHashedPassword);
+    const users = await viewCollection("users");
+    console.log("users in test", users);
     const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
     console.log(response.data);
     expect(response.status).toBe(200);

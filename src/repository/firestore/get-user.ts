@@ -8,12 +8,6 @@ export const getUserByAttributeFactory = (firestoreClient: FirebaseFirestore.Fir
     userAttribute: UserAttributeType,
     value: string,
   ): Promise<UserFireStoreType | undefined> => {
-    const snapshotUsers = await firestoreClient
-      .collection("users")
-      .get();
-
-    console.log("getUsers", snapshotUsers.docs.map(doc => doc.data()));
-
     const snapshot = await firestoreClient.collection("users").where(userAttribute, "==", value).get();
     if (
       snapshot.empty ||

@@ -8,6 +8,7 @@ import {
   updateUserLastLoginFactory,
   updateUserProductsSyncedFactory,
 } from "./update-user.js";
+import { viewCollectionFactory } from "./view-collection.js";
 dotenv.config();
 
 if (!process.env["PROJECT_ID"]) {
@@ -21,3 +22,4 @@ export const insertUser = insertUserFactory(firestoreClient);
 export const updateUserLastLogin = updateUserLastLoginFactory(firestoreClient);
 export const updateUserProductsSynced = updateUserProductsSyncedFactory(firestoreClient);
 export const batchWriteProducts = batchWriteProductsFactory(firestoreClient);
+export const viewCollection = viewCollectionFactory(firestoreClient);
