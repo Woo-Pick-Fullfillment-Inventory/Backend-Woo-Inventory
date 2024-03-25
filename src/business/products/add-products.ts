@@ -52,7 +52,7 @@ const AddProductRequest = Type.Object({
   name: Type.String(),
   sku: Type.String(),
   price: Type.String(),
-  stock_quantity: Type.Union([ Type.Number() ], Type.Null()), // string || null
+  stock_quantity: Type.Optional( Type.Number() )
   // Type.Optional(Type.Union([Type.Null(), Type.String()])) // string || null || undefined
   images: Type.Array(
     Type.Object({
