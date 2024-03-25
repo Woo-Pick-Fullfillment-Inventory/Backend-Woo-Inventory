@@ -18,7 +18,7 @@ type PostProductResponse = {
   product: ProductType; // Assuming ProductType is the type for a single product
 };
 
-export const postProducts = async (
+export const postProduct = async (
   baseUrl: string,
   token: string,
   productDetails: NewProductType,
