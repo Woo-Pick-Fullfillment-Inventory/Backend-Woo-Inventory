@@ -1,7 +1,9 @@
 import type {
   ProductFromWooType,
   ProductType,
-} from "../models/products.type.js";
+  ProductsFromWooType,
+  ProductsType,
+} from "../models";
 
 export const convertWooProductToClient = (product: ProductFromWooType): ProductType => {
   return {
@@ -17,6 +19,6 @@ export const convertWooProductToClient = (product: ProductFromWooType): ProductT
   };
 };
 
-export const convertWooProductsToClient = (products: ProductFromWooType[]): ProductType[] => {
+export const convertWooProductsToClient = (products: ProductsFromWooType): ProductsType => {
   return products.map((product) => convertWooProductToClient(product));
 };

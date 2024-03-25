@@ -1,29 +1,18 @@
-import {
-  apps,
-  clearFirestoreData,
-} from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { createAuthorizationHeader } from "../../src/modules/create-authorization-header";
-import { insertUser } from "../../src/repository/firestore";
+import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
-import { mockUserWithHashedPassword } from "../common/mock-data";
 
-const mambuApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
+const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
   beforeEach(async () => {
-    await insertUser(mockUserWithHashedPassword);
-    await mambuApiMockServer.requests.deleteAllRequests();
-  });
-
-  afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
+    await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   it("should return a product list", async () => {
-    const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(mockUserWithHashedPassword.user_id) } });
+    const userId = "1";
+    const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(userId) } });
     expect(response.status).toBe(200);
     expect(response.data.products.length).toEqual(response.data.items_count);
     expect(response.data.has_next_page).toEqual(true);
@@ -111,7 +100,7 @@ describe("Get products test", () => {
         },
       ],
     );
-    expect((await mambuApiMockServer.requests.getCount({
+    expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/products?per_page=10&page=1",
     })).count).toEqual(1);

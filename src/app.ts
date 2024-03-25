@@ -19,7 +19,7 @@ dotenv.config();
 
 const app: Express = express();
 
-const PORT = process.env["SERVICE_PORT"] || 8080;
+const PORT = process.env["SERVICE_PORT"];
 
 app.use(helmet());
 app.use(bodyParser.json());
@@ -36,6 +36,6 @@ app.use(function (_req: Request, _res: Response, next: NextFunction) {
   next(createError(404));
 });
 
-app.listen(8080, () => console.log(`Running on ${PORT}`));
+app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
 // TODO: add cors

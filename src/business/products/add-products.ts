@@ -8,7 +8,7 @@ import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import {
-  getUserByAttribute,
+  getUserById,
   insertProduct,
 } from "../../repository/firestore/index.js";
 import { postProduct } from "../../repository/woo-api/create-post-product.js";
@@ -96,7 +96,7 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore = await getUserByAttribute("user_id", userId);
+  const userFoundInFirestore = await getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);

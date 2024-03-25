@@ -1,7 +1,8 @@
-import type { UserFireStoreType } from "../../src/repository/firestore/models/user.type.js";
-import type { ProductsType } from "../../src/repository/woo-api/models/products.type.js";
+import { insertUser } from "../repository/firestore/index.js";
 
-export const mockUserWithHashedPassword: UserFireStoreType = {
+import type { UserFireStoreType } from "../repository/firestore/models/user.type.js";
+
+const mockUser: UserFireStoreType = {
   user_id: "1",
   email: "someone@gmail.com",
   username: "someone",
@@ -19,7 +20,7 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
   are_products_synced: false,
 };
 
-export const mockUserWrongType = {
+const mockUserWrongType = {
   user_id: "2",
   email: "wrong@gmail.com",
   username: "someone",
@@ -36,7 +37,7 @@ export const mockUserWrongType = {
   },
 };
 
-export const mockUserForSyncingProducts: UserFireStoreType = {
+const mockUserForSyncingProducts: UserFireStoreType = {
   user_id: "3",
   email: "someone33@gmail.com",
   username: "someone33",
@@ -54,31 +55,14 @@ export const mockUserForSyncingProducts: UserFireStoreType = {
   are_products_synced: false,
 };
 
-export const mockProducts: ProductsType = [
-  {
-    id: 1,
-    name: "product 1",
-    sku: "sku-1",
-    price: "100",
-    stock_quantity: 10,
-    images: [
-      {
-        id: 1,
-        src: "https://testwebsite.com/image1.jpg",
-      },
-    ],
+const firestoreMock = {
+  getProducts: async () => await insertUser(mockUser),
+  signIn: async () => {
+    await insertUser(mockUser);
+    await insertUser(mockUserWrongType as UserFireStoreType);
   },
-  {
-    id: 2,
-    name: "product 2",
-    sku: "sku-2",
-    price: "200",
-    stock_quantity: 20,
-    images: [
-      {
-        id: 2,
-        src: "https://testwebsite.com/image2.jpg",
-      },
-    ],
-  },
-];
+  signUp: async () => await insertUser(mockUser),
+  syncProducts: async () => await insertUser(mockUserForSyncingProducts),
+};
+
+export default firestoreMock;

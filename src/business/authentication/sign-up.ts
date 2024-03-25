@@ -5,16 +5,18 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
+import { firestoreMock } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { emailValidator } from "../../modules/create-email-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import {
-  getUserByAttribute,
+  getUserByEmail,
+  getUserByUsername,
   insertUser,
 } from "../../repository/firestore/index.js";
-import { getSystemStatus } from "../../repository/woo-api/create-get-system-status.js";
+import { getSystemStatus } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -66,6 +68,9 @@ const SignupRequest = Type.Object({
 });
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+if (process.env["NODE_ENV"] === "test") await firestoreMock.signUp();
+
 export const signup = async (req: Request, res: Response) => {
   const isSignupRequestTypeValid = isResponseTypeTrue(
     SignupRequest,
@@ -73,22 +78,13 @@ export const signup = async (req: Request, res: Response) => {
     false,
   );
   if (!isSignupRequestTypeValid.isValid) {
-    logger.log(
-      "error",
-      `invalid signup request type  ${
-        isSignupRequestTypeValid.errors[0]?.message
-      } **Expected** ${JSON.stringify(
-        SignupRequest,
-      )} **RECEIVED** ${JSON.stringify(req.body)}`,
-    );
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await getUserByAttribute("email", req.body.email))
-    return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await getUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await getUserByAttribute("username", req.body.username))
-    return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await getUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator(req.body.email))
     return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
@@ -110,8 +106,8 @@ export const signup = async (req: Request, res: Response) => {
       req.body.token.split("|")[1],
     ),
   );
-  if (!systemStatusResult)
-    return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
+  // actually useless
+  if (!systemStatusResult) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -135,7 +131,8 @@ export const signup = async (req: Request, res: Response) => {
   });
 
   if (!process.env["JWT_SECRET"]) {
-    throw new Error("JWT_SECRET is not defined");
+    logger.log("error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`);
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   return res
