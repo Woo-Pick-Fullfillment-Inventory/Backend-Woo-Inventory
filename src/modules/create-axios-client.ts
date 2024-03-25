@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import type { NewProductType } from "../repository/woo-api/models/products.type.ts";
 import type {
   AxiosError,
   AxiosRequestConfig,
@@ -33,11 +32,9 @@ const createAxiosClient = <T>({
   return {
     get: (url: string, config?: AxiosRequestConfig) =>
       axiosClient.get<T, AxiosResponse<T>>(url, config),
-      post: <D>( url: string, data: D, config?: AxiosRequestConfig ) => axiosClient.post<T, AxiosResponse<R>>(
-        url,
-        data,
-        config
-      ),
+    post: <D>(url: string, data: D, config?: AxiosRequestConfig) =>
+      axiosClient.post<T, AxiosResponse<T>>(url, data, config),
+  };
 };
 
 export default createAxiosClient;
