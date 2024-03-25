@@ -11,7 +11,7 @@ import {
   getUserByAttribute,
   insertProduct,
 } from "../../repository/firestore/index.js";
-import { postProducts } from "../../repository/woo-api/create-post-product.js";
+import { postProduct } from "../../repository/woo-api/create-post-product.js";
 
 import type {
   Request,
@@ -62,7 +62,7 @@ const AddProductRequest = Type.Object({
   ),
 });
 
-export const addProducts = async (req: Request, res: Response) => {
+export const addProduct = async (req: Request, res: Response) => {
   const productDetails = req.body;
   const isAddProductTypeRequestValid = isResponseTypeTrue(
     AddProductRequest,
@@ -82,7 +82,7 @@ export const addProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  // TODO return error if product name already exist
+  // TODO return error if product name already exist? Woo api accept product with same name
 
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
 
@@ -113,7 +113,7 @@ export const addProducts = async (req: Request, res: Response) => {
       : (process.env["WOO_BASE_URL"] as string);
 
   try {
-    const addProductToWooResult = await postProducts(
+    const addProductToWooResult = await postProduct(
       base_url,
       wooBasicAuth,
       productDetails,

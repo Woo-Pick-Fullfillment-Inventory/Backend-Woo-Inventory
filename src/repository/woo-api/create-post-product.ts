@@ -34,7 +34,7 @@ export const postProduct = async (
     interceptors: [
       {
         onTrue: (response: AxiosResponse) => {
-          if (response.status !== 200) {
+          if (response.status !== 201) {
             logger.log(
               "error",
               `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`,
