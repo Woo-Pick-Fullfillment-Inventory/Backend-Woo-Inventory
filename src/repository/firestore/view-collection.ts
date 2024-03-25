@@ -1,9 +1,6 @@
 export const viewCollectionFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
-  return async (collectionPath: string) => {
+  return async <T>(collectionPath: string): Promise<T[]> => {
     const snapshot = await firestoreClient.collection(collectionPath).get();
-
-    if (snapshot.empty) return [];
-
-    return snapshot.docs.map((doc) => doc.data());
+    return snapshot.docs.map(doc => doc.data()) as T[];
   };
 };
