@@ -126,7 +126,7 @@ export const addProduct = async (req: Request, res: Response) => {
       price: addProductToWooResult.product.price,
       stock_quantity: addProductToWooResult.product.stock_quantity,
       images: addProductToWooResult.product.images,
-    });
+    }, userId);
 
     return res.status(200).send(addProductToWooResult);
   } catch (error) {
