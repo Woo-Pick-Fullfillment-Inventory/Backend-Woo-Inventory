@@ -4,6 +4,8 @@ import type { Static } from "@sinclair/typebox";
 
 export type UserAttributeType = "user_id" | "email" | "username";
 
+export type UserUpdateAttributeType = "last_login" | "are_products_synced";
+
 export const UserFireStoreSchema = Type.Object({
   user_id: Type.String(),
   email: Type.String(),

@@ -4,10 +4,7 @@ import dotenv from "dotenv";
 import { batchWriteProductsFactory } from "./batch-write-products.js";
 import { getUserFactory } from "./get-user.js";
 import { insertUserFactory } from "./insert-user.js";
-import {
-  updateUserLastLoginFactory,
-  updateUserProductsSyncedFactory,
-} from "./update-user.js";
+import { updateUserFactory } from "./update-user.js";
 import { viewCollectionFactory } from "./view-collection.js";
 dotenv.config();
 
@@ -21,7 +18,7 @@ export const getUserByUsername = getUserFactory(firestoreClient)("username");
 export const getUserByEmail = getUserFactory(firestoreClient)("email");
 export const getUserById = getUserFactory(firestoreClient)("user_id");
 export const insertUser = insertUserFactory(firestoreClient);
-export const updateUserLastLogin = updateUserLastLoginFactory(firestoreClient);
-export const updateUserProductsSynced = updateUserProductsSyncedFactory(firestoreClient);
+export const updateUserLastLogin = updateUserFactory(firestoreClient)("last_login");
+export const updateUserProductsSynced = updateUserFactory(firestoreClient)("are_products_synced");
 export const batchWriteProducts = batchWriteProductsFactory(firestoreClient);
 export const viewCollection = viewCollectionFactory(firestoreClient);

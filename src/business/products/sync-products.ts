@@ -106,7 +106,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   const endTimeWritingToDb = performance.now();
   logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
 
-  await updateUserProductsSynced(userId);
+  await updateUserProductsSynced(userId, true);
 
   return res.status(200).send({ are_products_synced: true });
 };

@@ -71,7 +71,7 @@ export const signin = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  await updateUserLastLogin(userFound.user_id);
+  await updateUserLastLogin(userFound.user_id, new Date().toISOString());
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });
 };
