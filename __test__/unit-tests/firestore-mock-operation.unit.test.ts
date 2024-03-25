@@ -10,8 +10,7 @@ import {
 } from "../common/mock-data";
 
 import type { UserFireStoreType } from "../../src/repository/firestore/models/user.type";
-import type { ProductsType } from "../../src/repository/woo-api/models/products.type";
-
+import type { ProductsType } from "../../src/repository/woo-api/models";
 it("should return mock user", async () => {
   await insertUser(mockUserWithHashedPassword);
   const users = await viewCollection<UserFireStoreType>("users");

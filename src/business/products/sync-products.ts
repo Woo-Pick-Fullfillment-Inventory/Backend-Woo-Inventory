@@ -18,7 +18,7 @@ import {
   getUserById,
   updateUserProductsSynced,
 } from "../../repository/firestore/index.js";
-import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
+import { getProductsPagination } from "../../repository/woo-api/index.js";
 
 import type {
   Request,

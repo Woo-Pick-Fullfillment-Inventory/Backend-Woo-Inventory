@@ -16,7 +16,7 @@ import {
   getUserByUsername,
   insertUser,
 } from "../../repository/firestore/index.js";
-import { getSystemStatus } from "../../repository/woo-api/create-get-system-status.js";
+import { getSystemStatus } from "../../repository/woo-api/index.js";
 
 import type {
   Request,

@@ -3,7 +3,7 @@ import type {
   ProductType,
   ProductsFromWooType,
   ProductsType,
-} from "../models/products.type.js";
+} from "../models";
 
 export const convertWooProductToClient = (product: ProductFromWooType): ProductType => {
   return {

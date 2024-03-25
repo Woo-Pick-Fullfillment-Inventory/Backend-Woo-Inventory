@@ -1,9 +1,11 @@
-import { SystemStatusSchema } from "./models/system-status.type.js";
+import {
+  SystemStatusSchema,
+  type SystemStatusType,
+} from "./models/index.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
-import type { SystemStatusType } from "./models/system-status.type.js";
 import type {
   AxiosError,
   AxiosResponse,

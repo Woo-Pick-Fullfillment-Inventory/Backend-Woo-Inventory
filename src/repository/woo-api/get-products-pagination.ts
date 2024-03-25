@@ -1,13 +1,13 @@
 import { convertWooProductsToClient } from "./converter/convert-woo-product-to-client.js";
-import { ProductsSchema } from "./models/products.type.js";
+import {
+  type ProductType,
+  type ProductsFromWooType,
+  ProductsSchema,
+} from "./models/index.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
-import type {
-  ProductType,
-  ProductsFromWooType,
-} from "./models/products.type.js";
 import type {
   AxiosError,
   AxiosResponse,

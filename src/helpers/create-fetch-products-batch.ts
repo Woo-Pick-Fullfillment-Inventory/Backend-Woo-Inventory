@@ -1,13 +1,26 @@
-import { getProductsPagination } from "../repository/woo-api/create-get-products-pagination.js";
+import { getProductsPagination } from "../repository/woo-api/index.js";
 
 import type { ProductsType } from "../repository/woo-api/models/products.type.js";
 
-const fetchProductsBatch = async (base_url: string, wooBasicAuth: string, currentPage: number) => {
-  const result = await getProductsPagination(base_url, wooBasicAuth, 50, currentPage);
+const fetchProductsBatch = async (
+  base_url: string,
+  wooBasicAuth: string,
+  currentPage: number,
+) => {
+  const result = await getProductsPagination(
+    base_url,
+    wooBasicAuth,
+    50,
+    currentPage,
+  );
   return result.products;
 };
 
-const fetchAllProducts = async (base_url: string, wooBasicAuth: string, totalItems: number) => {
+const fetchAllProducts = async (
+  base_url: string,
+  wooBasicAuth: string,
+  totalItems: number,
+): Promise<ProductsType> => {
   let currentChunk = 1;
   let shouldContinue = true;
   let allProductsToBeSynced: ProductsType = [];
@@ -27,7 +40,10 @@ const fetchAllProducts = async (base_url: string, wooBasicAuth: string, totalIte
 
     allProductsToBeSynced = allProductsToBeSynced.concat(...results);
 
-    if (results.some(result => result.length === 0) || currentChunk > totalChunks) {
+    if (
+      results.some((result) => result.length === 0) ||
+      currentChunk > totalChunks
+    ) {
       shouldContinue = false;
       break;
     }

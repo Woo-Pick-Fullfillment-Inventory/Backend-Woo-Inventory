@@ -7,7 +7,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import { getUserById } from "../../repository/firestore/index.js";
-import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
+import { getProductsPagination } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
