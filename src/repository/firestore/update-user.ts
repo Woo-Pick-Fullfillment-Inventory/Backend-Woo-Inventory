@@ -1,17 +1,14 @@
-export const updateUserLastLoginFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
-  return async (
-    userId: string,
-  ): Promise<void> => {
-    const userRef = firestoreClient.collection("users").doc(userId);
-    await userRef.update({ last_login: new Date().toISOString() });
-  };
-};
+import type { UserUpdateAttributeType } from "./models/user.type.js";
 
-export const updateUserProductsSyncedFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
-  return async (
-    userId: string,
-  ): Promise<void> => {
-    const userRef = firestoreClient.collection("users").doc(userId);
-    await userRef.update({ are_products_synced: true });
+// TODO: add type validation
+export const updateUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
+  return (userAttribute: UserUpdateAttributeType) => {
+    return async (
+      userId: string,
+      value: string | boolean,
+    ): Promise<void> => {
+      const userRef = firestoreClient.collection("users").doc(userId);
+      await userRef.update({ [userAttribute]: value });
+    };
   };
 };

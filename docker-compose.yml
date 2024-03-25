@@ -8,8 +8,6 @@ services:
       - PORT=8888
     ports:
       - 8888:8888
-    volumes:
-      - ${PWD}/__test__/firestore:/opt/data
   wiremock:
     image: wiremock/wiremock:3.1.0
     command: --verbose

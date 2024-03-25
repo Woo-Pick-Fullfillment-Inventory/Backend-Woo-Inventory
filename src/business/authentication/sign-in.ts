@@ -9,7 +9,8 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import {
-  getUserByAttribute,
+  getUserByEmail,
+  getUserByUsername,
   updateUserLastLogin,
 } from "../../repository/firestore/index.js";
 import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
@@ -50,8 +51,8 @@ export const signin = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userFoundByEmail = await getUserByAttribute("email", req.body.email_or_username);
-  const userFoundByUsername = await getUserByAttribute("username", req.body.email_or_username);
+  const userFoundByEmail = await getUserByEmail(req.body.email_or_username);
+  const userFoundByUsername = await getUserByUsername(req.body.email_or_username);
 
   const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
 
@@ -70,7 +71,7 @@ export const signin = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  await updateUserLastLogin(userFound.user_id);
+  await updateUserLastLogin(userFound.user_id, new Date().toISOString());
 
   return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });
 };

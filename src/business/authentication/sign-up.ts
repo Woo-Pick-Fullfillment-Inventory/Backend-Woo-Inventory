@@ -12,10 +12,11 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import {
-  getUserByAttribute,
+  getUserByEmail,
+  getUserByUsername,
   insertUser,
 } from "../../repository/firestore/index.js";
-import { getSystemStatus } from "../../repository/woo-api/create-get-system-status.js";
+import { getSystemStatus } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -77,9 +78,9 @@ export const signup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await getUserByAttribute("email", req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await getUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await getUserByAttribute("username", req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await getUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
