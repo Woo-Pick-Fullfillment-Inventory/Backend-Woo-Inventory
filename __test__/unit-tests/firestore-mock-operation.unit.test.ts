@@ -1,11 +1,5 @@
 import {
-  apps,
-  clearFirestoreData,
-} from "@firebase/rules-unit-testing";
-
-import {
   batchWriteProducts,
-  getUserById,
   insertUser,
   viewCollection,
 } from "../../src/repository/firestore";
@@ -15,18 +9,10 @@ import {
   mockUserWrongType,
 } from "../common/mock-data";
 
-beforeEach(async () => {
-  await insertUser(mockUserWithHashedPassword);
-});
-
-afterEach(async () => {
-  await clearFirestoreData({ projectId: "test-project" });
-  await Promise.all(apps().map((app) => app.delete()));
-});
-
 it("should return mock user", async () => {
-  const resp = await getUserById(mockUserWithHashedPassword.username);
-  expect(resp).toEqual(mockUserWithHashedPassword);
+  await insertUser(mockUserWithHashedPassword);
+  const users = await viewCollection("users");
+  expect(users[0]).toEqual(mockUserWithHashedPassword);
 });
 
 it("should batch write products", async () => {
