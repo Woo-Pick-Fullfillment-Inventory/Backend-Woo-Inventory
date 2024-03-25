@@ -6,7 +6,7 @@ import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-head
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
-import { getUserByAttribute } from "../../repository/firestore/index.js";
+import { getUserById } from "../../repository/firestore/index.js";
 import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
 
 import type {
@@ -50,7 +50,7 @@ export const getProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await getUserByAttribute("user_id", userId);
+  const userFoundInFirestore = await getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);

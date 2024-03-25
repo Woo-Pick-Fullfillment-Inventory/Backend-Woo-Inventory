@@ -15,7 +15,7 @@ import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js"
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import {
   batchWriteProducts,
-  getUserByAttribute,
+  getUserById,
   updateUserProductsSynced,
 } from "../../repository/firestore/index.js";
 import { getProductsPagination } from "../../repository/woo-api/create-get-products-pagination.js";
@@ -44,8 +44,8 @@ const SERVICE_ERRORS = {
   },
   dataSyncedAlready: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/sync-process/user-already-synced-products",
-    message: "invalid request",
+    type: "/products/sync-process/synced-already",
+    message: "products synced",
   },
 };
 
@@ -71,7 +71,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await getUserByAttribute("user_id", userId);
+  const userFoundInFirestore = await getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);

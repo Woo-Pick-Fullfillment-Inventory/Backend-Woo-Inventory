@@ -19,7 +19,7 @@ dotenv.config();
 
 const app: Express = express();
 
-const PORT = process.env["SERVICE_PORT"] || 5000;
+const PORT = process.env["SERVICE_PORT"];
 
 app.use(helmet());
 app.use(bodyParser.json());

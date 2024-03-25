@@ -5,7 +5,7 @@ import {
 
 import {
   batchWriteProducts,
-  getUserByAttribute,
+  getUserById,
   insertUser,
   viewCollection,
 } from "../../src/repository/firestore";
@@ -25,7 +25,7 @@ afterEach(async () => {
 });
 
 it("should return mock user", async () => {
-  const resp = await getUserByAttribute("username", mockUserWithHashedPassword.username);
+  const resp = await getUserById(mockUserWithHashedPassword.username);
   expect(resp).toEqual(mockUserWithHashedPassword);
 });
 
