@@ -33,9 +33,11 @@ const createAxiosClient = <T>({
   return {
     get: (url: string, config?: AxiosRequestConfig) =>
       axiosClient.get<T, AxiosResponse<T>>(url, config),
-    post: (url: string, data: NewProductType, config?: AxiosRequestConfig) =>
-      axiosClient.post<T, AxiosResponse<T>>(url, data, config),
-  };
+      post: <D>( url: string, data: D, config?: AxiosRequestConfig ) => axiosClient.post<T, AxiosResponse<R>>(
+        url,
+        data,
+        config
+      ),
 };
 
 export default createAxiosClient;
