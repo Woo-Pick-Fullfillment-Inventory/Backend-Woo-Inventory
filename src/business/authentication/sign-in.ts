@@ -47,7 +47,7 @@ if (process.env["NODE_ENV"] === "test") await firestoreMock.signIn();
 export const signin = async (req: Request, res: Response) => {
   const isSignInRequestTypeValid = isResponseTypeTrue(SigninRequest, req.body, false);
   if (!isSignInRequestTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signin request type  ${isSignInRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SigninRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signin request type  ${isSignInRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SigninRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
@@ -59,7 +59,7 @@ export const signin = async (req: Request, res: Response) => {
   if (!userFound) return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
   const isUserFoundTypeValid = isResponseTypeTrue(UserFireStoreSchema, userFound, true);
   if (!isUserFoundTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** invalid user found type ${isUserFoundTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(UserFireStoreSchema)} **RECEIVED** ${JSON.stringify(userFound)}`);
+    logger.log("warn", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** invalid user found type ${isUserFoundTypeValid.errorMessage} **Expected** ${JSON.stringify(UserFireStoreSchema)} **RECEIVED** ${JSON.stringify(userFound)}`);
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
