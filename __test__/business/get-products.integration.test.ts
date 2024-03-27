@@ -1,12 +1,7 @@
-import { firestoreMock } from "../../src/helpers/index.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 
 describe("Get products test", () => {
-
-  beforeEach(async () => {
-    await firestoreMock.getProducts();
-  });
 
   it("should return a product list of first 27 products order by id in descending order", async () => {
     const userId = "1";
