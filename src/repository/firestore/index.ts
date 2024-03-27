@@ -2,6 +2,7 @@ import { Firestore } from "@google-cloud/firestore";
 import dotenv from "dotenv";
 
 import { batchWriteProductsFactory } from "./batch-write-products.js";
+import { clearCollectionFactory } from "./clear-collection.js";
 import { getProductsFactory } from "./get-products.js";
 import { getUserFactory } from "./get-user.js";
 import { insertUserFactory } from "./insert-user.js";
@@ -24,3 +25,4 @@ export const updateUserProductsSynced = updateUserFactory(firestoreClient)("are_
 export const batchWriteProducts = batchWriteProductsFactory(firestoreClient);
 export const viewCollection = viewCollectionFactory(firestoreClient);
 export const getProducts = getProductsFactory(firestoreClient);
+export const clearCollection = clearCollectionFactory(firestoreClient);

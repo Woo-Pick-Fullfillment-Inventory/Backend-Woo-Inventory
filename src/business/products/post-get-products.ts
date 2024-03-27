@@ -56,7 +56,10 @@ const sortingCriteria = Type.Object({
 });
 
 const paginationCriteria = Type.Object({
-  last_product: Type.Optional(Type.Number()),
+  last_product: Type.Optional(Type.Union([
+    Type.String(),
+    Type.Number(),
+  ])),
   limit: Type.Number(),
 });
 
@@ -109,7 +112,7 @@ export const postGetProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  const products = await getProducts({
+  const firestoreResult = await getProducts({
     userId,
     field: req.body.sortingCriteria.field,
     direction: req.body.sortingCriteria.direction,
@@ -117,8 +120,8 @@ export const postGetProducts = async (req: Request, res: Response) => {
   })(req.body.paginationCriteria.last_product);
 
   return res.status(200).send({
-    ...products,
-    last_product_id: products.lastProduct,
-    total_products: products.products.length,
+    products: firestoreResult.products,
+    last_product: firestoreResult.lastProduct,
+    total_products: firestoreResult.products.length,
   });
 };
