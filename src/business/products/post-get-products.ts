@@ -2,7 +2,6 @@ import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
-import { firestoreMock } from "../../helpers/index.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -64,8 +63,6 @@ const postGetProductsRequest = Type.Object({
   sortingCriteria: sortingCriteria,
   paginationCriteria: paginationCriteria,
 });
-
-if (process.env["NODE_ENV"] === "test") await firestoreMock.getProducts();
 
 export const postGetProducts = async (req: Request, res: Response) => {
   const isPostGetProductsRequestTypeValid = isResponseTypeTrue(
