@@ -8,11 +8,7 @@ import { firestoreMock } from "../../helpers/index.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import {
-  getUserByEmail,
-  getUserByUsername,
-  updateUserLastLogin,
-} from "../../repository/firestore/index.js";
+import { firestoreRepository } from "../../repository/firestore/index.js";
 import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
 
 import type { Static } from "@sinclair/typebox";
@@ -51,8 +47,8 @@ export const signin = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userFoundByEmail = await getUserByEmail(req.body.email_or_username);
-  const userFoundByUsername = await getUserByUsername(req.body.email_or_username);
+  const userFoundByEmail = await firestoreRepository.user.getUserByEmail(req.body.email_or_username);
+  const userFoundByUsername = await firestoreRepository.user.getUserByUsername(req.body.email_or_username);
 
   const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
 
@@ -71,7 +67,7 @@ export const signin = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  await updateUserLastLogin(userFound.user_id, new Date().toISOString());
+  await firestoreRepository.user.updateUserLastLogin(userFound.user_id, new Date().toISOString());
 
-  return res.status(200).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"]) }` });
 };

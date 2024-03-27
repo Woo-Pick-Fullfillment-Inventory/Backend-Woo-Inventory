@@ -1,8 +1,5 @@
 import { generateProductsArray } from "./faker.js";
-import {
-  batchWriteProducts,
-  insertUser,
-} from "../repository/firestore/index.js";
+import { firestoreRepository } from "../repository/firestore/index.js";
 
 import type { UserFireStoreType } from "../repository/firestore/models/user.type.js";
 
@@ -62,14 +59,14 @@ const mockUserForSyncingProducts: UserFireStoreType = {
 const firestoreMock = {
   getProducts: async () => {
     const mockProducts = await generateProductsArray(27);
-    await batchWriteProducts(mockProducts, "1");
+    await firestoreRepository.product.batchWriteProducts(mockProducts, "1");
   },
   signIn: async () => {
-    await insertUser(mockUser);
-    await insertUser(mockUserWrongType as UserFireStoreType);
+    await firestoreRepository.user.insertUser(mockUser);
+    await firestoreRepository.user.insertUser(mockUserWrongType as UserFireStoreType);
   },
-  signUp: async () => await insertUser(mockUser),
-  syncProducts: async () => await insertUser(mockUserForSyncingProducts),
+  signUp: async () => await firestoreRepository.user.insertUser(mockUser),
+  syncProducts: async () => await firestoreRepository.user.insertUser(mockUserForSyncingProducts),
 };
 
 export default firestoreMock;

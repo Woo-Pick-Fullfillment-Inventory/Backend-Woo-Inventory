@@ -1,7 +1,7 @@
 import type {
   ProductFireStoreAttributeType,
   ProductsFireStoreType,
-} from "./models/index.js";
+} from "../models/index.js";
 
 type GetProductsInputType = {
   userId: string;

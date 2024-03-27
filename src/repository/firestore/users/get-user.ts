@@ -1,7 +1,7 @@
 import type {
   UserAttributeType,
   UserFireStoreType,
-} from "./models/user.type.js";
+} from "../models/user.type.js";
 
 // todo: type check
 export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {

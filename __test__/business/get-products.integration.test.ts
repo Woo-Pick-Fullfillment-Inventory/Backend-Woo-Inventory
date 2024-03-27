@@ -8,11 +8,11 @@ describe("Get products test", () => {
     const responseFirstList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "id",
           direction: "desc",
         },
-        paginationCriteria: { limit: 10 },
+        pagination_criteria: { limit: 10 },
       },
       { headers: { authorization: createAuthorizationHeader(userId) } },
     );
@@ -24,11 +24,11 @@ describe("Get products test", () => {
     const responseSecondList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "id",
           direction: "desc",
         },
-        paginationCriteria: {
+        pagination_criteria: {
           last_product: responseFirstList.data.products[9].id,
           limit: 10,
         },
@@ -43,11 +43,11 @@ describe("Get products test", () => {
     const responseThirdList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "id",
           direction: "desc",
         },
-        paginationCriteria: {
+        pagination_criteria: {
           last_product: responseSecondList.data.products[9].id,
           limit: 10,
         },
@@ -65,11 +65,11 @@ describe("Get products test", () => {
     const responseFirstList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "name",
           direction: "asc",
         },
-        paginationCriteria: { limit: 10 },
+        pagination_criteria: { limit: 10 },
       },
       { headers: { authorization: createAuthorizationHeader(userId) } },
     );
@@ -78,11 +78,11 @@ describe("Get products test", () => {
     const responseSecondList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "name",
           direction: "asc",
         },
-        paginationCriteria: {
+        pagination_criteria: {
           last_product: responseFirstList.data.products[9].name,
           limit: 10,
         },
@@ -94,11 +94,11 @@ describe("Get products test", () => {
     const responseThirdList = await httpClient.post(
       "api/v1/products:search",
       {
-        sortingCriteria: {
+        sorting_criteria: {
           field: "name",
           direction: "asc",
         },
-        paginationCriteria: {
+        pagination_criteria: {
           last_product: responseSecondList.data.products[9].name,
           limit: 10,
         },
@@ -110,6 +110,6 @@ describe("Get products test", () => {
     for (let i = 0; i < list.length - 1; i++) {
       expect(list[i]?.name.localeCompare(list[i + 1]?.name)).toBeLessThanOrEqual(0);
     }
-
   });
+
 });

@@ -11,6 +11,5 @@ export const clearCollectionFactory = (
     });
 
     await batch.commit();
-    console.log(`Collection ${collectionPath} cleared successfully.`);
   };
 };
