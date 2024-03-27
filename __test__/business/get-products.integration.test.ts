@@ -1,109 +1,67 @@
-import { WireMockRestClient } from "wiremock-rest-client";
-
+import { firestoreMock } from "../../src/helpers/index.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 
-const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 describe("Get products test", () => {
 
   beforeEach(async () => {
-    await woocommerceApiMockServer.requests.deleteAllRequests();
+    await firestoreMock.getProducts();
   });
 
-  it("should return a product list", async () => {
+  it("should return a product list of first 27 products order by id in descending order", async () => {
     const userId = "1";
-    const response = await httpClient.get("api/v1/products?per_page=10&page=1", { headers: { authorization: createAuthorizationHeader(userId) } });
-    expect(response.status).toBe(200);
-    expect(response.data.products.length).toEqual(response.data.items_count);
-    expect(response.data.has_next_page).toEqual(true);
-    expect(response.data.products).toEqual(
-      [
-        {
-          id: 2897,
-          name: "Vegetable - Gemüse",
-          sku: "S123",
-          price: "3",
-          stock_quantity: 100,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/vegetable.jpg",
+    const responseFirstList = await httpClient.post(
+      "api/v1/products:search",
+      {
+        sortingCriteria: {
+          field: "id",
+          direction: "desc",
         },
-        {
-          id: 2893,
-          name: "Tyj spring roll pastry 550g - Tyj Frühlingsrollenteig 550g",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tyj-spring-roll-pastry.jpg",
-        },
-        {
-          id: 2889,
-          name: "Trái sấu đông lạnh 500g - Gefrorenes Krokodil 500g",
-          sku: "",
-          price: "1.8",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/trai-sau-dong-lanh-2.jpg",
-        },
-        {
-          id: 2887,
-          name: "Tower red pepper powder 500g - Tower Paprikapulver 500g",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tower-red-pepper-power.jpg",
-        },
-        {
-          id: 2884,
-          name: "Tomatenmark 850g",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tomaten-mark.jpg",
-        },
-        {
-          id: 2880,
-          name: "Tôm thẻ hấp - Gedämpfte weiße Garnelen",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tom-the-hap-2.jpg",
-        },
-        {
-          id: 2876,
-          name: "Thịt trái gấc - Gac-Fruchtfleisch",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/thit-trai-gac.jpg",
-        },
-        {
-          id: 2873,
-          name: "Tamarind concentrate 454g - Tamarindenkonzentrat 454g",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/tamarind-concentrate.jpg",
-        },
-        {
-          id: 2871,
-          name: "Taekyung red pepper powder 454g - Taekyung Paprikapulver 454g",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/taekyung-red-pepper-powder.jpg",
-        },
-        {
-          id: 2868,
-          name: "Lươn rút xương - Aal ohne Knochen",
-          sku: "",
-          price: "",
-          stock_quantity: null,
-          image_src: "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/09/swamp-eel-fillet.jpg",
-        },
-      ],
+        paginationCriteria: { limit: 10 },
+      },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
     );
-    expect((await woocommerceApiMockServer.requests.getCount({
-      method: "GET",
-      url: "/wp-json/wc/v3/products?per_page=10&page=1",
-    })).count).toEqual(1);
-  });
+    expect(responseFirstList.data.products.length).toBe(10);
+    for (let i = 0; i < responseFirstList.data.products.length - 1; i++) {
+      expect(responseFirstList.data.products[i]?.id).toBeGreaterThanOrEqual(responseFirstList.data.products[i + 1]?.id);
+    }
 
+    const responseSecondList = await httpClient.post(
+      "api/v1/products:search",
+      {
+        sortingCriteria: {
+          field: "id",
+          direction: "desc",
+        },
+        paginationCriteria: {
+          last_product: responseFirstList.data.products[9].id,
+          limit: 10,
+        },
+      },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
+    );
+    expect(responseSecondList.data.products.length).toBe(10);
+    for (let i = 0; i < responseSecondList.data.products.length - 1; i++) {
+      expect(responseSecondList.data.products[i]?.id).toBeGreaterThanOrEqual(responseSecondList.data.products[i + 1]?.id);
+    }
+
+    const responseThirdList = await httpClient.post(
+      "api/v1/products:search",
+      {
+        sortingCriteria: {
+          field: "id",
+          direction: "desc",
+        },
+        paginationCriteria: {
+          last_product: responseSecondList.data.products[9].id,
+          limit: 10,
+        },
+      },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
+    );
+    expect(responseThirdList.data.products.length).toBe(7);
+    for (let i = 0; i < responseThirdList.data.products.length - 1; i++) {
+      expect(responseThirdList.data.products[i]?.id).toBeGreaterThanOrEqual(responseThirdList.data.products[i + 1]?.id);
+    }
+  });
 });
