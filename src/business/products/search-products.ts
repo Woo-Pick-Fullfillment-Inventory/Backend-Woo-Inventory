@@ -7,10 +7,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
-import {
-  getProducts,
-  getUserById,
-} from "../../repository/firestore/index.js";
+import { firestoreRepository } from "../../repository/firestore/index.js";
 
 import type {
   Request,
@@ -64,13 +61,13 @@ const paginationCriteria = Type.Object({
 });
 
 const postGetProductsRequest = Type.Object({
-  sortingCriteria: sortingCriteria,
-  paginationCriteria: paginationCriteria,
+  sorting_criteria: sortingCriteria,
+  pagination_criteria: paginationCriteria,
 });
 
 if (process.env["NODE_ENV"] === "test") await firestoreMock.getProducts();
 
-export const postGetProducts = async (req: Request, res: Response) => {
+export const searchProducts = async (req: Request, res: Response) => {
   const isPostGetProductsRequestTypeValid = isResponseTypeTrue(
     postGetProductsRequest,
     req.body,
@@ -103,7 +100,7 @@ export const postGetProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await getUserById(userId);
+  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log(
       "warn",
@@ -112,14 +109,14 @@ export const postGetProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  const firestoreResult = await getProducts({
+  const firestoreResult = await firestoreRepository.product.getProducts({
     userId,
-    field: req.body.sortingCriteria.field,
-    direction: req.body.sortingCriteria.direction,
-    limit: req.body.paginationCriteria.limit,
-  })(req.body.paginationCriteria.last_product);
+    field: req.body.sorting_criteria.field,
+    direction: req.body.sorting_criteria.direction,
+    limit: req.body.pagination_criteria.limit,
+  })(req.body.pagination_criteria.last_product);
 
-  return res.status(200).send({
+  return res.status(201).send({
     products: firestoreResult.products,
     last_product: firestoreResult.lastProduct,
     total_products: firestoreResult.products.length,

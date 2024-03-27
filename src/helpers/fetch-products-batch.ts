@@ -1,4 +1,4 @@
-import { getProductsPagination } from "../repository/woo-api/index.js";
+import { wooApiRepository } from "../repository/woo-api/index.js";
 
 import type { ProductsType } from "../repository/woo-api/models/products.type.js";
 
@@ -7,7 +7,7 @@ const fetchProductsBatch = async (
   wooBasicAuth: string,
   currentPage: number,
 ) => {
-  const result = await getProductsPagination(
+  const result = await wooApiRepository.product.getProductsPagination(
     base_url,
     wooBasicAuth,
     50,

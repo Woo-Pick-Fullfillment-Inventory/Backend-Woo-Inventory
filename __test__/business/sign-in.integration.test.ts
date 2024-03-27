@@ -9,13 +9,13 @@ import { httpClient } from "../common/http-client"; describe("Signin test", () =
         password: "Test123abcjs",
       });
 
-    expect(responseEmail.status).toEqual(200);
+    expect(responseEmail.status).toEqual(201);
     const responseUsername = await httpClient.post("api/v1/auth/signin",
       {
         email_or_username: "someone",
         password: "Test123abcjs",
       });
-    expect(responseUsername.status).toEqual(200);
+    expect(responseUsername.status).toEqual(201);
   });
 
   it("should return a 400 error when credentials are falsy", async () => {

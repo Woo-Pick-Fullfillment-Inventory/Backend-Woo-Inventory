@@ -1,4 +1,4 @@
-import type { UserUpdateAttributeType } from "./models/user.type.js";
+import type { UserUpdateAttributeType } from "../models/user.type.js";
 
 // TODO: add type validation
 export const updateUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
