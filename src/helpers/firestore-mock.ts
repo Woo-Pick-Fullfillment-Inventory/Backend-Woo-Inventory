@@ -1,4 +1,8 @@
-import { insertUser } from "../repository/firestore/index.js";
+import { generateProductsArray } from "./faker.js";
+import {
+  batchWriteProducts,
+  insertUser,
+} from "../repository/firestore/index.js";
 
 import type { UserFireStoreType } from "../repository/firestore/models/user.type.js";
 
@@ -56,7 +60,10 @@ const mockUserForSyncingProducts: UserFireStoreType = {
 };
 
 const firestoreMock = {
-  getProducts: async () => await insertUser(mockUser),
+  getProducts: async () => {
+    const mockProducts = await generateProductsArray(27);
+    await batchWriteProducts(mockProducts, "1");
+  },
   signIn: async () => {
     await insertUser(mockUser);
     await insertUser(mockUserWrongType as UserFireStoreType);

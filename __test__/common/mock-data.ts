@@ -59,7 +59,7 @@ export const mockProducts: ProductsType = [
     id: 1,
     name: "product 1",
     sku: "sku-1",
-    price: "100",
+    price: 100,
     stock_quantity: 10,
     images: [
       {
@@ -72,7 +72,7 @@ export const mockProducts: ProductsType = [
     id: 2,
     name: "product 2",
     sku: "sku-2",
-    price: "200",
+    price: 200,
     stock_quantity: 20,
     images: [
       {
