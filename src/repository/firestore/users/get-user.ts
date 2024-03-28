@@ -1,15 +1,12 @@
 import type {
   UserAttributeType,
   UserFireStoreType,
-} from "./models/user.type.js";
+} from "../models/user.type.js";
 
-export const getUserFactory = (
-  firestoreClient: FirebaseFirestore.Firestore,
-) => {
+// todo: type check
+export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
   return (userAttribute: UserAttributeType) => {
-    return async (
-      value: string,
-    ): Promise<UserFireStoreType | undefined> => {
+    return async (value: string): Promise<UserFireStoreType | undefined> => {
       const snapshot = await firestoreClient
         .collection("users")
         .where(userAttribute, "==", value)

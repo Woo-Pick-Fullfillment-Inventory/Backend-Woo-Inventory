@@ -19,7 +19,7 @@ const ProductSchema = Type.Object({
     }),
   ),
   images: Type.Array(ImageSchema),
-  price: Type.String(),
+  price: Type.Number(),
   sku: Type.String(),
   stock_quantity: Type.Number(),
 });
@@ -32,16 +32,16 @@ export type ProductsFromWooType = Static<typeof ProductsSchema>;
 
 // User receive this product type with id
 export type ProductType = {
-  id: string;
-  name: string;
-  sku: string;
-  price: string;
-  stock_quantity: number | null;
-  images: {
     id: number;
-    src: string;
-  }[];
-};
+    name: string;
+    sku: string;
+    price: number;
+    stock_quantity: number | null;
+    images: {
+      id: number;
+      src: string;
+    }[];
+}
 
 export type ProductsType = ProductType[];
 

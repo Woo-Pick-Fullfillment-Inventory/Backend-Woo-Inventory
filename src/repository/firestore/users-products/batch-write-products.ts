@@ -1,4 +1,4 @@
-import type { ProductsType } from "../woo-api/models/products.type.js";
+import type { ProductsType } from "../../woo-api/models/products.type.js";
 
 export const batchWriteProductsFactory = (
   firestoreClient: FirebaseFirestore.Firestore,

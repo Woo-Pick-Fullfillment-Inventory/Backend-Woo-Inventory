@@ -1,17 +1,17 @@
+import createAxiosClient from "../../../modules/create-axios-client.js";
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
   SystemStatusSchema,
   type SystemStatusType,
-} from "./models/index.js";
-import createAxiosClient from "../../modules/create-axios-client.js";
-import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+} from "../models/index.js";
 
 import type {
   AxiosError,
   AxiosResponse,
 } from "axios";
 
-export const getSystemStatus = async (
+export const getSystemStatusFactory = async (
   baseUrl: string,
   token: string,
 ): Promise<SystemStatusType> => {

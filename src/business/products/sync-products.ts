@@ -13,12 +13,8 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
-import {
-  batchWriteProducts,
-  getUserById,
-  updateUserProductsSynced,
-} from "../../repository/firestore/index.js";
-import { getProductsPagination } from "../../repository/woo-api/index.js";
+import { firestoreRepository } from "../../repository/firestore/index.js";
+import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -61,7 +57,7 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   const isSyncProductsRequestTypeValid = isResponseTypeTrue(SyncProductsSchema, req.body, false);
   if (!isSyncProductsRequestTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
@@ -71,7 +67,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await getUserById(userId);
+  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
@@ -87,7 +83,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   const base_url =
   process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
 
-  const { totalItems } = await getProductsPagination(base_url, wooBasicAuth, 1, 1);
+  const { totalItems } = await wooApiRepository.product.getProductsPagination(base_url, wooBasicAuth, 1, 1);
 
   const startTimeGettingProducts = performance.now();
   const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
@@ -101,12 +97,12 @@ export const syncProducts = async (req: Request, res: Response) => {
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
   for (let i = 0; i < products.length; i+=100) {
-    await batchWriteProducts(products.slice(i, i+100), userId);
+    await firestoreRepository.product.batchWriteProducts(products.slice(i, i+100), userId);
   }
   const endTimeWritingToDb = performance.now();
   logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
 
-  await updateUserProductsSynced(userId, true);
+  await firestoreRepository.user.updateUserProductsSynced(userId, true);
 
-  return res.status(200).send({ are_products_synced: true });
+  return res.status(201).send({ are_products_synced: true });
 };

@@ -1,6 +1,6 @@
-import { getProductsPagination } from "./get-products-pagination.js";
-import { getSystemStatus } from "./get-system-status.js";
-export {
-  getSystemStatus,
-  getProductsPagination,
+import { getProductsPaginationFactory } from "./products/get-products-pagination.js";
+import { getSystemStatusFactory } from "./system/get-system-status.js";
+export const wooApiRepository = {
+  system: { getSystemStatus: getSystemStatusFactory },
+  product: { getProductsPagination: getProductsPaginationFactory },
 };

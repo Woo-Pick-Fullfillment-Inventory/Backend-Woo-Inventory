@@ -1,6 +1,6 @@
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { viewCollection } from "../../src/repository/firestore/index.js";
+import { firestoreRepository } from "../../src/repository/firestore/index.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 
@@ -34,9 +34,9 @@ describe("Get products test", () => {
         { src: "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg" },
       ],
     };
-    const oldProductsCount = await viewCollection<ProductsType>("users-products/users-1-products/products");
+    const oldProductsCount = await firestoreRepository.collection.viewCollection<ProductsType>("users-products/users-1-products/products");
     const response = await httpClient.post("api/v1/products", newProduct, { headers: { authorization: createAuthorizationHeader(userId) } });
-    const newProductsCount = await viewCollection<ProductsType>("users-products/users-1-products/products");
+    const newProductsCount = await firestoreRepository.collection.viewCollection<ProductsType>("users-products/users-1-products/products");
     expect(newProductsCount.length).toEqual(oldProductsCount.length + 1);
     expect(response.status).toBe(201);
     expect(response.data).toEqual(newProduct);

@@ -1,6 +1,6 @@
 {
   "roots": ["<rootDir>"],
-  "testMatch": ["**/*.integration.test.ts", "**/*.unit.test.ts"],
+  "testMatch": ["**/*.local.test.ts"],
   "extensionsToTreatAsEsm": [".ts"],
   "moduleNameMapper": {
     "^(\\.{1,2}/.*)\\.js$": "$1"
@@ -13,5 +13,5 @@
       }
     ]
   },
-  "testTimeout": 30000
+  "testTimeout": 10000
 }

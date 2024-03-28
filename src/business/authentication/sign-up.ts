@@ -11,12 +11,8 @@ import { emailValidator } from "../../modules/create-email-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import {
-  getUserByEmail,
-  getUserByUsername,
-  insertUser,
-} from "../../repository/firestore/index.js";
-import { getSystemStatus } from "../../repository/woo-api/index.js";
+import { firestoreRepository } from "../../repository/firestore/index.js";
+import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -78,13 +74,13 @@ export const signup = async (req: Request, res: Response) => {
     false,
   );
   if (!isSignupRequestTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errors[0]?.message} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await getUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await firestoreRepository.user.getUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await getUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await firestoreRepository.user.getUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator(req.body.email))
     return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
@@ -96,10 +92,8 @@ export const signup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
-    process.env["NODE_ENV"] === "production"
-      ? req.body.app_url
-      : process.env["WOO_BASE_URL"];
-  const systemStatusResult = await getSystemStatus(
+    process.env["NODE_ENV"] === "production" ? req.body.app_url : process.env["WOO_BASE_URL"];
+  const systemStatusResult = await wooApiRepository.system.getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
@@ -112,7 +106,8 @@ export const signup = async (req: Request, res: Response) => {
   const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  await insertUser({
+  // todo : products can actually be synced from another users of same store
+  await firestoreRepository.user.insertUser({
     user_id: userId,
     store: { app_url: req.body.app_url },
     email: req.body.email,
@@ -135,9 +130,7 @@ export const signup = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  return res
-    .status(200)
-    .send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"]) }` });
 };
 
 export default signup;

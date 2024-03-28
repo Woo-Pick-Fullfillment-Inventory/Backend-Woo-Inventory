@@ -1,2 +1,3 @@
-export { default as fetchAllProducts } from "./create-fetch-products-batch.js";
-export { default as firestoreMock } from "./create-firestore-mock.js";
+export { default as fetchAllProducts } from "./fetch-products-batch.js";
+export { default as firestoreMock } from "./firestore-mock.js";
+export { generateProductsArray } from "./faker.js";

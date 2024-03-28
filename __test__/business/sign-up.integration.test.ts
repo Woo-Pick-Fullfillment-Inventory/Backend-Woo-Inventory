@@ -21,7 +21,7 @@ describe("Signup test", () => {
         password_confirmation: "Test123abcjs",
         token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
       });
-    expect(response.status).toEqual(200);
+    expect(response.status).toEqual(201);
     expect((await woocommerceApiMockServer.requests.getCount({
       method: "GET",
       url: "/wp-json/wc/v3/system_status",

@@ -7,10 +7,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
-import {
-  getUserById,
-  insertProduct,
-} from "../../repository/firestore/index.js";
+import { firestoreRepository } from "../../repository/firestore/index.js";
 import { postProduct } from "../../repository/woo-api/create-post-product.js";
 
 import type {
@@ -74,7 +71,7 @@ export const addProduct = async (req: Request, res: Response) => {
     logger.log(
       "error",
       `invalid add product request type  ${
-        isAddProductTypeRequestValid.errors[0]?.message
+        isAddProductTypeRequestValid.errorMessage
       } **Expected** ${JSON.stringify(
         AddProductRequest,
       )} **RECEIVED** ${JSON.stringify(req.body)}`,
@@ -96,7 +93,7 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore = await getUserById(userId);
+  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
@@ -119,7 +116,7 @@ export const addProduct = async (req: Request, res: Response) => {
       productDetails,
     );
 
-    await insertProduct({
+    await firestoreRepository.product.insertProduct({
       id: addProductToWooResult.product.id,
       name: addProductToWooResult.product.name,
       sku: addProductToWooResult.product.sku,

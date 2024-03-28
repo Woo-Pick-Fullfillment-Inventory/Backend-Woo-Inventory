@@ -1,12 +1,12 @@
-import { convertWooProductsToClient } from "./converter/convert-woo-product-to-client.js";
+import createAxiosClient from "../../../modules/create-axios-client.js";
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import { convertWooProductsToClient } from "../converter/convert-woo-product-to-client.js";
 import {
   type ProductType,
   type ProductsFromWooType,
   ProductsSchema,
-} from "./models/index.js";
-import createAxiosClient from "../../modules/create-axios-client.js";
-import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+} from "../models/index.js";
 
 import type {
   AxiosError,
@@ -19,7 +19,7 @@ type getAllProductsPaginationResponse = {
   totalPages: number;
 };
 
-export const getProductsPagination = async (
+export const getProductsPaginationFactory = async (
   baseUrl: string,
   token: string,
   perPage: number,

@@ -7,7 +7,7 @@ import type {
 
 export const convertWooProductToClient = (product: ProductFromWooType): ProductType => {
   return {
-    id: product.id.toString(),
+    id: product.id,
     name: product.name,
     sku: product.sku,
     price: product.price,
