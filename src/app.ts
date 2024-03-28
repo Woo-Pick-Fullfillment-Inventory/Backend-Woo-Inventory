@@ -24,9 +24,9 @@ const PORT = process.env["SERVICE_PORT"];
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/webhook", webhookRouter);
-app.use("/api/v1", authRouter);
-app.use("/api/v1", productRouter);
+app.use(webhookRouter);
+app.use(authRouter);
+app.use(productRouter);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory!");

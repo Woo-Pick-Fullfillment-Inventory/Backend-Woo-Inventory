@@ -7,10 +7,10 @@ import { handleErrorFunction } from "../../modules/create-error-function.js";
 
 const productRouter = express.Router();
 
-productRouter.post("/products:search", handleErrorFunction(searchProducts));
+productRouter.post("/api/v1/products:search", handleErrorFunction(searchProducts));
 
-productRouter.get("/products/synced", handleErrorFunction(areProductsSynced));
+productRouter.get("/api/v1/products/synced", handleErrorFunction(areProductsSynced));
 
-productRouter.post("/products/sync", handleErrorFunction(syncProducts));
+productRouter.post("/api/v1/products/sync", handleErrorFunction(syncProducts));
 
 export default productRouter;
