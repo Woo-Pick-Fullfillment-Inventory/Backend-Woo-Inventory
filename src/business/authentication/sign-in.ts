@@ -95,7 +95,5 @@ export const signin = async (req: Request, res: Response) => {
     new Date().toISOString(),
   );
 
-  return res
-    .status(201)
-    .send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"])}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"])}` });
 };
