@@ -6,7 +6,7 @@ import {
   initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 
-import { firestoreRepository } from "../../src/repository/firestore/index.js";
+import { batchWriteProductsFactory } from "../../src/repository/firestore/users-products/batch-write-products.js";
 import { getProductsFactory } from "../../src/repository/firestore/users-products/get-products.js";
 import { generateProductsArray } from "../common/faker.js";
 
@@ -15,6 +15,7 @@ import type { ProductsFireStorePaginationType } from "../../src/repository/fires
 // todo: write test in the cicd pipeline also
 describe("Firestore get product", () => {
   let db: FirebaseFirestore.Firestore;
+  const userId = "1";
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
     await clearFirestoreData({ projectId: "test-project" });
@@ -26,7 +27,7 @@ describe("Firestore get product", () => {
 
   it("should get 10 products order by product id direction desc", async () => {
     const mockProducts = await generateProductsArray(10);
-    await firestoreRepository.product.batchWriteProducts(mockProducts, "1");
+    await batchWriteProductsFactory(db)(mockProducts, userId);
 
     const result = await getProductsFactory(db)({
       userId: "1",
@@ -43,7 +44,7 @@ describe("Firestore get product", () => {
 
   it("should get 10 products order by product name direction desc", async () => {
     const mockProducts = await generateProductsArray(10);
-    await firestoreRepository.product.batchWriteProducts(mockProducts, "1");
+    await batchWriteProductsFactory(db)(mockProducts, userId);
 
     const result = await getProductsFactory(db)({
       userId: "1",
