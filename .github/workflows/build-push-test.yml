@@ -11,6 +11,27 @@ env:
   IMAGE_NAME: woopick-backend
 
 jobs:
+  checks:
+    runs-on: ubuntu-latest
+    name: Checks
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Docker Linter
+        run: npm run lint-docker
+
+      - name: Run Markdown Linter
+        run: npm run lint-markdown
+
+      - name: Run Typescript Linter
+        run: npm run lint
+
+      - name: Run Npm Build
+        run: npm run build
   check-test:
     name: Execute Test Cases
     runs-on: ubuntu-latest
