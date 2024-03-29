@@ -3,10 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
-import {
-  fetchAllProducts,
-  firestoreMock,
-} from "../../helpers/index.js";
+import { fetchAllProducts } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -20,6 +17,7 @@ import type {
   Request,
   Response,
 } from "express";
+
 dotenv.config();
 
 const SERVICE_ERRORS = {
@@ -47,7 +45,6 @@ const SERVICE_ERRORS = {
 
 const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
 
-if (process.env["NODE_ENV"] === "test") await firestoreMock.syncProducts();
 // TODO:
 // 1. Add tracing
 // 2. Add error handling

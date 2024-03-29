@@ -2,13 +2,13 @@ version: '3.9'
 
 services:
   firestore-emulator:
-    build: 
-      context: .
-      dockerfile: Dockerfile.Firebase
+    image: mtlynch/firestore-emulator
+    environment:
+      - FIRESTORE_PROJECT_ID=test-project
+      - FIRESTORE_EMULATOR_HOST=firestore-emulator:8888
+      - PORT=8888
     ports:
-      - "8888:8888" 
-    volumes:
-      - ${PWD}/firebase.json:/app/firebase.json
+      - 8888:8888
 
   wiremock:
     image: wiremock/wiremock:3.1.0
@@ -32,5 +32,8 @@ services:
       PROJECT_ID: test-project
 
     depends_on:
-      - firestore-emulator
-      - wiremock
+      firestore-emulator:
+        condition: service_started
+      wiremock:
+        condition: service_started
+
