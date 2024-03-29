@@ -2,7 +2,6 @@ import { createAuthorizationHeader } from "../common/create-authorization-header
 import { httpClient } from "../common/http-client.js";
 
 describe("Get products test", () => {
-
   it("should return a product list of first 27 products order by id in descending order", async () => {
     const userId = "1";
     const responseFirstList = await httpClient.post(

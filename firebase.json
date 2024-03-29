@@ -22,8 +22,8 @@
       "port": 5001
     },
     "firestore": {
-      "host": "127.0.0.1",
-      "port": 9000
+      "host": "firestore-emulator",
+      "port": 8888
     },
     "hosting": {
       "port": 5002
