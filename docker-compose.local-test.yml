@@ -2,14 +2,13 @@ version: '3.9'
 
 services:
   firestore-emulator:
-    image: fixl/firebase-emulator-suite:12.7
+    build: 
+      context: .
+      dockerfile: Dockerfile.Firebase
     ports:
-      - "8888:8888"
-    environment:
-      - FIREBASE_PROJECT_ID=test-project
-      - FIRESTORE=true
-      - FIRESTORE_PORT=8888
-      - AUTH=false
+      - "8888:8888" 
+    volumes:
+      - ${PWD}/firebase.json:/app/firebase.json
   wiremock:
     image: wiremock/wiremock:3.1.0
     container_name: wiremock-container
