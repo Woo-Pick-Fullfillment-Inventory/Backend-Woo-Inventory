@@ -1,4 +1,4 @@
-name: Build Image and Check for Tests
+name: Check out code
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
       - name: Run Npm Build
         run: npm run build
 
-      - name: Check Prettier
+      - name: Run Prettier
         run: npm run prettier-check
 
   run-tests:
