@@ -5,9 +5,9 @@
       "request": {
         "method": "GET",
         "url": "/wp-json/wc/v3/system_status",
-        "basicAuth":{
-            "username":"ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
-            "password":"cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb"
+        "basicAuth": {
+          "username": "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
+          "password": "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb"
         }
       },
       "response": {
@@ -16,19 +16,19 @@
       }
     },
     {
-        "scenarioName": "sign up auth - Incorrect Token",
-        "request": {
-          "method": "GET",
-          "url": "/wp-json/wc/v3/system_status",
-          "basicAuth": {
-            "username": "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
-            "password": "some_random_string"
-          }
-        },
-        "response": {
-          "status": 401,
-          "fixedDelayMilliseconds": 2000
+      "scenarioName": "sign up auth - Incorrect Token",
+      "request": {
+        "method": "GET",
+        "url": "/wp-json/wc/v3/system_status",
+        "basicAuth": {
+          "username": "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
+          "password": "some_random_string"
         }
+      },
+      "response": {
+        "status": 401,
+        "fixedDelayMilliseconds": 2000
       }
+    }
   ]
 }

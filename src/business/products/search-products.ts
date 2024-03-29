@@ -97,7 +97,8 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
+  const userFoundInFirestore =
+    await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log(
       "warn",

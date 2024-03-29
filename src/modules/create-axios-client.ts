@@ -9,12 +9,12 @@ import type {
 type InterceptorType = {
   onTrue: (response: AxiosResponse) => AxiosResponse;
   onError: (error: AxiosError) => AxiosError;
-}
+};
 
 type axiosOptions = {
   config: AxiosRequestConfig;
   interceptors: InterceptorType[];
-}
+};
 
 const createAxiosClient = <T>({
   config,
@@ -23,10 +23,16 @@ const createAxiosClient = <T>({
   const axiosClient = axios.create(config);
 
   interceptors.forEach((interceptor) => {
-    axiosClient.interceptors.response.use(interceptor.onTrue, interceptor.onError);
+    axiosClient.interceptors.response.use(
+      interceptor.onTrue,
+      interceptor.onError,
+    );
   });
 
-  return { get: (url: string, config?: AxiosRequestConfig) => axiosClient.get<T, AxiosResponse<T>>(url, config) };
+  return {
+    get: (url: string, config?: AxiosRequestConfig) =>
+      axiosClient.get<T, AxiosResponse<T>>(url, config),
+  };
 };
 
 export default createAxiosClient;

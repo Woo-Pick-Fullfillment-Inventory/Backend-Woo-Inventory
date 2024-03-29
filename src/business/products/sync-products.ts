@@ -51,53 +51,91 @@ const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync
 // 3. Add tests
 // 4. Cloud functions?
 export const syncProducts = async (req: Request, res: Response) => {
-
-  const isSyncProductsRequestTypeValid = isResponseTypeTrue(SyncProductsSchema, req.body, false);
+  const isSyncProductsRequestTypeValid = isResponseTypeTrue(
+    SyncProductsSchema,
+    req.body,
+    false,
+  );
   if (!isSyncProductsRequestTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
+    );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
   if (!userId) {
-    logger.log("warn", `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${userId} header`);
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${userId} header`,
+    );
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
+  const userFoundInFirestore =
+    await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
-    logger.log("warn", `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`);
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,
+    );
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
   if (userFoundInFirestore.are_products_synced) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`);
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`,
+    );
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
 
-  const wooBasicAuth = createBasicAuthHeaderToken(userFoundInFirestore.woo_credentials.token, userFoundInFirestore.woo_credentials.secret);
+  const wooBasicAuth = createBasicAuthHeaderToken(
+    userFoundInFirestore.woo_credentials.token,
+    userFoundInFirestore.woo_credentials.secret,
+  );
 
   const base_url =
-  process.env["NODE_ENV"] === "production" ? userFoundInFirestore.store.app_url : process.env["WOO_BASE_URL"] as string;
+    process.env["NODE_ENV"] === "production"
+      ? userFoundInFirestore.store.app_url
+      : (process.env["WOO_BASE_URL"] as string);
 
-  const { totalItems } = await wooApiRepository.product.getProductsPagination(base_url, wooBasicAuth, 1, 1);
+  const { totalItems } = await wooApiRepository.product.getProductsPagination(
+    base_url,
+    wooBasicAuth,
+    1,
+    1,
+  );
 
   const startTimeGettingProducts = performance.now();
   const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
   if (products.length !== totalItems) {
-    logger.log("error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`);
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`,
+    );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
   const endTimeGettingProducts = performance.now();
-  logger.log("info", `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`);
+  logger.log(
+    "info",
+    `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`,
+  );
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < products.length; i+=100) {
-    await firestoreRepository.product.batchWriteProducts(products.slice(i, i+100), userId);
+  for (let i = 0; i < products.length; i += 100) {
+    await firestoreRepository.product.batchWriteProducts(
+      products.slice(i, i + 100),
+      userId,
+    );
   }
   const endTimeWritingToDb = performance.now();
-  logger.log("info", `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`);
+  logger.log(
+    "info",
+    `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
+  );
 
   await firestoreRepository.user.updateUserProductsSynced(userId, true);
 

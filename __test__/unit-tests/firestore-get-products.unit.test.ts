@@ -29,16 +29,19 @@ describe("Firestore get product", () => {
     const mockProducts = await generateProductsArray(10);
     await batchWriteProductsFactory(db)(mockProducts, userId);
 
-    const result = await getProductsFactory(db)({
+    const result = (await getProductsFactory(db)({
       userId: "1",
       field: "id",
       direction: "desc",
       limit: 10,
-    })() as ProductsFireStorePaginationType;
+    })()) as ProductsFireStorePaginationType;
     expect(result.products.length).toBe(10);
     for (let i = 0; i < result.products.length - 1; i++) {
       // eslint-disable-next-line
-      expect(result.products[i]!.id).toBeGreaterThanOrEqual(result.products[i + 1]!.id);
+      expect(result.products[i]!.id).toBeGreaterThanOrEqual(
+        // eslint-disable-next-line
+        result.products[i + 1]!.id,
+      );
     }
   });
 
@@ -46,16 +49,19 @@ describe("Firestore get product", () => {
     const mockProducts = await generateProductsArray(10);
     await batchWriteProductsFactory(db)(mockProducts, userId);
 
-    const result = await getProductsFactory(db)({
+    const result = (await getProductsFactory(db)({
       userId: "1",
       field: "name",
       direction: "desc",
       limit: 10,
-    })() as ProductsFireStorePaginationType;
+    })()) as ProductsFireStorePaginationType;
     expect(result.products.length).toBe(10);
     for (let i = 0; i < result.products.length - 1; i++) {
       // eslint-disable-next-line
-      expect(result.products[i]!.name.localeCompare(result.products[i + 1]!.name)).toBeGreaterThanOrEqual(0);
+      expect(
+        // eslint-disable-next-line
+        result.products[i]!.name.localeCompare(result.products[i + 1]!.name),
+      ).toBeGreaterThanOrEqual(0);
     }
   });
 });
