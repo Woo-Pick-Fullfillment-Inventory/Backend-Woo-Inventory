@@ -5,12 +5,14 @@ import type {
   ValidateFunction,
 } from "ajv";
 
-export type ValidationResult = {
-  isValid: false;
-  errorMessage: string;
-} | {
-  isValid: true;
-};
+export type ValidationResult =
+  | {
+      isValid: false;
+      errorMessage: string;
+    }
+  | {
+      isValid: true;
+    };
 
 export const isResponseTypeTrue = <T extends Schema>(
   schema: T,
@@ -23,8 +25,11 @@ export const isResponseTypeTrue = <T extends Schema>(
     additionalProperties: areAdditionalPropertiesAllowed,
   });
   const isValid = validate(data) as boolean;
-  return isValid ? { isValid } : {
-    isValid: false,
-    errorMessage: validate.errors?.map(error => error.message).join("; ") || "",
-  };
+  return isValid
+    ? { isValid }
+    : {
+      isValid: false,
+      errorMessage:
+          validate.errors?.map((error) => error.message).join("; ") || "",
+    };
 };

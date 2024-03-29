@@ -22,21 +22,28 @@ const generateRandomProduct = (): ProductType => {
       min: 0,
       max: 100,
     }),
-    images: Array.from({
-      length: faker.number.int({
-        min: 1,
-        max: 5,
+    images: Array.from(
+      {
+        length: faker.number.int({
+          min: 1,
+          max: 5,
+        }),
+      },
+      () => ({
+        id: faker.number.int({
+          min: 100,
+          max: 200,
+        }),
+        src: faker.image.url(),
       }),
-    }, () => ({
-      id: faker.number.int({
-        min: 100,
-        max: 200,
-      }),
-      src: faker.image.url(),
-    })),
+    ),
   };
 };
 
-export const generateProductsArray = async (numberOfProducts: number): Promise<ProductsType> => {
-  return Array.from({ length: numberOfProducts }, () => generateRandomProduct());
+export const generateProductsArray = async (
+  numberOfProducts: number,
+): Promise<ProductsType> => {
+  return Array.from({ length: numberOfProducts }, () =>
+    generateRandomProduct(),
+  );
 };

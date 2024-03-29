@@ -5,7 +5,6 @@ import {
 } from "../../src/repository/firestore/models/product.type.js";
 
 describe("Firestore get product", () => {
-
   it("should return error", async () => {
     const data = {
       name: "product1",

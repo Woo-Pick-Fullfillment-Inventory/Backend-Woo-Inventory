@@ -5,9 +5,8 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { randomUUID } from "node:crypto";
 
-import { firestoreMock } from "../../helpers/index.js";
+import { emailValidator } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
-import { emailValidator } from "../../modules/create-email-validator.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -65,25 +64,39 @@ const SignupRequest = Type.Object({
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-if (process.env["NODE_ENV"] === "test") await firestoreMock.signUp();
-
 export const signup = async (req: Request, res: Response) => {
-  const isSignupRequestTypeValid = isResponseTypeTrue(SignupRequest, req.body, false);
+  const isSignupRequestTypeValid = isResponseTypeTrue(
+    SignupRequest,
+    req.body,
+    false,
+  );
   if (!isSignupRequestTypeValid.isValid) {
-    logger.log("warn", `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`);
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid signup request type  ${isSignupRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SignupRequest)} **RECEIVED** ${JSON.stringify(req.body)}`,
+    );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await firestoreRepository.user.getUserByEmail(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
+  if (await firestoreRepository.user.getUserByEmail(req.body.email))
+    return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await firestoreRepository.user.getUserByUsername(req.body.username)) return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
+  if (await firestoreRepository.user.getUserByUsername(req.body.username))
+    return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
-  if (!emailValidator(req.body.email)) return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
+  if (!emailValidator(req.body.email))
+    return createErrorResponse(res, SERVICE_ERRORS.invalidEmail);
 
-  if (!passwordRegex.test(req.body.password) || req.body.password !== req.body.password_confirmation) return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
+  if (
+    !passwordRegex.test(req.body.password) ||
+    req.body.password !== req.body.password_confirmation
+  )
+    return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const base_url =
-    process.env["NODE_ENV"] === "production" ? req.body.app_url : process.env["WOO_BASE_URL"];
+    process.env["NODE_ENV"] === "production"
+      ? req.body.app_url
+      : process.env["WOO_BASE_URL"];
   const systemStatusResult = await wooApiRepository.system.getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(
@@ -92,7 +105,8 @@ export const signup = async (req: Request, res: Response) => {
     ),
   );
   // actually useless
-  if (!systemStatusResult) return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
+  if (!systemStatusResult)
+    return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
   const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -117,11 +131,14 @@ export const signup = async (req: Request, res: Response) => {
   });
 
   if (!process.env["JWT_SECRET"]) {
-    logger.log("error", `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`);
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`,
+    );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"]) }` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}` });
 };
 
 export default signup;
