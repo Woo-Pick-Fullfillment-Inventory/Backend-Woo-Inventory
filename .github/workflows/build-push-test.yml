@@ -22,6 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: install dependencies
+        run: npm install
+
       - name: Start wiremock, firestore-emulator and application
         run: |-
           docker-compose -f docker-compose.local-test.yml up -d --build
