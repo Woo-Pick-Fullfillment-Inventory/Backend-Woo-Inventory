@@ -47,6 +47,8 @@ jobs:
 
   deploy-to-cloudrun:
     name: Deploy to Cloud Run
+    needs: 
+      build-push-gcr
     runs-on: ubuntu-latest
 
     permissions:
