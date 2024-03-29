@@ -1,9 +1,33 @@
+import {
+  apps,
+  clearFirestoreData,
+  initializeAdminApp,
+} from "@firebase/rules-unit-testing";
+
+import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
+import { batchWriteProductsFactory } from "../../src/repository/firestore/users-products/batch-write-products.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
+import { generateProductsArray } from "../common/faker.js";
 import { httpClient } from "../common/http-client.js";
+import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 describe("Get products test", () => {
+  const userId = mockUserForSyncingProducts.user_id;
+  let db: FirebaseFirestore.Firestore;
+
+  beforeEach(async () => {
+    db = initializeAdminApp({ projectId: "test-project" }).firestore();
+    insertUserFactory(db)(mockUserForSyncingProducts);
+    const mockProducts = await generateProductsArray(27);
+    await batchWriteProductsFactory(db)(mockProducts, userId);
+  });
+
+  afterEach(async () => {
+    await clearFirestoreData({ projectId: "test-project" });
+    await Promise.all(apps().map((app) => app.delete()));
+  });
   it("should return a product list of first 27 products order by id in descending order", async () => {
-    const userId = "1";
+
     const responseFirstList = await httpClient.post(
       "api/v1/products:search",
       {
@@ -63,7 +87,6 @@ describe("Get products test", () => {
   });
 
   it("should return a product list of first 27 products order by iname in descending order", async () => {
-    const userId = "1";
     const responseFirstList = await httpClient.post(
       "api/v1/products:search",
       {

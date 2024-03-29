@@ -1,6 +1,31 @@
+import {
+  apps,
+  clearFirestoreData,
+  initializeAdminApp,
+} from "@firebase/rules-unit-testing";
 import { randomUUID } from "crypto";
 
-import { httpClient } from "../common/http-client"; describe("Signin test", () => {
+import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
+import { httpClient } from "../common/http-client";
+import {
+  mockUserWithHashedPassword,
+  mockUserWrongType,
+} from "../common/mock-data";
+
+import type { UserFireStoreType } from "../../src/repository/firestore/models/index.js";
+describe("Signin test", () => {
+  let db: FirebaseFirestore.Firestore;
+
+  beforeEach(async () => {
+    db = initializeAdminApp({ projectId: "test-project" }).firestore();
+    insertUserFactory(db)(mockUserWithHashedPassword);
+    insertUserFactory(db)(mockUserWrongType as UserFireStoreType);
+  });
+
+  afterEach(async () => {
+    await clearFirestoreData({ projectId: "test-project" });
+    await Promise.all(apps().map((app) => app.delete()));
+  });
 
   it("should return a token when log in was succesful", async () => {
     const responseEmail = await httpClient.post("api/v1/auth/signin",

@@ -6,9 +6,9 @@ import {
   initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 
-import { generateProductsArray } from "../../src/helpers/index.js";
 import { firestoreRepository } from "../../src/repository/firestore/index.js";
 import { getProductsFactory } from "../../src/repository/firestore/users-products/get-products.js";
+import { generateProductsArray } from "../common/faker.js";
 
 import type { ProductsFireStorePaginationType } from "../../src/repository/firestore/users-products/get-products.js";
 

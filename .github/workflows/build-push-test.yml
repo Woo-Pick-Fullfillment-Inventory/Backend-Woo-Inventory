@@ -27,7 +27,7 @@ jobs:
 
       - name: Start wiremock, firestore-emulator and application
         run: |-
-          docker-compose -f docker-compose.local-test.yml up -d --build
+          docker-compose -f docker-compose.github-pipeline.yml up -d --build
 
       - name: Check Docker Network
         run: docker network ls
