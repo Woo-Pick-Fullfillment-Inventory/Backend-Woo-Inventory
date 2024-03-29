@@ -18,7 +18,9 @@ services:
     volumes:
       - ${PWD}/__test__/wiremock:/home/wiremock
   application:
-    image: hehe:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
     environment:
