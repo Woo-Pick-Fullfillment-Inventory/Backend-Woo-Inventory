@@ -19,7 +19,7 @@ const ProductSchema = Type.Object({
     }),
   ),
   images: Type.Array(ImageSchema),
-  price: Type.Number(),
+  price: Type.String(),
   sku: Type.String(),
   stock_quantity: Type.Number(),
 });
@@ -35,7 +35,7 @@ export type ProductType = {
     id: number;
     name: string;
     sku: string;
-    price: number;
+    price: string;
     stock_quantity: number | null;
     images: {
       id: number;

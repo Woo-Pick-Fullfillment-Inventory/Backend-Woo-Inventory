@@ -38,11 +38,6 @@ const SERVICE_ERRORS = {
     type: "/products/add-product-failed",
     message: "request body is not valid",
   },
-  existingProduct: {
-    statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/add-product-failed",
-    message: "product name exist",
-  },
 };
 
 const AddProductRequest = Type.Object({
@@ -50,13 +45,11 @@ const AddProductRequest = Type.Object({
   sku: Type.String(),
   price: Type.String(),
   stock_quantity: Type.Optional(Type.Number()),
-  // Type.Optional(Type.Union([Type.Null(), Type.String()])) // string || null || undefined
-  images: Type.Array(
-    Type.Object({
-      id: Type.Number(),
-      src: Type.String(),
-    }),
-  ),
+  description: Type.Optional(Type.Union([
+    Type.Null(),
+    Type.String(),
+  ])), // Example usage of the commented-out line
+  images: Type.Array(Type.Object({ src: Type.String() })),
 });
 
 export const addProduct = async (req: Request, res: Response) => {
@@ -78,8 +71,6 @@ export const addProduct = async (req: Request, res: Response) => {
     );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
-
-  // TODO return error if product name already exist? Woo api accept product with same name
 
   const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
 
@@ -125,7 +116,7 @@ export const addProduct = async (req: Request, res: Response) => {
       images: addProductToWooResult.product.images,
     }, userId);
 
-    return res.status(200).send(addProductToWooResult);
+    return res.status(201).send(addProductToWooResult);
   } catch (error) {
     throw new Error("Error adding product to woo and database");
   }

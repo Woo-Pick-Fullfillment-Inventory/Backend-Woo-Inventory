@@ -1,3 +1,5 @@
+import { response } from "express";
+
 import { convertWooProductToClient } from "./converter/convert-woo-product-to-client.js";
 import { ProductsSchema } from "./models/products.type.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
@@ -54,7 +56,7 @@ export const postProduct = async (
           if (error.config) {
             logger.log(
               "error",
-              `onError Intercepted: request ${error.config.url}:`,
+              `onError Intercepted: request ${error.config.url} with response status ${response.status}:`,
               error,
             );
           }
