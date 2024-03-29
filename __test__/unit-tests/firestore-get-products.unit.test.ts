@@ -18,10 +18,10 @@ describe("Firestore get product", () => {
   const userId = "1";
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    await clearFirestoreData({ projectId: "test-project" });
   });
 
   afterEach(async () => {
+    await clearFirestoreData({ projectId: "test-project" });
     await Promise.all(apps().map((app) => app.delete()));
   });
 
