@@ -125,7 +125,7 @@
         }
       },
       "response": {
-        "status": 200,
+        "status": 201,
         "bodyFileName": "products/POST-add-product-1.json"
       }
     }

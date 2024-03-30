@@ -10,9 +10,7 @@ const productRouter = express.Router();
 
 productRouter.post("/products:search", handleErrorFunction(searchProducts));
 productRouter.post("/products", handleErrorFunction(addProduct));
-
 productRouter.get("/products/synced", handleErrorFunction(areProductsSynced));
-
 productRouter.post("/products/sync", handleErrorFunction(syncProducts));
 
 export default productRouter;

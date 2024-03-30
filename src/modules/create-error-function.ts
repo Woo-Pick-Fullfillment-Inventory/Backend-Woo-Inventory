@@ -16,7 +16,7 @@ export const handleErrorFunction = (fn: (req: Request, res: Response) => Promise
     if (process.env["NODE_ENV"] !== "production") logger.log("info", `${req.method} ${req.url} - ${res.statusCode}`);
   }
   catch (error) {
-    if (process.env["NODE_ENV"] !== "production") logger.log("info", `${req.method} ${req.url} - 500 - Internal Server Error`);
+    if (process.env["NODE_ENV"] !== "production") logger.log("info", `${req.method} ${req.url} - 500 - Internal Server Error ${error}`);
     next(error);
   }
 };

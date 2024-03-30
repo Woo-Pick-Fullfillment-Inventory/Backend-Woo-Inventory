@@ -67,6 +67,7 @@ const firestoreMock = {
   },
   signUp: async () => await firestoreRepository.user.insertUser(mockUser),
   syncProducts: async () => await firestoreRepository.user.insertUser(mockUserForSyncingProducts),
+  addProduct: async () => await firestoreRepository.user.insertUser(mockUserForSyncingProducts),
 };
 
 export default firestoreMock;

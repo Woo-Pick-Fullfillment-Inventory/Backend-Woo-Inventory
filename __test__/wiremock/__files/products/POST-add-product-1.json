@@ -5,7 +5,13 @@
   "price": "100",
   "stock_quantity": 200,
   "images": [
-    { "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg" },
-    { "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg" }
+    {
+      "id": 2222,
+      "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg"
+    },
+    {
+      "id": 3333,
+      "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg"
+    }
   ]
 }

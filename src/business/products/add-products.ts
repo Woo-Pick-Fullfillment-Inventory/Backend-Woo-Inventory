@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
+import { firestoreMock } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -52,6 +53,8 @@ const AddProductRequest = Type.Object({
   images: Type.Array(Type.Object({ src: Type.String() })),
 });
 
+if (process.env["NODE_ENV"] === "test") await firestoreMock.addProduct();
+
 export const addProduct = async (req: Request, res: Response) => {
   const productDetails = req.body;
   const isAddProductTypeRequestValid = isResponseTypeTrue(
@@ -84,7 +87,9 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore = await firestoreRepository.user.getUserById(userId);
+  const userFoundInFirestore = await firestoreRepository.user.getUserById(
+    userId,
+  );
   if (!userFoundInFirestore) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
@@ -100,24 +105,27 @@ export const addProduct = async (req: Request, res: Response) => {
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
-  try {
-    const addProductToWooResult = await postProduct(
-      base_url,
-      wooBasicAuth,
-      productDetails,
-    );
+  const { product } = await postProduct(
+    base_url,
+    wooBasicAuth,
+    productDetails,
+  );
 
-    await firestoreRepository.product.insertProduct({
-      id: addProductToWooResult.product.id,
-      name: addProductToWooResult.product.name,
-      sku: addProductToWooResult.product.sku,
-      price: addProductToWooResult.product.price,
-      stock_quantity: addProductToWooResult.product.stock_quantity,
-      images: addProductToWooResult.product.images,
-    }, userId);
+  await firestoreRepository.product.insertProduct(
+    {
+      id: product.id,
+      name: product.name,
+      sku: product.sku,
+      price: product.price,
+      stock_quantity: product.stock_quantity,
+      images: product.images,
+    },
+    userId,
+  );
 
-    return res.status(201).send(addProductToWooResult);
-  } catch (error) {
-    throw new Error("Error adding product to woo and database");
-  }
+  console.log("====================================");
+  console.log("almost successful, returning 201 ");
+  console.log("====================================");
+
+  return res.status(201).json({ message: "Product added successfully" });
 };
