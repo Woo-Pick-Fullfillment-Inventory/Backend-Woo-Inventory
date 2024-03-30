@@ -1,3 +1,7 @@
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import { ProductsFireStoreSchema } from "../models/index.js";
+
 import type {
   ProductFireStoreAttributeType,
   ProductsFireStoreType,
@@ -40,15 +44,29 @@ export const getProductsFactory = (
 
       const snapshot = await query.get();
 
+      const products = snapshot.docs.map((doc) => doc.data());
+      const isSyncProductsRequestTypeValid = isResponseTypeTrue(
+        ProductsFireStoreSchema,
+        products,
+        true,
+      );
+      if (!isSyncProductsRequestTypeValid.isValid) {
+        logger.log(
+          "warn",
+          `***ERROR*** invalid products response type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(
+            ProductsFireStoreSchema,
+          )} **RECEIVED** ${JSON.stringify(products)}`,
+        );
+        throw new Error("Products Firestore Type Not Expected");
+      }
+
       return {
         lastProduct:
           snapshot.docs.length > 0 && snapshot.docs[snapshot.docs.length - 1]
             // eslint-disable-next-line
             ? snapshot.docs[snapshot.docs.length - 1]!.data()[field]
             : null,
-        products: snapshot.docs.map((doc) =>
-          doc.data(),
-        ) as ProductsFireStoreType,
+        products: products as ProductsFireStoreType,
       };
     };
   };

@@ -11,7 +11,7 @@ import { generateProductsArray } from "../common/faker.js";
 import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
-describe("Get products test", () => {
+describe("Search products test", () => {
   const userId = mockUserForSyncingProducts.user_id;
   let db: FirebaseFirestore.Firestore;
 
