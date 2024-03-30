@@ -11,7 +11,7 @@ export const ProductFireStoreSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
   sku: Type.String(),
-  price: Type.Number(),
+  price: Type.String(),
   stock_quantity: Type.Number(),
   images: Type.Array(ImageSchema),
 });

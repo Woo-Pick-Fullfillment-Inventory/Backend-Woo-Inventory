@@ -148,7 +148,7 @@ describe("Get products test", () => {
       ).toBeLessThanOrEqual(0);
     }
   });
-  it.only("should return an empty list if the last product is not found", async () => {
+  it("should return an empty list if the last product is not found", async () => {
     const responseFirstList = await httpClient.post(
       "api/v1/products:search",
       {
@@ -163,7 +163,6 @@ describe("Get products test", () => {
       },
       { headers: { authorization: createAuthorizationHeader(userId) } },
     );
-    console.log(responseFirstList.data);
     expect(responseFirstList.status).toEqual(201);
     expect(responseFirstList.data.last_product).toBe(null);
     expect(responseFirstList.data.products.length).toBe(0);

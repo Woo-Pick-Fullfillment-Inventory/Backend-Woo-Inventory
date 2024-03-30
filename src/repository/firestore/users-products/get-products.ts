@@ -13,7 +13,7 @@ type GetProductsInputType = {
 export type ProductsFireStorePaginationType = {
   lastProduct: number | string | null;
   products: ProductsFireStoreType | [];
-}
+};
 // todo: type check
 export const getProductsFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
@@ -24,7 +24,9 @@ export const getProductsFactory = (
     direction,
     limit,
   }: GetProductsInputType) => {
-    return async (lastProductFromPrevious?: string | number): Promise<ProductsFireStorePaginationType> => {
+    return async (
+      lastProductFromPrevious?: string | number,
+    ): Promise<ProductsFireStorePaginationType> => {
       let query = firestoreClient
         .collection("users-products")
         .doc(`users-${userId}-products`)
@@ -39,9 +41,14 @@ export const getProductsFactory = (
       const snapshot = await query.get();
 
       return {
-        // eslint-disable-next-line
-        lastProduct: (snapshot.docs.length > 0 && snapshot.docs[snapshot.docs.length - 1]) ? snapshot.docs[snapshot.docs.length - 1]!.data()[field] : null,
-        products: snapshot.docs.map((doc) => doc.data()) as ProductsFireStoreType,
+        lastProduct:
+          snapshot.docs.length > 0 && snapshot.docs[snapshot.docs.length - 1]
+            // eslint-disable-next-line
+            ? snapshot.docs[snapshot.docs.length - 1]!.data()[field]
+            : null,
+        products: snapshot.docs.map((doc) =>
+          doc.data(),
+        ) as ProductsFireStoreType,
       };
     };
   };
