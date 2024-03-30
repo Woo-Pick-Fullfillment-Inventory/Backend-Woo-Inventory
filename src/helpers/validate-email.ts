@@ -1,7 +1,9 @@
 // eslint-disable-next-line no-useless-escape
-const emailExpressionRules: RegExp = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+const emailExpressionRules: RegExp =
+  // eslint-disable-next-line
+  /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
-export const emailValidator = (email: string): boolean => {
+const emailValidator = (email: string): boolean => {
   if (!email) return false;
 
   const emailParts: string[] = email.split("@");
@@ -23,4 +25,4 @@ export const emailValidator = (email: string): boolean => {
   return emailExpressionRules.test(email);
 };
 
-export const emailTester: RegExp = emailExpressionRules;
+export default emailValidator;

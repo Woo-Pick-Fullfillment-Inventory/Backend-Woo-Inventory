@@ -4,6 +4,8 @@ import express from "express";
 
 const webhookRouter = express.Router();
 
-webhookRouter.use("/wc-auth", (_req, res) => { res.send("Webhook is listening..."); });
+webhookRouter.use("/webhook/wc-auth", (_req, res) => {
+  res.send("Webhook is listening...");
+});
 
 export default webhookRouter;

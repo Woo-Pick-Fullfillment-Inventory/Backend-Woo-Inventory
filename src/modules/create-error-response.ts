@@ -1,6 +1,6 @@
 import type { Response } from "express";
 
- type ErrorResponseType = {
+type ErrorResponseType = {
   statusCode: number;
   type: string;
   message: string;

@@ -8,9 +8,17 @@ import { handleErrorFunction } from "../../modules/create-error-function.js";
 
 const productRouter = express.Router();
 
-productRouter.post("/products:search", handleErrorFunction(searchProducts));
-productRouter.post("/products", handleErrorFunction(addProduct));
-productRouter.get("/products/synced", handleErrorFunction(areProductsSynced));
-productRouter.post("/products/sync", handleErrorFunction(syncProducts));
+productRouter.post(
+  "/api/v1/products:search",
+  handleErrorFunction(searchProducts),
+);
+
+productRouter.get(
+  "/api/v1/products/synced",
+  handleErrorFunction(areProductsSynced),
+);
+
+productRouter.post("/api/v1/products/sync", handleErrorFunction(syncProducts));
+productRouter.post("/api/v1/products", handleErrorFunction(addProduct));
 
 export default productRouter;

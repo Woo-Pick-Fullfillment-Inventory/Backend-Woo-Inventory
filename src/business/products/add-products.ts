@@ -2,7 +2,6 @@ import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
-import { firestoreMock } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -52,8 +51,6 @@ const AddProductRequest = Type.Object({
   ])), // Example usage of the commented-out line
   images: Type.Array(Type.Object({ src: Type.String() })),
 });
-
-if (process.env["NODE_ENV"] === "test") await firestoreMock.addProduct();
 
 export const addProduct = async (req: Request, res: Response) => {
   const productDetails = req.body;
@@ -122,10 +119,6 @@ export const addProduct = async (req: Request, res: Response) => {
     },
     userId,
   );
-
-  console.log("====================================");
-  console.log("almost successful, returning 201 ");
-  console.log("====================================");
 
   return res.status(201).json({ message: "Product added successfully" });
 };

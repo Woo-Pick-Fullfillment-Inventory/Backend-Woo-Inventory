@@ -9,23 +9,22 @@ spec:
     spec:
       serviceAccountName: $SA_CLOUDRUN_BACKEND
       containers:
-      - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
-        ports:
-        - name: http1
-          containerPort: 5000
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: SERVICE_PORT
-          value: "5000"
-        - name: PROJECT_ID
-          value: $PROJECT_ID
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              key: latest
-              name: JWT_SECRET
+        - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+          ports:
+            - name: http1
+              containerPort: 5000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: SERVICE_PORT
+              value: "5000"
+            - name: PROJECT_ID
+              value: $PROJECT_ID
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_SECRET
   traffic:
-  - percent: 100
-    latestRevision: true
-      
+    - percent: 100
+      latestRevision: true

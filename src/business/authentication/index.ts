@@ -6,8 +6,8 @@ import { handleErrorFunction } from "../../modules/create-error-function.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/auth/signup", handleErrorFunction(signup));
+authRouter.post("/api/v1/auth/signup", handleErrorFunction(signup));
 
-authRouter.post("/auth/signin", handleErrorFunction(signin));
+authRouter.post("/api/v1/auth/signin", handleErrorFunction(signin));
 
 export default authRouter;
