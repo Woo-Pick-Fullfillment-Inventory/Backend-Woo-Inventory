@@ -20,7 +20,7 @@ describe("Signup test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserWithHashedPassword);
+    await insertUserFactory(db)(mockUserWithHashedPassword);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 

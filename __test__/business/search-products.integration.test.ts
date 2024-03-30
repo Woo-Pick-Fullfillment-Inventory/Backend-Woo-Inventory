@@ -11,13 +11,13 @@ import { generateProductsArray } from "../common/faker.js";
 import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
-describe("Get products test", () => {
+describe("Search products test", () => {
   const userId = mockUserForSyncingProducts.user_id;
   let db: FirebaseFirestore.Firestore;
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserForSyncingProducts);
     const mockProducts = await generateProductsArray(27);
     await batchWriteProductsFactory(db)(mockProducts, userId);
   });
@@ -147,5 +147,24 @@ describe("Get products test", () => {
         list[i]?.name.localeCompare(list[i + 1]?.name),
       ).toBeLessThanOrEqual(0);
     }
+  });
+  it("should return an empty list if the last product is not found", async () => {
+    const responseFirstList = await httpClient.post(
+      "api/v1/products:search",
+      {
+        sorting_criteria: {
+          field: "id",
+          direction: "asc",
+        },
+        pagination_criteria: {
+          last_product: 27,
+          limit: 10,
+        },
+      },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
+    );
+    expect(responseFirstList.status).toEqual(201);
+    expect(responseFirstList.data.last_product).toBe(null);
+    expect(responseFirstList.data.products.length).toBe(0);
   });
 });

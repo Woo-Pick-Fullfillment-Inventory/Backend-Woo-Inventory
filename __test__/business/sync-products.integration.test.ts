@@ -19,7 +19,7 @@ describe("Syncing products test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserForSyncingProducts);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 

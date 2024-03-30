@@ -17,7 +17,7 @@ const generateRandomProduct = (): ProductType => {
     price: faker.number.int({
       min: 1,
       max: 1000,
-    }),
+    }).toString(),
     stock_quantity: faker.number.int({
       min: 0,
       max: 100,
@@ -43,6 +43,7 @@ const generateRandomProduct = (): ProductType => {
 export const generateProductsArray = async (
   numberOfProducts: number,
 ): Promise<ProductsType> => {
+  productIdCounter = 0;
   return Array.from({ length: numberOfProducts }, () =>
     generateRandomProduct(),
   );
