@@ -22,8 +22,8 @@ describe("Get products from woo api test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserForSyncingProducts);
-    insertUserFactory(db)(mockUserForSyncingProductsFalsyTypeProductReturn);
+    await insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserForSyncingProductsFalsyTypeProductReturn);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
