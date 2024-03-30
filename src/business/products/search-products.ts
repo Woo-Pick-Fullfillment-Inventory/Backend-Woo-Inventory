@@ -7,6 +7,7 @@ import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
+import { ProductsFireStoreSchema } from "../../repository/firestore/models/product.type.js";
 
 import type {
   Request,
@@ -113,6 +114,21 @@ export const searchProducts = async (req: Request, res: Response) => {
     direction: req.body.sorting_criteria.direction,
     limit: req.body.pagination_criteria.limit,
   })(req.body.pagination_criteria.last_product);
+
+  const isProductsTypeValid = isResponseTypeTrue(ProductsFireStoreSchema, firestoreResult.products, true);
+  if (!isProductsTypeValid.isValid) {
+    logger.log(
+      "warn",
+      `${req.method} ${
+        req.url
+      } - 500 - Internal Server Error ***ERROR*** invalid products type ${
+        isProductsTypeValid.errorMessage
+      } **Expected** ${JSON.stringify(
+        ProductsFireStoreSchema,
+      )} **RECEIVED** ${JSON.stringify(firestoreResult.products)}`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
 
   return res.status(201).send({
     products: firestoreResult.products,

@@ -148,4 +148,24 @@ describe("Get products test", () => {
       ).toBeLessThanOrEqual(0);
     }
   });
+  it.only("should return an empty list if the last product is not found", async () => {
+    const responseFirstList = await httpClient.post(
+      "api/v1/products:search",
+      {
+        sorting_criteria: {
+          field: "id",
+          direction: "asc",
+        },
+        pagination_criteria: {
+          last_product: 27,
+          limit: 10,
+        },
+      },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
+    );
+    console.log(responseFirstList.data);
+    expect(responseFirstList.status).toEqual(201);
+    expect(responseFirstList.data.last_product).toBe(null);
+    expect(responseFirstList.data.products.length).toBe(0);
+  });
 });

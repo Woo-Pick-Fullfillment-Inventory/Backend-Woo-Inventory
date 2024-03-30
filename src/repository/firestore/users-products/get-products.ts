@@ -11,7 +11,7 @@ type GetProductsInputType = {
 };
 
 export type ProductsFireStorePaginationType = {
-  lastProduct: number | string | undefined;
+  lastProduct: number | string | null;
   products: ProductsFireStoreType | [];
 }
 // todo: type check
@@ -37,12 +37,11 @@ export const getProductsFactory = (
       }
 
       const snapshot = await query.get();
-      const products = snapshot.docs.map((doc) => doc.data()) as ProductsFireStoreType;
 
-      const lastProduct = snapshot.docs[snapshot.docs.length - 1];
       return {
-        lastProduct: lastProduct ? lastProduct.data()[field] : undefined,
-        products: products,
+        // eslint-disable-next-line
+        lastProduct: (snapshot.docs.length > 0 && snapshot.docs[snapshot.docs.length - 1]) ? snapshot.docs[snapshot.docs.length - 1]!.data()[field] : null,
+        products: snapshot.docs.map((doc) => doc.data()) as ProductsFireStoreType,
       };
     };
   };
