@@ -22,6 +22,8 @@ describe("Get products from woo api test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
+    insertUserFactory(db)(mockUserForSyncingProducts);
+    insertUserFactory(db)(mockUserForSyncingProductsFalsyTypeProductReturn);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -30,7 +32,6 @@ describe("Get products from woo api test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
   it("should not return product from woo api, because type validation is falsy", async () => {
-    insertUserFactory(db)(mockUserForSyncingProductsFalsyTypeProductReturn);
     const wooBasicAuth = createBasicAuthHeaderToken(
       mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.token,
       mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.secret,
@@ -53,7 +54,6 @@ describe("Get products from woo api test", () => {
     ).toEqual(1);
   });
   it("should not return product from woo api, because url is falsy", async () => {
-    insertUserFactory(db)(mockUserForSyncingProducts);
     const wooBasicAuth = createBasicAuthHeaderToken(
       mockUserForSyncingProducts.woo_credentials.token,
       mockUserForSyncingProducts.woo_credentials.secret,
