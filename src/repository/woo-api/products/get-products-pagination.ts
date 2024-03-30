@@ -25,7 +25,6 @@ export const getProductsPaginationFactory = async (
   perPage: number,
   page: number,
 ): Promise<getAllProductsPaginationResponse> => {
-  console.log(baseUrl, token, perPage, page);
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
