@@ -7,7 +7,7 @@ const ImageSchema = Type.Object({
   src: Type.String(),
 });
 
-const ProductSchema = Type.Object({
+export const ProductSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
   slug: Type.String(),
@@ -19,9 +19,12 @@ const ProductSchema = Type.Object({
     }),
   ),
   images: Type.Array(ImageSchema),
-  price: Type.Number(),
+  price: Type.String(),
   sku: Type.String(),
-  stock_quantity: Type.Number(),
+  stock_quantity: Type.Union([
+    Type.Number(),
+    Type.Null(),
+  ]),
 });
 
 export type ProductFromWooType = Static<typeof ProductSchema>;
@@ -34,7 +37,7 @@ export type ProductType = {
   id: number;
   name: string;
   sku: string;
-  price: number;
+  price: string;
   stock_quantity: number | null;
   images: {
     id: number;

@@ -17,7 +17,7 @@ const generateRandomProduct = (): ProductType => {
     price: faker.number.int({
       min: 1,
       max: 1000,
-    }),
+    }).toString(),
     stock_quantity: faker.number.int({
       min: 0,
       max: 100,

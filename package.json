@@ -10,7 +10,8 @@
     "lint-markdown": "markdownlint -i ./node_modules ",
     "lint:fix": "npx eslint 'src/**/*' '__test__/**/*' --fix",
     "build": "tsc -p tsconfig-build.json",
-    "test": "jest -c __test__/jest.config.json --detectOpenHandles",
+    "test": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' jest -c __test__/jest.config.json --detectOpenHandles",
+    "test-local": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' jest -c __test__/jest.local.config.json --detectOpenHandles",
     "test-pipeline": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' jest -c __test__/jest.config.json --detectOpenHandles",
     "dev": "nodemon"
   },
