@@ -75,8 +75,6 @@ export const signin = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  console.log(req.body.password, userFound.password);
-
   const isPasswordMatched = await bcrypt.compare(
     req.body.password,
     userFound.password,
