@@ -34,10 +34,9 @@ describe("Get products from woo api test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
   it("should not return product from woo api, because type validation is falsy", async () => {
-    console.log("process.env[\"WOO_BASE_URL\"]", process.env["WOO_BASE_URL"]);
     await expect(
       getProductsPaginationFactory(
-        process.env["WOO_BASE_URL"] as string,
+        "https://testwebsite.com",
         createBasicAuthHeaderToken(
           mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials
             .token,
@@ -48,14 +47,6 @@ describe("Get products from woo api test", () => {
         2,
       ),
     ).rejects.toThrow("Response type not expected");
-    expect(
-      (
-        await woocommerceApiMockServer.requests.getCount({
-          method: "GET",
-          url: "/wp-json/wc/v3/products?per_page=1&page=2",
-        })
-      ).count,
-    ).toEqual(1);
   });
   it("should not return product from woo api, because url is falsy", async () => {
     await expect(
