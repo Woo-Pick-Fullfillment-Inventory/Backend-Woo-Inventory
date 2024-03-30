@@ -43,6 +43,14 @@ describe("Get products from woo api test", () => {
         2,
       ),
     ).rejects.toThrow("Response type not expected");
+    expect(
+      (
+        await woocommerceApiMockServer.requests.getCount({
+          method: "GET",
+          url: "/wp-json/wc/v3/products?per_page=1&page=2",
+        })
+      ).count,
+    ).toEqual(1);
   });
   it("should not return product from woo api, because url is falsy", async () => {
     insertUserFactory(db)(mockUserForSyncingProducts);
@@ -53,5 +61,13 @@ describe("Get products from woo api test", () => {
     await expect(
       getProductsPaginationFactory("some-url", wooBasicAuth, 1, 1),
     ).rejects.toThrow("Axios Error");
+    expect(
+      (
+        await woocommerceApiMockServer.requests.getCount({
+          method: "GET",
+          url: "/wp-json/wc/v3/products?per_page=1&page=1",
+        })
+      ).count,
+    ).toEqual(0);
   });
 });
