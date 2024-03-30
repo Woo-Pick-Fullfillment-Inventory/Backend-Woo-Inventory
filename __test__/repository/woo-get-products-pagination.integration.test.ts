@@ -23,7 +23,9 @@ describe("Get products from woo api test", () => {
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
     await insertUserFactory(db)(mockUserForSyncingProducts);
-    await insertUserFactory(db)(mockUserForSyncingProductsFalsyTypeProductReturn);
+    await insertUserFactory(db)(
+      mockUserForSyncingProductsFalsyTypeProductReturn,
+    );
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -32,12 +34,15 @@ describe("Get products from woo api test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
   it("should not return product from woo api, because type validation is falsy", async () => {
+    console.log("process.env[\"WOO_BASE_URL\"]", process.env["WOO_BASE_URL"]);
     await expect(
       getProductsPaginationFactory(
         process.env["WOO_BASE_URL"] as string,
         createBasicAuthHeaderToken(
-          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.token,
-          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.secret,
+          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials
+            .token,
+          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials
+            .secret,
         ),
         1,
         2,
@@ -54,10 +59,15 @@ describe("Get products from woo api test", () => {
   });
   it("should not return product from woo api, because url is falsy", async () => {
     await expect(
-      getProductsPaginationFactory("some-url", createBasicAuthHeaderToken(
-        mockUserForSyncingProducts.woo_credentials.token,
-        mockUserForSyncingProducts.woo_credentials.secret,
-      ), 1, 1),
+      getProductsPaginationFactory(
+        "some-url",
+        createBasicAuthHeaderToken(
+          mockUserForSyncingProducts.woo_credentials.token,
+          mockUserForSyncingProducts.woo_credentials.secret,
+        ),
+        1,
+        1,
+      ),
     ).rejects.toThrow("Axios Error");
     expect(
       (
