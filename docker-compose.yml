@@ -1,13 +1,15 @@
 version: "3.8"
 
 services:
-  firestore_emulator:
-    image: mtlynch/firestore-emulator
-    environment:
-      - FIRESTORE_PROJECT_ID=test-project
-      - PORT=8888
+  firestore-emulator:
+    image: fixl/firebase-emulator-suite:12.7
     ports:
-      - 8888:8888
+      - "8888:8888"
+    environment:
+      - FIREBASE_PROJECT_ID=test-project
+      - FIRESTORE=true
+      - FIRESTORE_PORT=8888
+      - AUTH=false
   wiremock:
     image: wiremock/wiremock:3.1.0
     command: --verbose

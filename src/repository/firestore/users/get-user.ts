@@ -1,7 +1,11 @@
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import { UserFireStoreSchema } from "../models/index.js";
+
 import type {
   UserAttributeType,
   UserFireStoreType,
-} from "../models/user.type.js";
+} from "../models/index.js";
 
 // todo: type check
 export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
@@ -18,6 +22,20 @@ export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => 
         !snapshot.docs[0].data()
       ) {
         return undefined;
+      }
+      const isUserTypeValid = isResponseTypeTrue(
+        UserFireStoreSchema,
+        snapshot.docs[0].data(),
+        true,
+      );
+      if (!isUserTypeValid.isValid) {
+        logger.log(
+          "warn",
+          `***ERROR*** invalid user response type  ${isUserTypeValid.errorMessage} **Expected** ${JSON.stringify(
+            UserFireStoreSchema,
+          )} **RECEIVED** ${JSON.stringify(snapshot.docs[0].data())}`,
+        );
+        throw new Error("User Firestore Type Not Expected");
       }
       return snapshot.docs[0].data() as UserFireStoreType;
     };

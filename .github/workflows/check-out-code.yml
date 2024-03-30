@@ -6,10 +6,6 @@ on:
       - "**"
       - "!main"
 
-env:
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  IMAGE_NAME: woopick-backend
-
 jobs:
   checks:
     runs-on: ubuntu-latest
@@ -61,7 +57,7 @@ jobs:
         run: docker exec wiremock-container ls -al /home/wiremock/mappings
 
       - name: Run all the tests
-        run: npm run test-pipeline
+        run: npm run test
 
       - name: Check Docker container logs
         if: always()

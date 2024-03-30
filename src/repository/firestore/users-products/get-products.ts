@@ -1,3 +1,7 @@
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import { ProductsFireStoreSchema } from "../models/index.js";
+
 import type {
   ProductFireStoreAttributeType,
   ProductsFireStoreType,
@@ -11,9 +15,9 @@ type GetProductsInputType = {
 };
 
 export type ProductsFireStorePaginationType = {
-  lastProduct: number | string | undefined;
+  lastProduct: number | string | null;
   products: ProductsFireStoreType | [];
-}
+};
 // todo: type check
 export const getProductsFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
@@ -24,7 +28,9 @@ export const getProductsFactory = (
     direction,
     limit,
   }: GetProductsInputType) => {
-    return async (lastProductFromPrevious?: string | number): Promise<ProductsFireStorePaginationType> => {
+    return async (
+      lastProductFromPrevious?: string | number,
+    ): Promise<ProductsFireStorePaginationType> => {
       let query = firestoreClient
         .collection("users-products")
         .doc(`users-${userId}-products`)
@@ -37,12 +43,30 @@ export const getProductsFactory = (
       }
 
       const snapshot = await query.get();
-      const products = snapshot.docs.map((doc) => doc.data()) as ProductsFireStoreType;
 
-      const lastProduct = snapshot.docs[snapshot.docs.length - 1];
+      const products = snapshot.docs.map((doc) => doc.data());
+      const isSyncProductsRequestTypeValid = isResponseTypeTrue(
+        ProductsFireStoreSchema,
+        products,
+        true,
+      );
+      if (!isSyncProductsRequestTypeValid.isValid) {
+        logger.log(
+          "warn",
+          `***ERROR*** invalid products response type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(
+            ProductsFireStoreSchema,
+          )} **RECEIVED** ${JSON.stringify(products)}`,
+        );
+        throw new Error("Products Firestore Type Not Expected");
+      }
+
       return {
-        lastProduct: lastProduct ? lastProduct.data()[field] : undefined,
-        products: products,
+        lastProduct:
+          snapshot.docs.length > 0 && snapshot.docs[snapshot.docs.length - 1]
+            // eslint-disable-next-line
+            ? snapshot.docs[snapshot.docs.length - 1]!.data()[field]
+            : null,
+        products: products as ProductsFireStoreType,
       };
     };
   };

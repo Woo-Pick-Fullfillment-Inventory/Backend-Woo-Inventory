@@ -1,4 +1,7 @@
-import { ProductsSchema } from "./products.type.js";
+import {
+  ProductSchema,
+  ProductsSchema,
+} from "./products.type.js";
 import { SystemStatusSchema } from "./system-status.type.js";
 
 import type {
@@ -17,4 +20,5 @@ export {
   SystemStatusType,
   SystemStatusSchema,
   ProductsSchema,
+  ProductSchema,
 };

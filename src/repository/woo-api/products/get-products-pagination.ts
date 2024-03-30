@@ -44,11 +44,12 @@ export const getProductsPaginationFactory = async (
             );
             throw new Error("Response status code not expected");
           }
-          if (!isResponseTypeTrue(ProductsSchema, response.data, true)) {
+          const isSystemStatusTypeValid = isResponseTypeTrue(ProductsSchema, response.data, true);
+          if (!isSystemStatusTypeValid.isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with ${response.data} 
-               does not return expected system status type`,
+              `onTrue Intercepted: request ${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}`+
+              ` ***Expected*** ${JSON.stringify(ProductsSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
           }
@@ -60,9 +61,8 @@ export const getProductsPaginationFactory = async (
               "error",
               `onError Intercepted: request ${error.config.url}, ${JSON.stringify(error)}`,
             );
-            throw new Error("Axios error");
           }
-          return error;
+          throw new Error("Axios Error");
         },
       },
     ],
@@ -75,6 +75,10 @@ export const getProductsPaginationFactory = async (
     `/wp-json/wc/v3/products?per_page=${perPage}&page=${page}`,
     { headers: { Authorization: token } },
   );
+
+  if (headers["x-wp-total"] === undefined || headers["x-wp-totalpages"] === undefined) {
+    throw new Error("Response headers not expected");
+  }
 
   return {
     products: convertWooProductsToClient(data),
