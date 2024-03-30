@@ -32,14 +32,13 @@ describe("Get products from woo api test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
   it("should not return product from woo api, because type validation is falsy", async () => {
-    const wooBasicAuth = createBasicAuthHeaderToken(
-      mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.token,
-      mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.secret,
-    );
     await expect(
       getProductsPaginationFactory(
         process.env["WOO_BASE_URL"] as string,
-        wooBasicAuth,
+        createBasicAuthHeaderToken(
+          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.token,
+          mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials.secret,
+        ),
         1,
         2,
       ),
@@ -54,12 +53,11 @@ describe("Get products from woo api test", () => {
     ).toEqual(1);
   });
   it("should not return product from woo api, because url is falsy", async () => {
-    const wooBasicAuth = createBasicAuthHeaderToken(
-      mockUserForSyncingProducts.woo_credentials.token,
-      mockUserForSyncingProducts.woo_credentials.secret,
-    );
     await expect(
-      getProductsPaginationFactory("some-url", wooBasicAuth, 1, 1),
+      getProductsPaginationFactory("some-url", createBasicAuthHeaderToken(
+        mockUserForSyncingProducts.woo_credentials.token,
+        mockUserForSyncingProducts.woo_credentials.secret,
+      ), 1, 1),
     ).rejects.toThrow("Axios Error");
     expect(
       (

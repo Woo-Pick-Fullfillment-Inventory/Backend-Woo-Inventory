@@ -17,7 +17,7 @@ describe("Get products test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserForSyncingProducts);
     const mockProducts = await generateProductsArray(27);
     await batchWriteProductsFactory(db)(mockProducts, userId);
   });
