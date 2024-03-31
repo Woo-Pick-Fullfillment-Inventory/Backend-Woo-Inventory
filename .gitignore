@@ -60,4 +60,3 @@ docker-compose.local.yaml
 # in case of log files accidentally committed
 .log
 
-firestore
