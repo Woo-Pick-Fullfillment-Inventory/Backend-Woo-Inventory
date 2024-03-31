@@ -1,29 +1,29 @@
 import {
   apps,
   clearFirestoreData,
-  initializeAdminApp,
+  // initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection";
+// import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
-import type { ViewCollectionFunction } from "../../src/repository/firestore/collection/view-collection";
-import type { ProductsType } from "../../src/repository/woo-api/models";
+// import type { ViewCollectionFunction } from "../../src/repository/firestore/collection/view-collection";
+// import type { ProductsType } from "../../src/repository/woo-api/models";
 
 const woocommerceApiMockServer = new WireMockRestClient("http://localhost:1080", { logLevel: "silent" });
 
 describe("Get products test", () => {
-  let db: FirebaseFirestore.Firestore;
-  let viewCollection: ViewCollectionFunction;
+  // let db: FirebaseFirestore.Firestore;
+  // let viewCollection: ViewCollectionFunction;
 
   beforeEach(async () => {
     // Initialize Firestore for each test
-    db = initializeAdminApp({ projectId: "test-project" }).firestore();
+    // db = initializeAdminApp({ projectId: "test-project" }).firestore();
     // Initialize the viewCollection function once
-    viewCollection = viewCollectionFactory(db);
+    // viewCollection = viewCollectionFactory(db);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -44,11 +44,20 @@ describe("Get products test", () => {
       ],
     };
 
-    const oldProducts = await viewCollection<ProductsType>(`users-products/users-${mockUserForSyncingProducts.user_id}-products/products`);
+    // const oldProducts = await viewCollection<ProductsType>(`users-products/users-${mockUserForSyncingProducts.user_id}-products/products`);
     const response = await httpClient.post("api/v1/products", newProduct, { headers: { authorization: createAuthorizationHeader(mockUserForSyncingProducts.user_id) } });
-    const newProducts = await viewCollection<ProductsType>(`users-products/users-${mockUserForSyncingProducts.user_id}-products/products`);
+    // const newProducts = await woocommerceApiMockServer.requests.getCount({method: "GET", url: `users-products/users-${mockUserForSyncingProducts.user_id}-products/products`});
 
-    expect(newProducts.length).toEqual(oldProducts.length + 1);
+    expect(
+      (await woocommerceApiMockServer
+        .requests
+        .getCount({
+          method: "GET",
+          url: `users-products/users-${mockUserForSyncingProducts.user_id}-products/products`,
+        })
+      ).count,
+    ).toEqual(1);
+    // expect(newProducts.length).toEqual(oldProducts.length + 1);
     expect(response.status).toBe(201);
   });
 });
