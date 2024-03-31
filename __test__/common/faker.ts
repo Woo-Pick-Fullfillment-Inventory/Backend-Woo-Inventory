@@ -43,6 +43,7 @@ const generateRandomProduct = (): ProductType => {
 export const generateProductsArray = async (
   numberOfProducts: number,
 ): Promise<ProductsType> => {
+  productIdCounter = 0;
   return Array.from({ length: numberOfProducts }, () =>
     generateRandomProduct(),
   );

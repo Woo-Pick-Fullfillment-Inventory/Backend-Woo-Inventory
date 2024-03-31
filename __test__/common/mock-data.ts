@@ -54,6 +54,24 @@ export const mockUserForSyncingProducts: UserFireStoreType = {
   are_products_synced: false,
 };
 
+export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType = {
+  user_id: "4",
+  email: "someone44@gmail.com",
+  username: "someone44",
+  password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
+  store: { app_url: "https://testwebsite.com" },
+  woo_credentials: {
+    token: "ck_9999",
+    secret: "cs_9999",
+  },
+  authentication: {
+    method: "woo_credentials",
+    is_authorized: true,
+  },
+  last_login: "2024-02-06T00:00:00.000Z",
+  are_products_synced: false,
+};
+
 export const mockProducts: ProductsType = [
   {
     id: 1,

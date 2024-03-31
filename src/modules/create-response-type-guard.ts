@@ -1,9 +1,6 @@
 import Ajv from "ajv";
 
-import type {
-  Schema,
-  ValidateFunction,
-} from "ajv";
+import type { Schema } from "ajv";
 
 export type ValidationResult =
   | {
@@ -19,8 +16,11 @@ export const isResponseTypeTrue = <T extends Schema>(
   data: Record<string, unknown> | Record<string, unknown>[],
   areAdditionalPropertiesAllowed: boolean,
 ): ValidationResult => {
-  const ajv = new Ajv({ strict: false });
-  const validate: ValidateFunction = ajv.compile({
+  const ajv = new Ajv({
+    strict: false,
+    allErrors: true,
+  });
+  const validate = ajv.compile({
     ...(schema as Record<string, unknown> | Record<string, unknown>[]),
     additionalProperties: areAdditionalPropertiesAllowed,
   });
@@ -30,6 +30,6 @@ export const isResponseTypeTrue = <T extends Schema>(
     : {
       isValid: false,
       errorMessage:
-          validate.errors?.map((error) => error.message).join("; ") || "",
+          validate.errors?.map((error) => `${error.schemaPath} ${error.message}`).join("; ") || "",
     };
 };

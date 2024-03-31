@@ -33,10 +33,16 @@ export const getSystemStatusFactory = async (
             );
             throw new Error("Response status code not expected");
           }
-          if (!isResponseTypeTrue(SystemStatusSchema, response.data, true)) {
+          const isSystemStatusTypeValid = isResponseTypeTrue(
+            SystemStatusSchema,
+            response.data,
+            true,
+          );
+          if (!isSystemStatusTypeValid.isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`,
+              `onTrue Intercepted: request ${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
+                ` ***Expected*** ${JSON.stringify(SystemStatusSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
           }
@@ -46,17 +52,15 @@ export const getSystemStatusFactory = async (
           if (error.config) {
             logger.log(
               "error",
-              `onError Intercepted: request ${
-                error.config.url
-              }, ${JSON.stringify(error)}`,
+              `onError Intercepted: request ${error.config.url}, ${JSON.stringify(error)}`,
             );
-            throw new Error("Axios error");
           }
-          return error;
+          throw new Error("Axios Error");
         },
       },
     ],
   });
+
   const { data } = await get("/wp-json/wc/v3/system_status", { headers: { Authorization: token } });
   return data;
 };

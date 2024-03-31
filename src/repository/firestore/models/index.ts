@@ -1,11 +1,11 @@
 import {
-  ProductFireStoreAttributeType,
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
 } from "./product.type.js";
 import { UserFireStoreSchema } from "./user.type.js";
 
 import type {
+  ProductFireStoreAttributeType,
   ProductFireStoreType,
   ProductsFireStoreType,
 } from "./product.type.js";

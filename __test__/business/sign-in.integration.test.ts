@@ -18,8 +18,8 @@ describe("Signin test", () => {
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    insertUserFactory(db)(mockUserWithHashedPassword);
-    insertUserFactory(db)(mockUserWrongType as UserFireStoreType);
+    await insertUserFactory(db)(mockUserWithHashedPassword);
+    await insertUserFactory(db)(mockUserWrongType as UserFireStoreType);
   });
 
   afterEach(async () => {
@@ -32,7 +32,6 @@ describe("Signin test", () => {
       email_or_username: "someone@gmail.com",
       password: "Test123abcjs",
     });
-
     expect(responseEmail.status).toEqual(201);
     const responseUsername = await httpClient.post("api/v1/auth/signin", {
       email_or_username: "someone",
