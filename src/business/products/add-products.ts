@@ -20,22 +20,22 @@ dotenv.config();
 const SERVICE_ERRORS = {
   notAuthorized: {
     statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/products/not-authorized",
+    type: "/products/add-product/not-authorized",
     message: "not authorized",
   },
   resourceNotFound: {
     statusCode: StatusCodes.NOT_FOUND,
-    type: "/products/not-found",
+    type: "/products/add-product/not-found",
     message: "resource not found",
   },
   notAllowed: {
     statusCode: StatusCodes.FORBIDDEN,
-    type: "/products/not-allowed",
+    type: "/products/add-product/not-allowed",
     message: "query missing or not allowed",
   },
   invalidRequestType: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/add-product-failed",
+    type: "/products/add-product/add-product-failed",
     message: "request body is not valid",
   },
 };
