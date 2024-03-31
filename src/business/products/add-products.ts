@@ -8,7 +8,7 @@ import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
-import { postProduct } from "../../repository/woo-api/create-post-product.js";
+import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -53,7 +53,6 @@ const AddProductRequest = Type.Object({
 });
 
 export const addProduct = async (req: Request, res: Response) => {
-  const productDetails = req.body;
   const isAddProductTypeRequestValid = isResponseTypeTrue(
     AddProductRequest,
     req.body,
@@ -102,10 +101,10 @@ export const addProduct = async (req: Request, res: Response) => {
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
-  const { product } = await postProduct(
+  const product = await wooApiRepository.product.postAddProduct(
     base_url,
     wooBasicAuth,
-    productDetails,
+    req.body,
   );
 
   await firestoreRepository.product.insertProduct(
@@ -120,5 +119,5 @@ export const addProduct = async (req: Request, res: Response) => {
     userId,
   );
 
-  return res.send(201);
+  return res.sendStatus(201);
 };

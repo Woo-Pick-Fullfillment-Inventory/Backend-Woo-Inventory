@@ -1,7 +1,7 @@
 import { response } from "express";
 
 import { convertWooProductToClient } from "./converter/convert-woo-product-to-client.js";
-import { ProductsSchema } from "./models/products.type.js";
+import { ProductSchema } from "./models/products.type.js";
 import createAxiosClient from "../../modules/create-axios-client.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -16,15 +16,11 @@ import type {
   AxiosResponse,
 } from "axios";
 
-type PostProductResponse = {
-  product: ProductType; // Assuming ProductType is the type for a single product
-};
-
-export const postProduct = async (
+export const postAddProductFactory = async (
   baseUrl: string,
   token: string,
   productDetails: NewProductType,
-): Promise<PostProductResponse> => {
+): Promise<ProductType> => {
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -43,10 +39,11 @@ export const postProduct = async (
             );
             throw new Error("Response not expected");
           }
-          if (!isResponseTypeTrue(ProductsSchema, response.data, true)) {
+          if (!isResponseTypeTrue(ProductSchema, response.data, true).isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`,
+              `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`+
+              ` ***Expected*** ${JSON.stringify(ProductSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response not expected");
           }
@@ -71,5 +68,8 @@ export const postProduct = async (
     { headers: { Authorization: token } },
   );
 
-  return { product: convertWooProductToClient(data) };
+  console.log("=====================================");
+  console.log("data ", data);
+
+  return convertWooProductToClient(data);
 };
