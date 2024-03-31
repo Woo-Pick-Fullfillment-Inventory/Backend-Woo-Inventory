@@ -120,5 +120,5 @@ export const addProduct = async (req: Request, res: Response) => {
     userId,
   );
 
-  return res.status(201).json({ message: "Product added successfully" });
+  return res.send(201);
 };

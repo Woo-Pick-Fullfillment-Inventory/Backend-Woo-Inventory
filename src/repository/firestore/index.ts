@@ -1,7 +1,6 @@
 import { Firestore } from "@google-cloud/firestore";
 import dotenv from "dotenv";
 
-import { insertProductFactory } from "./add-product-firestore.js";
 import { clearCollectionFactory } from "./collection/clear-collection.js";
 import { viewCollectionFactory } from "./collection/view-collection.js";
 import { getUserFactory } from "./users/get-user.js";
@@ -9,6 +8,7 @@ import { insertUserFactory } from "./users/insert-user.js";
 import { updateUserFactory } from "./users/update-user.js";
 import { batchWriteProductsFactory } from "./users-products/batch-write-products.js";
 import { getProductsFactory } from "./users-products/get-products.js";
+import { insertProductFactory } from "./users-products/insert-product.js";
 dotenv.config();
 
 if (!process.env["PROJECT_ID"]) {
