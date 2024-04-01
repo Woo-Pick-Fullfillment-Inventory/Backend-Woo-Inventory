@@ -10,6 +10,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-fileRouter.post("/api/v1/files/upload-image", upload.array("images", 5), handleErrorFunction(uploadImages));
+fileRouter.post("/api/v1/files/upload-images", upload.array("images", 5), handleErrorFunction(uploadImages));
 
 export default fileRouter;

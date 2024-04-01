@@ -20,6 +20,8 @@ spec:
               value: "5000"
             - name: PROJECT_ID
               value: $PROJECT_ID
+            - name: PRODUCTS_IMAGES_BUCKET
+              value: $PRODUCTS_IMAGES_BUCKET
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
