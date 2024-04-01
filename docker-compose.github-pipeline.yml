@@ -36,6 +36,5 @@ services:
     depends_on:
       firestore-emulator:
         condition: service_started
-
       wiremock:
         condition: service_started

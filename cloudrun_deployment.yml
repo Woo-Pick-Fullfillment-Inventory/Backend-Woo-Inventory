@@ -12,12 +12,12 @@ spec:
         - image: europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
           ports:
             - name: http1
-              containerPort: 5000
+              containerPort: 5003
           env:
             - name: NODE_ENV
               value: "production"
             - name: SERVICE_PORT
-              value: "5000"
+              value: "5003"
             - name: PROJECT_ID
               value: $PROJECT_ID
             - name: PRODUCTS_IMAGES_BUCKET
