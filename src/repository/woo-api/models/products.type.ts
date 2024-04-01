@@ -47,6 +47,3 @@ export type ProductType = {
 }
 
 export type ProductsType = ProductType[];
-
-// When user create new product there is no id yet
-export type NewProductType = Omit<ProductType, "id">;

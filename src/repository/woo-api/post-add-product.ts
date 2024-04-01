@@ -7,7 +7,6 @@ import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 
 import type {
-  NewProductType,
   ProductFromWooType,
   ProductType,
 } from "./models/products.type.js";
@@ -16,10 +15,21 @@ import type {
   AxiosResponse,
 } from "axios";
 
+type UserInputAddProductType = {
+  name: string,
+  sku: string,
+  price: string,
+  stock_quantity: string,
+  images: {
+    id: number;
+    src: string;
+  }[];
+};
+
 export const postAddProductFactory = async (
   baseUrl: string,
   token: string,
-  productDetails: NewProductType,
+  productDetails: UserInputAddProductType,
 ): Promise<ProductType> => {
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
@@ -67,9 +77,6 @@ export const postAddProductFactory = async (
     productDetails,
     { headers: { Authorization: token } },
   );
-
-  console.log("=====================================");
-  console.log("data ", data);
 
   return convertWooProductToClient(data);
 };

@@ -97,24 +97,26 @@ export const addProduct = async (req: Request, res: Response) => {
   );
 
   const base_url =
-    process.env["NOVE_ENV"] === "product"
+    process.env["NOVE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
-  const product = await wooApiRepository.product.postAddProduct(
+  const { id } = await wooApiRepository.product.postAddProduct(
     base_url,
     wooBasicAuth,
-    req.body,
+    {
+      name: req.body.name,
+      sku: req.body.sku,
+      price: req.body.price,
+      stock_quantity: req.body.stock_quantity,
+      images: req.body.images,
+    },
   );
 
   await firestoreRepository.product.insertProduct(
     {
-      id: product.id,
-      name: product.name,
-      sku: product.sku,
-      price: product.price,
-      stock_quantity: product.stock_quantity,
-      images: product.images,
+      id: id,
+      ...req.body,
     },
     userId,
   );
