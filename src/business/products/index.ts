@@ -1,6 +1,5 @@
 import express from "express";
 
-import { addProduct } from "./add-products.js";
 import { areProductsSynced } from "./are-products-synced.js";
 import { searchProducts } from "./search-products.js";
 import { syncProducts } from "./sync-products.js";
@@ -19,6 +18,5 @@ productRouter.get(
 );
 
 productRouter.post("/api/v1/products/sync", handleErrorFunction(syncProducts));
-productRouter.post("/api/v1/products", handleErrorFunction(addProduct));
 
 export default productRouter;

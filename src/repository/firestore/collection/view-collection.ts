@@ -4,5 +4,3 @@ export const viewCollectionFactory = (firestoreClient: FirebaseFirestore.Firesto
     return snapshot.docs.map(doc => doc.data()) as T[];
   };
 };
-
-export type ViewCollectionFunction = <T>(collectionPath: string) => Promise<T[]>;

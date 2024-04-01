@@ -132,21 +132,6 @@
         },
         "bodyFileName": "products/GET-products-50-page-4.json"
       }
-    },
-    {
-      "scenarioName": "add one new product",
-      "request": {
-        "method": "POST",
-        "url": "/wp-json/wc/v3/products",
-        "basicAuth": {
-          "username": "ck_1111",
-          "password": "cs_2222"
-        }
-      },
-      "response": {
-        "status": 201,
-        "bodyFileName": "products/POST-add-product-1.json"
-      }
     }
   ]
 }

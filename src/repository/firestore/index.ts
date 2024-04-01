@@ -8,7 +8,6 @@ import { insertUserFactory } from "./users/insert-user.js";
 import { updateUserFactory } from "./users/update-user.js";
 import { batchWriteProductsFactory } from "./users-products/batch-write-products.js";
 import { getProductsFactory } from "./users-products/get-products.js";
-import { insertProductFactory } from "./users-products/insert-product.js";
 dotenv.config();
 
 if (!process.env["PROJECT_ID"]) {
@@ -29,7 +28,6 @@ export const firestoreRepository = {
   product: {
     batchWriteProducts: batchWriteProductsFactory(firestoreClient),
     getProducts: getProductsFactory(firestoreClient),
-    insertProduct: insertProductFactory(firestoreClient),
   },
   collection: {
     viewCollection: viewCollectionFactory(firestoreClient),

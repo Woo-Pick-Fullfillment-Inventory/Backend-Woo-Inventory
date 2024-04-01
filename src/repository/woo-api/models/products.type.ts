@@ -33,20 +33,16 @@ export const ProductsSchema = Type.Array(ProductSchema);
 
 export type ProductsFromWooType = Static<typeof ProductsSchema>;
 
-// User receive this product type with id
 export type ProductType = {
+  id: number;
+  name: string;
+  sku: string;
+  price: string;
+  stock_quantity: number | null;
+  images: {
     id: number;
-    name: string;
-    sku: string;
-    price: string;
-    stock_quantity: number | null;
-    images: {
-      id: number;
-      src: string;
-    }[];
-}
+    src: string;
+  }[];
+};
 
 export type ProductsType = ProductType[];
-
-// When user create new product there is no id yet
-export type NewProductType = Omit<ProductType, "id">;
