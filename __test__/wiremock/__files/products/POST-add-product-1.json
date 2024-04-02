@@ -1,0 +1,30 @@
+{
+  "id": 1111,
+  "name": "Premium Quality",
+  "slug": "premium-quality-19",
+  "sku": "some_sku",
+  "price": "100",
+  "stock_quantity": 200,
+  "categories": [
+    {
+      "id": 116,
+      "name": "G Catename ",
+      "slug": "reis-nudeln"
+    },
+    {
+      "id": 119,
+      "name": "M Catename",
+      "slug": "nudeln"
+    }
+  ],
+  "images": [
+    {
+      "id": 2222,
+      "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg"
+    },
+    {
+      "id": 3333,
+      "src": "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg"
+    }
+  ]
+}
