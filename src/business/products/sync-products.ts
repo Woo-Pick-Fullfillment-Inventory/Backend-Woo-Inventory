@@ -9,7 +9,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
+import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
@@ -64,7 +64,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
+  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",

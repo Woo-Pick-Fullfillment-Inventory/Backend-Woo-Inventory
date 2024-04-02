@@ -6,7 +6,7 @@ import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-head
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
+import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
@@ -71,7 +71,7 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
+  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
 
   if (!userId) {
     logger.log(

@@ -9,6 +9,8 @@ services:
       - FIREBASE_PROJECT_ID=test-project
       - FIRESTORE=true
       - FIRESTORE_PORT=8888
+      - STORAGE=true
+      - STORAGE_PORT=9199
       - AUTH=false
   wiremock:
     image: wiremock/wiremock:3.1.0

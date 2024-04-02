@@ -1,4 +1,4 @@
-import type { ProductType } from "../../woo-api/models";
+import type { ProductType } from "../../woo-api/models/index.js";
 
 export const insertProductFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
