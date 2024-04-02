@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  firestore-emulator:
+  firebase-emulator:
     image: fixl/firebase-emulator-suite:12.7
     ports:
       - "8888:8888"
@@ -9,6 +9,8 @@ services:
       - FIREBASE_PROJECT_ID=test-project
       - FIRESTORE=true
       - FIRESTORE_PORT=8888
+      - STORAGE=true
+      - STORAGE_PORT=9199
       - AUTH=false
   wiremock:
     image: wiremock/wiremock:3.1.0
@@ -29,12 +31,13 @@ services:
       SERVICE_PORT: 5003
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
-      FIRESTORE_EMULATOR_HOST: firestore-emulator:8888
+      FIRESTORE_EMULATOR_HOST: firebase-emulator:8888
       FIRESTORE_PROJECT_ID: test-project
       PROJECT_ID: test-project
       PRODUCTS_IMAGES_BUCKET: test-bucket
+      FIREBASE_STORAGE_EMULATOR_HOST: firebase-emulator:9199
     depends_on:
-      firestore-emulator:
+      firebase-emulator:
         condition: service_started
       wiremock:
         condition: service_started

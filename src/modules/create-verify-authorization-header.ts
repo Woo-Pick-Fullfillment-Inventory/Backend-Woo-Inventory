@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-export const createVerifyBasicAuthHeaderToken = (
+export const verifyAuthorizationHeader = (
   authorizationHeader: string | undefined,
 ): string => {
   if (!authorizationHeader) throw new Error("no authorization header found");

@@ -1,4 +1,8 @@
+import dotenv from "dotenv";
+
 import type { Storage } from "@google-cloud/storage";
+
+dotenv.config();
 
 if (!process.env["PRODUCTS_IMAGES_BUCKET"]) {
   throw new Error("PRODUCTS_IMAGES_BUCKET environment variable is required");

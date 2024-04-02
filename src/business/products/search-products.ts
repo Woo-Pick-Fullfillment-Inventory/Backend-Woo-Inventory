@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { createVerifyBasicAuthHeaderToken } from "../../modules/create-verify-authorization-header.js";
+import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
 
 import type {
@@ -84,7 +84,7 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = createVerifyBasicAuthHeaderToken(req.headers["authorization"]);
+  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",

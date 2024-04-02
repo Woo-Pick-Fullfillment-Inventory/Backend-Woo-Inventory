@@ -1,6 +1,6 @@
 {
     "roots": ["<rootDir>"],
-    "testMatch": ["**/woo-get-products-pagination.integration.test.ts"],
+    "testMatch": ["**/upload-images.integration.test.ts"],
     "extensionsToTreatAsEsm": [".ts"],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"

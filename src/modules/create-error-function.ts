@@ -13,11 +13,11 @@ export const handleErrorFunction =
         await Promise.resolve(fn(req, res));
         if (process.env["NODE_ENV"] !== "production")
           logger.log("info", `${req.method} ${req.url} - ${res.statusCode}`);
-      } catch (error) {
+      } catch (error: Error | unknown) {
         if (process.env["NODE_ENV"] !== "production")
           logger.log(
             "info",
-            `${req.method} ${req.url} - 500 - Internal Server Error`,
+            `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** ${error}`,
           );
         next(error);
       }
