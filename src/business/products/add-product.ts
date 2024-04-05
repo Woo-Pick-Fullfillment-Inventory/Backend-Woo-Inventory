@@ -114,7 +114,7 @@ export const addProduct = async (req: Request, res: Response) => {
     userFoundInFirestore.woo_credentials.secret,
   );
 
-  console.log("firebase user", userFoundInFirestore);
+  logger.log("info", `user found in firestore ${JSON.stringify(userFoundInFirestore)}`);
 
   const baseUrl =
     process.env["NOVE_ENV"] === "production"
