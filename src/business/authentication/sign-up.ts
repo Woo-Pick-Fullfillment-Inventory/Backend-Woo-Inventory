@@ -93,13 +93,13 @@ export const signup = async (req: Request, res: Response) => {
   )
     return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
-  const base_url =
+  const baseUrl =
     process.env["NODE_ENV"] === "production"
       ? req.body.app_url
       : process.env["WOO_BASE_URL"];
 
   const systemStatusResult = await wooApiRepository.system.getSystemStatus(
-    `${base_url}`,
+    `${baseUrl}`,
     createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
       req.body.token.split("|")[1],

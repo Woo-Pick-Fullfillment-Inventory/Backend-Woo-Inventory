@@ -43,7 +43,6 @@ export const postAddProductFactory = async (
   token: string,
   addProductRequestFromUser: AddProductRequestFromUserType,
 ): Promise<ProductType> => {
-  console.log("addProductRequestFromUser", addProductRequestFromUser);
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,

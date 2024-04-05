@@ -114,13 +114,15 @@ export const addProduct = async (req: Request, res: Response) => {
     userFoundInFirestore.woo_credentials.secret,
   );
 
-  const base_url =
+  console.log("firebase user", userFoundInFirestore);
+
+  const baseUrl =
     process.env["NOVE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
       : process.env["WOO_BASE_URL"];
 
   const product = await wooApiRepository.product.postAddProduct(
-    `${base_url}`,
+    `${baseUrl}`,
     wooBasicAuth,
     req.body,
   );
