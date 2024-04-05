@@ -29,7 +29,7 @@ export const getSystemStatusFactory = async (
           if (response.status !== 200) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`,
+              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} with status code ${response.status} is not expected`,
             );
             throw new Error("Response status code not expected");
           }
@@ -41,7 +41,7 @@ export const getSystemStatusFactory = async (
           if (!isSystemStatusTypeValid.isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
+              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
                 ` ***Expected*** ${JSON.stringify(SystemStatusSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
