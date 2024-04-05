@@ -16,7 +16,7 @@ type axiosOptions = {
   interceptors: InterceptorType[];
 };
 
-const createAxiosClient = <T>({
+const createAxiosClient = <R>({
   config,
   interceptors,
 }: axiosOptions) => {
@@ -30,10 +30,12 @@ const createAxiosClient = <T>({
   });
 
   return {
+    request: (config: AxiosRequestConfig) =>
+      axiosClient.request<R, AxiosResponse<R>>(config),
     get: (url: string, config?: AxiosRequestConfig) =>
-      axiosClient.get<T, AxiosResponse<T>>(url, config),
+      axiosClient.get<R, AxiosResponse<R>>(url, config),
     post: <D>(url: string, data: D, config?: AxiosRequestConfig) =>
-      axiosClient.post<T, AxiosResponse<T>>(url, data, config),
+      axiosClient.post<R, AxiosResponse<R>>(url, data, config),
   };
 };
 
