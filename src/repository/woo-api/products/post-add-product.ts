@@ -65,7 +65,7 @@ export const postAddProductFactory = async (
           if (!isResponseTypeTrue(ProductSchema, response.data, true).isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with ${response.data} does not return expected system status type`+
+              `onTrue Intercepted: request ${baseUrl}${response.config.url} with ${response.data} does not return expected system status type`+
               ` ***Expected*** ${JSON.stringify(ProductSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response not expected");
@@ -76,7 +76,7 @@ export const postAddProductFactory = async (
           if (error.config) {
             logger.log(
               "error",
-              `onError Intercepted: request ${error.config.url} with response status ${response.status}:`,
+              `onError Intercepted: request ${baseUrl}${error.config.url} with response status ${response.status}:`,
               JSON.stringify(error),
             );
           }

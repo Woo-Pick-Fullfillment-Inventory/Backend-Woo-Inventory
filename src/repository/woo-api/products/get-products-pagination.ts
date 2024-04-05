@@ -39,7 +39,7 @@ export const getProductsPaginationFactory = async (
           if (response.status !== 200) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} 
+              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} 
                with status code ${response.status} is not expected`,
             );
             throw new Error("Response status code not expected");
@@ -48,7 +48,7 @@ export const getProductsPaginationFactory = async (
           if (!isSystemStatusTypeValid.isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}`+
+              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}`+
               ` ***Expected*** ${JSON.stringify(ProductsSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
@@ -59,7 +59,7 @@ export const getProductsPaginationFactory = async (
           if (error.config) {
             logger.log(
               "error",
-              `onError Intercepted: request ${error.config.url}, ${JSON.stringify(error)}`,
+              `onError Intercepted: request ${baseUrl}${error.config.url}, ${JSON.stringify(error)}`,
             );
           }
           throw new Error("Axios Error");
