@@ -57,7 +57,7 @@ export const postAddProductFactory = async (
           if (response.status !== 201) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${response.config.url} with status code ${response.status} is not expected`,
+              `onTrue Intercepted: request ${baseUrl}${response.config.url} with status code ${response.status} is not expected`,
             );
             throw new Error("Response not expected");
           }
