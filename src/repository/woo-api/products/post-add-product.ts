@@ -80,7 +80,7 @@ export const postAddProductFactory = async (
               JSON.stringify(error),
             );
           }
-          return error;
+          throw new Error("Axios Error");
         },
       },
     ],
