@@ -29,8 +29,8 @@ type AddProductRequestFromUserType = {
   purchase_price: string | undefined;
   regular_price: string | undefined;
   sale_price: string | undefined;
-  tax_status: "taxable" | "shipping" | "none";
-  tax_class: "standard" | "reduced rate" | "zero rate";
+  tax_status: "taxable" | "shipping" | "none" | undefined;
+  tax_class: "standard" | "reduced rate" | "zero rate" | undefined;
   unit: string | undefined;
   activate: boolean | undefined;
   images: {
@@ -43,6 +43,7 @@ export const postAddProductFactory = async (
   token: string,
   addProductRequestFromUser: AddProductRequestFromUserType,
 ): Promise<ProductType> => {
+  console.log("addProductRequestFromUser", addProductRequestFromUser);
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -76,7 +77,7 @@ export const postAddProductFactory = async (
             logger.log(
               "error",
               `onError Intercepted: request ${error.config.url} with response status ${response.status}:`,
-              error,
+              JSON.stringify(error),
             );
           }
           return error;

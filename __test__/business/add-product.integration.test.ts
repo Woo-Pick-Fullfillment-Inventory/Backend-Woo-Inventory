@@ -37,15 +37,7 @@ describe("Add product test", () => {
   });
 
   it("should increase products count", async () => {
-    const newProduct = {
-      name: "Premium Quality",
-      sku: "some_sku",
-      sale_price: "100",
-      images: [
-        { src: "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg" },
-        { src: "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg" },
-      ],
-    };
+    const newProduct = { name: "Premium Quality" };
 
     const productListBefore = await viewCollectionFactory(db)(
       `users-products/users-${userId}-products/products`,
@@ -71,4 +63,5 @@ describe("Add product test", () => {
     ).toEqual(1);
     expect(response.status).toBe(201);
   });
+
 });

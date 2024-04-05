@@ -97,6 +97,7 @@ export const signup = async (req: Request, res: Response) => {
     process.env["NODE_ENV"] === "production"
       ? req.body.app_url
       : process.env["WOO_BASE_URL"];
+
   const systemStatusResult = await wooApiRepository.system.getSystemStatus(
     `${base_url}`,
     createBasicAuthHeaderToken(

@@ -117,10 +117,10 @@ export const addProduct = async (req: Request, res: Response) => {
   const base_url =
     process.env["NOVE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
-      : (process.env["WOO_BASE_URL"] as string);
+      : process.env["WOO_BASE_URL"];
 
   const product = await wooApiRepository.product.postAddProduct(
-    base_url,
+    `${base_url}`,
     wooBasicAuth,
     req.body,
   );
@@ -143,7 +143,7 @@ export const addProduct = async (req: Request, res: Response) => {
       tax_status: req.body.tax_status || "",
       tax_class: req.body.tax_class || "",
       unit: req.body.unit || "",
-      activate: req.body.activate || true,
+      activate: req.body.activate || false,
     },
     userId,
   );
