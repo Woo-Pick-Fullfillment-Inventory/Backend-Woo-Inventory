@@ -4,7 +4,7 @@ import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.
 import {
   SystemStatusSchema,
   type SystemStatusType,
-} from "../models/index.js";
+} from "../models/system-status.type.js";
 
 import type {
   AxiosError,

@@ -6,7 +6,7 @@ import {
   type ProductType,
   type ProductsFromWooType,
   ProductsSchema,
-} from "../models/index.js";
+} from "../models/products.type.js";
 
 import type {
   AxiosError,

@@ -139,5 +139,5 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   await firestoreRepository.user.updateUserProductsSynced(userId, true);
 
-  return res.status(201).send({ are_products_synced: true });
+  return res.sendStatus(201);
 };

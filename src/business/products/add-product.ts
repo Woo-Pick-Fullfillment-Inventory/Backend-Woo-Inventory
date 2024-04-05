@@ -42,14 +42,33 @@ const SERVICE_ERRORS = {
 
 const AddProductRequest = Type.Object({
   name: Type.String(),
-  sku: Type.String(),
-  price: Type.String(),
-  stock_quantity: Type.Optional(Type.Number()),
-  description: Type.Optional(Type.Union([
-    Type.Null(),
-    Type.String(),
-  ])), // Example usage of the commented-out line
-  images: Type.Array(Type.Object({ src: Type.String() })),
+  sku: Type.Optional(Type.String()),
+  slug: Type.Optional(Type.String()),
+  categories: Type.Optional(Type.Array(Type.Object({
+    id: Type.String(),
+    name: Type.String(),
+    slug: Type.String(),
+  }))),
+  barcode: Type.Optional(Type.String()),
+  imei: Type.Optional(Type.String()),
+  supplier: Type.Optional(Type.String()),
+  purchase_price: Type.Optional(Type.String()),
+  regular_price: Type.Optional(Type.String()),
+  sale_price: Type.Optional(Type.String()),
+  images: Type.Optional(Type.Array(Type.Object({ src: Type.String() }))),
+  // TODO: Deeper research on this field
+  tax_status: Type.Optional(Type.Union([
+    Type.Literal("taxable"),
+    Type.Literal("shipping"),
+    Type.Literal("none"),
+  ])),
+  tax_class: Type.Optional(Type.Union([
+    Type.Literal("standard"),
+    Type.Literal("reduced-rate"),
+    Type.Literal("zero-rate"),
+  ])),
+  unit: Type.Optional(Type.String()),
+  activate: Type.Optional(Type.Boolean()),
 });
 
 export const addProduct = async (req: Request, res: Response) => {
@@ -83,9 +102,8 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore = await firestoreRepository.user.getUserById(
-    userId,
-  );
+  const userFoundInFirestore =
+    await firestoreRepository.user.getUserById(userId);
   if (!userFoundInFirestore) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
@@ -97,7 +115,7 @@ export const addProduct = async (req: Request, res: Response) => {
   );
 
   const base_url =
-    process.env["NOVE_ENV"] === "product"
+    process.env["NOVE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
@@ -110,14 +128,25 @@ export const addProduct = async (req: Request, res: Response) => {
   await firestoreRepository.product.insertProduct(
     {
       id: product.id,
-      name: product.name,
-      sku: product.sku,
-      price: product.price,
-      stock_quantity: product.stock_quantity,
-      images: product.images,
+      name: req.body.name,
+      sku: req.body.sku || "",
+      slug: req.body.slug || "",
+      categories: req.body.categories || [],
+      images: product.images || [],
+      bar_code: req.body.barcode || "",
+      imei: req.body.imei || "",
+      description: req.body.description || "",
+      supplier: req.body.supplier || "",
+      purchase_price: req.body.purchase_price || "",
+      regular_price: req.body.regular_price || req.body.sale_price || "",
+      sale_price: req.body.sale_price || "",
+      tax_status: req.body.tax_status || "",
+      tax_class: req.body.tax_class || "",
+      unit: req.body.unit || "",
+      activate: req.body.activate || true,
     },
     userId,
   );
 
-  return res.sendStatus(201);
+  return res.status(201).send({ id: product.id });
 };

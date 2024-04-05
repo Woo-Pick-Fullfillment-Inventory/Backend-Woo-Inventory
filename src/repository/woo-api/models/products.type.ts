@@ -2,14 +2,10 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
-const ImageSchema = Type.Object({
-  id: Type.Number(),
-  src: Type.String(),
-});
-
 export const ProductSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
+  sku: Type.String(),
   slug: Type.String(),
   categories: Type.Array(
     Type.Object({
@@ -18,12 +14,28 @@ export const ProductSchema = Type.Object({
       slug: Type.String(),
     }),
   ),
-  images: Type.Array(ImageSchema),
+  images: Type.Array(Type.Object({
+    id: Type.Number(),
+    src: Type.String(),
+  })),
   price: Type.String(),
-  sku: Type.String(),
+  regular_price: Type.String(),
+  sale_price: Type.String(),
   stock_quantity: Type.Union([
     Type.Number(),
     Type.Null(),
+  ]),
+  tax_status: Type.Union([
+    Type.Literal("taxable"),
+    Type.Literal("shipping"),
+    Type.Literal("none"),
+    Type.Literal(""),
+  ]),
+  tax_class: Type.Union([
+    Type.Literal("standard"),
+    Type.Literal("reduced-rate"),
+    Type.Literal("zero-rate"),
+    Type.Literal(""),
   ]),
 });
 
@@ -38,7 +50,14 @@ export type ProductType = {
     id: number;
     name: string;
     sku: string;
-    price: string;
+    slug: string;
+    categories: {
+      id: number;
+      name: string;
+      slug: string;
+    }[];
+    regular_price: string;
+    sale_price: string;
     stock_quantity: number | null;
     images: {
       id: number;
@@ -47,6 +66,3 @@ export type ProductType = {
 }
 
 export type ProductsType = ProductType[];
-
-// When user create new product there is no id yet
-export type NewProductType = Omit<ProductType, "id">;

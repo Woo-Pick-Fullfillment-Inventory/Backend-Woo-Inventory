@@ -3,12 +3,30 @@ import dotenv from "dotenv";
 
 import { clearCollectionFactory } from "./collection/clear-collection.js";
 import { viewCollectionFactory } from "./collection/view-collection.js";
+import {
+  ProductFireStoreSchema,
+  ProductsFireStoreSchema,
+} from "./models/product.type.js";
+import { UserFireStoreSchema } from "./models/user.type.js";
 import { getUserFactory } from "./users/get-user.js";
 import { insertUserFactory } from "./users/insert-user.js";
 import { updateUserFactory } from "./users/update-user.js";
 import { batchWriteProductsFactory } from "./users-products/batch-write-products.js";
 import { getProductsFactory } from "./users-products/get-products.js";
 import { insertProductFactory } from "./users-products/insert-product.js";
+
+import type {
+  AddProductFireStoreType,
+  ProductFireStoreAttributeType
+  , ProductFireStoreType,
+  ProductsFireStoreType,
+} from "./models/product.type.js";
+import type {
+  UserAttributeType,
+  UserFireStoreType,
+  UserUpdateAttributeType,
+} from "./models/user.type.js";
+
 dotenv.config();
 
 if (!process.env["PROJECT_ID"]) {
@@ -35,4 +53,17 @@ export const firestoreRepository = {
     viewCollection: viewCollectionFactory(firestoreClient),
     clearCollection: clearCollectionFactory(firestoreClient),
   },
+};
+
+export {
+  UserAttributeType,
+  UserUpdateAttributeType,
+  UserFireStoreType,
+  ProductFireStoreType,
+  ProductsFireStoreType,
+  ProductFireStoreAttributeType,
+  AddProductFireStoreType,
+  UserFireStoreSchema,
+  ProductFireStoreSchema,
+  ProductsFireStoreSchema,
 };

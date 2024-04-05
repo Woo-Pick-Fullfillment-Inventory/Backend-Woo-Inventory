@@ -1,11 +1,10 @@
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { UserFireStoreSchema } from "../models/index.js";
-
-import type {
-  UserAttributeType,
-  UserFireStoreType,
-} from "../models/index.js";
+import {
+  type UserAttributeType,
+  UserFireStoreSchema,
+  type UserFireStoreType,
+} from "../models/user.type.js";
 
 // todo: type check
 export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {

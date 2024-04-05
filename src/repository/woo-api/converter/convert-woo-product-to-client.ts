@@ -3,7 +3,7 @@ import type {
   ProductType,
   ProductsFromWooType,
   ProductsType,
-} from "../models";
+} from "..";
 
 export const convertWooProductToClient = (
   product: ProductFromWooType,
@@ -11,8 +11,15 @@ export const convertWooProductToClient = (
   return {
     id: product.id,
     name: product.name,
+    slug: product.slug,
     sku: product.sku,
-    price: product.price,
+    categories: product.categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+    })),
+    regular_price: product.regular_price,
+    sale_price: product.sale_price,
     stock_quantity: product.stock_quantity,
     images: product.images.map((image) => ({
       id: image.id,

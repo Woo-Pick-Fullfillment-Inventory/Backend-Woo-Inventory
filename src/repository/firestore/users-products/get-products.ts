@@ -1,11 +1,10 @@
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { ProductsFireStoreSchema } from "../models/index.js";
-
-import type {
-  ProductFireStoreAttributeType,
-  ProductsFireStoreType,
-} from "../models/index.js";
+import {
+  type ProductFireStoreAttributeType,
+  ProductsFireStoreSchema,
+  type ProductsFireStoreType,
+} from "../models/product.type.js";
 
 type GetProductsInputType = {
   userId: string;
