@@ -1,5 +1,5 @@
-import type { UserFireStoreType } from "../../src/repository/firestore/models/user.type.js";
-import type { ProductsType } from "../../src/repository/woo-api/models/products.type.js";
+import type { UserFireStoreType } from "../../src/repository/firestore";
+import type { ProductsType } from "../../src/repository/woo-api";
 
 export const mockUserWithHashedPassword: UserFireStoreType = {
   user_id: "1",
@@ -76,8 +76,10 @@ export const mockProducts: ProductsType = [
   {
     id: 1,
     name: "product 1",
+    slug: "",
     sku: "sku-1",
-    price: "100",
+    regular_price: "100",
+    sale_price: "100",
     stock_quantity: 10,
     images: [
       {
@@ -85,17 +87,33 @@ export const mockProducts: ProductsType = [
         src: "https://testwebsite.com/image1.jpg",
       },
     ],
+    categories: [
+      {
+        id: 1,
+        name: "category 1",
+        slug: "category-1",
+      },
+    ],
   },
   {
     id: 2,
     name: "product 2",
+    slug: "",
     sku: "sku-2",
-    price: "200",
+    regular_price: "200",
+    sale_price: "200",
     stock_quantity: 20,
     images: [
       {
         id: 2,
         src: "https://testwebsite.com/image2.jpg",
+      },
+    ],
+    categories: [
+      {
+        id: 2,
+        name: "category 2",
+        slug: "category-2",
       },
     ],
   },

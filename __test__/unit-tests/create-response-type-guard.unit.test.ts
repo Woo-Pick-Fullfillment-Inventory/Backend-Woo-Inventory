@@ -2,8 +2,8 @@ import { isResponseTypeTrue } from "../../src/modules/create-response-type-guard
 import {
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
-} from "../../src/repository/firestore/models/product.type.js";
-import { ProductSchema } from "../../src/repository/woo-api/models/index.js";
+} from "../../src/repository/firestore/index.js";
+import { ProductSchema } from "../../src/repository/woo-api/index.js";
 
 describe("return type check tests", () => {
   it("should return error", async () => {
@@ -52,8 +52,13 @@ describe("return type check tests", () => {
       ],
       stock_quantity: null,
     };
-    const result = isResponseTypeTrue(ProductSchema, data, true) as { isValid: boolean, errorMessage: string };
+    const result = isResponseTypeTrue(ProductSchema, data, true) as {
+      isValid: boolean;
+      errorMessage: string;
+    };
     expect(result.isValid).toBe(false);
-    expect(result.errorMessage).toBe("#/properties/price/type must be string");
+    expect(result.errorMessage).toBe(
+      "#/required must have required property 'sale_price'; #/required must have required property 'tax_status'; #/required must have required property 'tax_class'; #/properties/price/type must be string",
+    );
   });
 });

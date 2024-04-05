@@ -1,25 +1,47 @@
 import { response } from "express";
 
-import { convertWooProductToClient } from "./converter/convert-woo-product-to-client.js";
-import { ProductSchema } from "./models/products.type.js";
-import createAxiosClient from "../../modules/create-axios-client.js";
-import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import createAxiosClient from "../../../modules/create-axios-client.js";
+import logger from "../../../modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import { convertWooProductToClient } from "../converter/convert-woo-product-to-client.js";
+import { ProductSchema } from "../models/products.type.js";
 
 import type {
-  NewProductType,
   ProductFromWooType,
   ProductType,
-} from "./models/products.type.js";
+} from "../models/products.type.js";
 import type {
   AxiosError,
   AxiosResponse,
 } from "axios";
 
+type AddProductRequestFromUserType = {
+  name: string;
+  sku: string | undefined;
+  categories: {
+    id: string;
+    name: string;
+    slug: string;
+  }[] | undefined;
+  barcode: string | undefined;
+  imei: string | undefined;
+  supplier: string | undefined;
+  purchase_price: string | undefined;
+  regular_price: string | undefined;
+  sale_price: string | undefined;
+  tax_status: "taxable" | "shipping" | "none";
+  tax_class: "standard" | "reduced rate" | "zero rate";
+  unit: string | undefined;
+  activate: boolean | undefined;
+  images: {
+    src: string;
+  }[] | undefined;
+}
+
 export const postAddProductFactory = async (
   baseUrl: string,
   token: string,
-  productDetails: NewProductType,
+  addProductRequestFromUser: AddProductRequestFromUserType,
 ): Promise<ProductType> => {
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
@@ -64,12 +86,9 @@ export const postAddProductFactory = async (
   });
   const { data } = await post(
     "/wp-json/wc/v3/products",
-    productDetails,
+    addProductRequestFromUser,
     { headers: { Authorization: token } },
   );
-
-  console.log("=====================================");
-  console.log("data ", data);
 
   return convertWooProductToClient(data);
 };

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { addProduct } from "./add-products.js";
+import { addProduct } from "./add-product.js";
 import { areProductsSynced } from "./are-products-synced.js";
 import { searchProducts } from "./search-products.js";
 import { syncProducts } from "./sync-products.js";

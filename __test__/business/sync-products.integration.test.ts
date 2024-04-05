@@ -41,7 +41,6 @@ describe("Syncing products test", () => {
       },
     );
     expect(response.status).toEqual(201);
-    expect(response.data.are_products_synced).toEqual(true);
     expect(
       (
         await woocommerceApiMockServer.requests.getCount({

@@ -12,7 +12,8 @@ import {
   mockUserWrongType,
 } from "../common/mock-data";
 
-import type { UserFireStoreType } from "../../src/repository/firestore/models/index.js";
+import type { UserFireStoreType } from "../../src/repository/firestore/index.js";
+
 describe("Signin test", () => {
   let db: FirebaseFirestore.Firestore;
 

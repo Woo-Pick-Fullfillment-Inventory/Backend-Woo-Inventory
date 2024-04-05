@@ -1,9 +1,12 @@
-import type { ProductType } from "../../woo-api/models/index.js";
+import type { AddProductFireStoreType } from "..";
 
 export const insertProductFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
 ) => {
-  return async (product: ProductType, userId: string): Promise<void> => {
+  return async (
+    product: AddProductFireStoreType,
+    userId: string,
+  ): Promise<void> => {
     await firestoreClient
       .collection("users-products")
       .doc(`users-${userId}-products`)

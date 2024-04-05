@@ -18,7 +18,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
   { logLevel: "silent" },
 );
 
-describe("Get products test", () => {
+describe("Add product test", () => {
   let db: FirebaseFirestore.Firestore;
   const userId = mockUserForSyncingProducts.user_id;
 
@@ -40,8 +40,7 @@ describe("Get products test", () => {
     const newProduct = {
       name: "Premium Quality",
       sku: "some_sku",
-      price: "100",
-      stock_quantity: 200,
+      sale_price: "100",
       images: [
         { src: "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg" },
         { src: "http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg" },
