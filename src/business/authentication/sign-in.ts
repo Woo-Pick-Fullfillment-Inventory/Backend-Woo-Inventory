@@ -82,18 +82,10 @@ export const signin = async (req: Request, res: Response) => {
   if (!isPasswordMatched)
     return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  if (!process.env["JWT_SECRET"]) {
-    logger.log(
-      "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`,
-    );
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-  }
-
   await firestoreRepository.user.updateUserLastLogin(
     userFound.user_id,
     new Date().toISOString(),
   );
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"])}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId: userFound.user_id }, process.env["JWT_SECRET"] as string)}` });
 };

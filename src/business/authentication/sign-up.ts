@@ -128,15 +128,7 @@ export const signup = async (req: Request, res: Response) => {
     are_products_synced: false,
   });
 
-  if (!process.env["JWT_SECRET"]) {
-    logger.log(
-      "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`,
-    );
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-  }
-
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"] as string)}` });
 };
 
 export default signup;

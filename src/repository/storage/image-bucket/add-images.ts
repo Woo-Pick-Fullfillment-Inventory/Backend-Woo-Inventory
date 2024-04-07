@@ -1,12 +1,4 @@
-import dotenv from "dotenv";
-
 import type { Storage } from "@google-cloud/storage";
-
-dotenv.config();
-
-if (!process.env["PRODUCTS_IMAGES_BUCKET"]) {
-  throw new Error("PRODUCTS_IMAGES_BUCKET environment variable is required");
-}
 
 export const insertImagesFactory = (storageClient: Storage) => {
   return async (
@@ -18,7 +10,7 @@ export const insertImagesFactory = (storageClient: Storage) => {
     for (const file of files) {
       const uploadPromise = new Promise<string>((resolve, reject) => {
         // eslint-disable-next-line
-        const uploadStream = (storageClient as any).bucket(`${process.env["PRODUCTS_IMAGES_BUCKET"]}`).file(
+        const uploadStream = (storageClient as any).bucket(`${process.env["PRODUCTS_IMAGES_BUCKET"] as string}`).file(
           `users-${userId}-products-images/${file.originalname}`,
         ).createWriteStream({
           predefinedAcl: "publicRead",
