@@ -93,18 +93,15 @@ export const signup = async (req: Request, res: Response) => {
   )
     return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
-  const baseUrl =
-    process.env["NODE_ENV"] === "production"
+  const systemStatusResult = await wooApiRepository.system.getSystemStatus({
+    baseUrl: process.env["NODE_ENV"] === "production"
       ? req.body.app_url
-      : process.env["WOO_BASE_URL"];
-
-  const systemStatusResult = await wooApiRepository.system.getSystemStatus(
-    `${baseUrl}`,
-    createBasicAuthHeaderToken(
+      : process.env["WOO_BASE_URL"] as string,
+    token: createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
       req.body.token.split("|")[1],
     ),
-  );
+  });
   // actually useless
   if (!systemStatusResult)
     return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);

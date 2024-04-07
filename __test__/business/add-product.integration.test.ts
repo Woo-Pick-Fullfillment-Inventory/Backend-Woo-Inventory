@@ -37,7 +37,6 @@ describe("Add product test", () => {
   });
 
   it("should increase products count", async () => {
-    const newProduct = { name: "Premium Quality" };
 
     const productListBefore = await viewCollectionFactory(db)(
       `users-products/users-${userId}-products/products`,
@@ -45,7 +44,7 @@ describe("Add product test", () => {
 
     expect(productListBefore.length).toEqual(5);
 
-    const response = await httpClient.post("api/v1/products", newProduct, { headers: { authorization: createAuthorizationHeader(userId) } });
+    const response = await httpClient.post("api/v1/products", { name: "Premium Quality" }, { headers: { authorization: createAuthorizationHeader(userId) } });
 
     const productListAfter = await viewCollectionFactory(db)(
       `users-products/users-${userId}-products/products`,

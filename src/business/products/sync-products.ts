@@ -96,20 +96,24 @@ export const syncProducts = async (req: Request, res: Response) => {
     userFoundInFirestore.woo_credentials.secret,
   );
 
-  const base_url =
+  const baseUrl =
     process.env["NODE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
-  const { totalItems } = await wooApiRepository.product.getProductsPagination(
-    base_url,
-    wooBasicAuth,
-    1,
-    1,
-  );
+  const { totalItems } = await wooApiRepository.product.getProductsPagination({
+    baseUrl: baseUrl,
+    token: wooBasicAuth,
+    perPage: 1,
+    page: 1,
+  });
 
   const startTimeGettingProducts = performance.now();
-  const products = await fetchAllProducts(base_url, wooBasicAuth, totalItems);
+  const products = await fetchAllProducts({
+    baseUrl,
+    wooBasicAuth,
+    totalItems,
+  });
   if (products.length !== totalItems) {
     logger.log(
       "error",

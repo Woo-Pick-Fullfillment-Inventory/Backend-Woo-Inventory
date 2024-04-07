@@ -35,30 +35,30 @@ describe("Get products from woo api test", () => {
   });
   it("should not return product from woo api, because type validation is falsy", async () => {
     await expect(
-      getProductsPaginationFactory(
-        "https://testwebsite.com",
-        createBasicAuthHeaderToken(
+      getProductsPaginationFactory({
+        baseUrl: "https://testwebsite.com",
+        token: createBasicAuthHeaderToken(
           mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials
             .token,
           mockUserForSyncingProductsFalsyTypeProductReturn.woo_credentials
             .secret,
         ),
-        1,
-        2,
-      ),
+        perPage: 1,
+        page: 2,
+      }),
     ).rejects.toThrow("Response type not expected");
   });
   it("should not return product from woo api, because url is falsy", async () => {
     await expect(
-      getProductsPaginationFactory(
-        "some-url",
-        createBasicAuthHeaderToken(
+      getProductsPaginationFactory({
+        baseUrl: "some-url",
+        token: createBasicAuthHeaderToken(
           mockUserForSyncingProducts.woo_credentials.token,
           mockUserForSyncingProducts.woo_credentials.secret,
         ),
-        1,
-        1,
-      ),
+        perPage: 1,
+        page: 1,
+      }),
     ).rejects.toThrow("Axios Error");
     expect(
       (

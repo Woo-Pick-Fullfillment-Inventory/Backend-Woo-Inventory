@@ -3,7 +3,6 @@ import { response } from "express";
 import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { convertWooProductToClient } from "../converter/convert-woo-product-to-client.js";
 import { ProductSchema } from "../models/products.type.js";
 
 import type {
@@ -38,11 +37,16 @@ type AddProductRequestFromUserType = {
   }[] | undefined;
 }
 
-export const postAddProductFactory = async (
-  baseUrl: string,
-  token: string,
-  addProductRequestFromUser: AddProductRequestFromUserType,
-): Promise<ProductType> => {
+export const postAddProductFactory = async ({
+  baseUrl,
+  token,
+  addProductRequestFromUser,
+}: {
+  baseUrl: string;
+  token: string;
+  addProductRequestFromUser: AddProductRequestFromUserType;
+}): Promise<Pick<ProductType, "id" | "images">> => {
+  console.log("baseUrl", baseUrl);
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -90,5 +94,8 @@ export const postAddProductFactory = async (
     { headers: { Authorization: token } },
   );
 
-  return convertWooProductToClient(data);
+  return {
+    id: data.id,
+    images: data.images,
+  };
 };

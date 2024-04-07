@@ -4,17 +4,20 @@ import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.
 import {
   SystemStatusSchema,
   type SystemStatusType,
-} from "../models/system-status.type.js";
+} from "../models/systems.type.js";
 
 import type {
   AxiosError,
   AxiosResponse,
 } from "axios";
 
-export const getSystemStatusFactory = async (
-  baseUrl: string,
-  token: string,
-): Promise<SystemStatusType> => {
+export const getSystemStatusFactory = async ({
+  baseUrl,
+  token,
+}: {
+  baseUrl: string;
+  token: string;
+}): Promise<SystemStatusType> => {
   const { get } = createAxiosClient<SystemStatusType>({
     config: {
       baseURL: baseUrl,

@@ -109,21 +109,16 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  const wooBasicAuth = createBasicAuthHeaderToken(
-    userFoundInFirestore.woo_credentials.token,
-    userFoundInFirestore.woo_credentials.secret,
-  );
-
-  const baseUrl =
-    process.env["NODE_ENV"] === "production"
+  const product = await wooApiRepository.product.postAddProduct({
+    baseUrl: process.env["NODE_ENV"] === "production"
       ? userFoundInFirestore.store.app_url
-      : process.env["WOO_BASE_URL"];
-
-  const product = await wooApiRepository.product.postAddProduct(
-    `${baseUrl}`,
-    wooBasicAuth,
-    req.body,
-  );
+      : process.env["WOO_BASE_URL"] as string,
+    token: createBasicAuthHeaderToken(
+      userFoundInFirestore.woo_credentials.token,
+      userFoundInFirestore.woo_credentials.secret,
+    ),
+    addProductRequestFromUser: req.body,
+  });
 
   await firestoreRepository.product.insertProduct(
     {
@@ -138,7 +133,7 @@ export const addProduct = async (req: Request, res: Response) => {
       description: req.body.description || "",
       supplier: req.body.supplier || "",
       purchase_price: req.body.purchase_price || "",
-      regular_price: req.body.regular_price || req.body.sale_price || "",
+      regular_price: req.body.regular_price || "",
       sale_price: req.body.sale_price || "",
       tax_status: req.body.tax_status || "",
       tax_class: req.body.tax_class || "",

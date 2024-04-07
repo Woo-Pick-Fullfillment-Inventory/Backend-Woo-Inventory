@@ -1,7 +1,6 @@
 import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { convertWooProductsToClient } from "../converter/convert-woo-product-to-client.js";
 import {
   type ProductType,
   type ProductsFromWooType,
@@ -19,12 +18,17 @@ type getAllProductsPaginationResponse = {
   totalPages: number;
 };
 
-export const getProductsPaginationFactory = async (
-  baseUrl: string,
-  token: string,
-  perPage: number,
-  page: number,
-): Promise<getAllProductsPaginationResponse> => {
+export const getProductsPaginationFactory = async ({
+  baseUrl,
+  token,
+  perPage,
+  page,
+}: {
+  baseUrl: string;
+  token: string;
+  perPage: number;
+  page: number;
+}): Promise<getAllProductsPaginationResponse> => {
   const { get } = createAxiosClient<ProductsFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -44,12 +48,16 @@ export const getProductsPaginationFactory = async (
             );
             throw new Error("Response status code not expected");
           }
-          const isSystemStatusTypeValid = isResponseTypeTrue(ProductsSchema, response.data, true);
+          const isSystemStatusTypeValid = isResponseTypeTrue(
+            ProductsSchema,
+            response.data,
+            true,
+          );
           if (!isSystemStatusTypeValid.isValid) {
             logger.log(
               "error",
-              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}`+
-              ` ***Expected*** ${JSON.stringify(ProductsSchema)} ***Received*** ${JSON.stringify(response.data)}`,
+              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
+                ` ***Expected*** ${JSON.stringify(ProductsSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
           }
@@ -76,12 +84,35 @@ export const getProductsPaginationFactory = async (
     { headers: { Authorization: token } },
   );
 
-  if (headers["x-wp-total"] === undefined || headers["x-wp-totalpages"] === undefined) {
+  if (
+    headers["x-wp-total"] === undefined ||
+    headers["x-wp-totalpages"] === undefined
+  ) {
     throw new Error("Response headers not expected");
   }
 
   return {
-    products: convertWooProductsToClient(data),
+    products: data.map((product) => ({
+      id: product.id,
+      name: product.name,
+      sku: product.sku,
+      slug: product.slug,
+      categories: product.categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        slug: category.slug,
+      })),
+      images: product.images.map((image) => ({
+        id: image.id,
+        src: image.src,
+      })),
+      price: product.price,
+      regular_price: product.regular_price,
+      sale_price: product.sale_price,
+      tax_class: product.tax_class,
+      tax_status: product.tax_status,
+      stock_quantity: product.stock_quantity,
+    })),
     totalItems: parseInt(headers["x-wp-total"] as string, 10),
     totalPages: parseInt(headers["x-wp-totalpages"] as string, 10),
   };
