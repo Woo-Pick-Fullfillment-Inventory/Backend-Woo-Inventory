@@ -13,6 +13,7 @@ import { updateUserFactory } from "./users/update-user.js";
 import { batchWriteProductsFactory } from "./users-products/batch-write-products.js";
 import { getProductsFactory } from "./users-products/get-products.js";
 import { insertProductFactory } from "./users-products/insert-product.js";
+import { batchWriteProductsCategoriesFactory } from "./users-products-categories/batch-write-categories.js";
 
 import type {
   AddProductFireStoreType,
@@ -42,6 +43,7 @@ export const firestoreRepository = {
     getProducts: getProductsFactory(firestoreClient),
     insertProduct: insertProductFactory(firestoreClient),
   },
+  productCategory: { batchWriteProductsCategories: batchWriteProductsCategoriesFactory(firestoreClient) },
   collection: {
     viewCollection: viewCollectionFactory(firestoreClient),
     clearCollection: clearCollectionFactory(firestoreClient),
