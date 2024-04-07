@@ -93,18 +93,15 @@ export const signup = async (req: Request, res: Response) => {
   )
     return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
-  const baseUrl =
-    process.env["NODE_ENV"] === "production"
+  const systemStatusResult = await wooApiRepository.system.getSystemStatus({
+    baseUrl: process.env["NODE_ENV"] === "production"
       ? req.body.app_url
-      : process.env["WOO_BASE_URL"];
-
-  const systemStatusResult = await wooApiRepository.system.getSystemStatus(
-    `${baseUrl}`,
-    createBasicAuthHeaderToken(
+      : process.env["WOO_BASE_URL"] as string,
+    token: createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
       req.body.token.split("|")[1],
     ),
-  );
+  });
   // actually useless
   if (!systemStatusResult)
     return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
@@ -131,15 +128,7 @@ export const signup = async (req: Request, res: Response) => {
     are_products_synced: false,
   });
 
-  if (!process.env["JWT_SECRET"]) {
-    logger.log(
-      "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR***  JWT_SECRET is not defined`,
-    );
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-  }
-
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"])}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"] as string)}` });
 };
 
 export default signup;

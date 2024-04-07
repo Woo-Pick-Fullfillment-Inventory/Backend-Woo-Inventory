@@ -56,6 +56,7 @@ export type ProductType = {
       name: string;
       slug: string;
     }[];
+    price: string;
     regular_price: string;
     sale_price: string;
     stock_quantity: number | null;
@@ -63,6 +64,8 @@ export type ProductType = {
       id: number;
       src: string;
     }[];
+    tax_status: "taxable" | "shipping" | "none" | "";
+    tax_class: "standard" | "reduced-rate" | "zero-rate" | "";
 }
 
 export type ProductsType = ProductType[];

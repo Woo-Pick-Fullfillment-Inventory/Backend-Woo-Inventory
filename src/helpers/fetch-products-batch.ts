@@ -2,25 +2,31 @@ import { wooApiRepository } from "../repository/woo-api/index.js";
 
 import type { ProductsType } from "../repository/woo-api/models/products.type.js";
 
+const PER_PAGE = 50;
+
 const fetchProductsBatch = async (
-  base_url: string,
+  baseUrl: string,
   wooBasicAuth: string,
   currentPage: number,
 ) => {
-  const result = await wooApiRepository.product.getProductsPagination(
-    base_url,
-    wooBasicAuth,
-    50,
-    currentPage,
-  );
+  const result = await wooApiRepository.product.getProductsPagination({
+    baseUrl: baseUrl,
+    token: wooBasicAuth,
+    perPage: PER_PAGE,
+    page: currentPage,
+  });
   return result.products;
 };
 
-const fetchAllProducts = async (
-  base_url: string,
-  wooBasicAuth: string,
-  totalItems: number,
-): Promise<ProductsType> => {
+const fetchAllProducts = async ({
+  baseUrl,
+  wooBasicAuth,
+  totalItems,
+}: {
+  baseUrl: string;
+  wooBasicAuth: string;
+  totalItems: number;
+}): Promise<ProductsType> => {
   let currentChunk = 1;
   let shouldContinue = true;
   let allProductsToBeSynced: ProductsType = [];
@@ -32,7 +38,7 @@ const fetchAllProducts = async (
     const promises: Promise<ProductsType>[] = [];
 
     for (let i = 0; i < numBatches; i++) {
-      promises.push(fetchProductsBatch(base_url, wooBasicAuth, currentChunk));
+      promises.push(fetchProductsBatch(baseUrl, wooBasicAuth, currentChunk));
       currentChunk += 1;
     }
 

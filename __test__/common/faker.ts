@@ -14,6 +14,10 @@ const generateRandomProduct = (): ProductType => {
     id: productIdCounter,
     name: faker.commerce.productName(),
     sku: faker.string.alpha(),
+    price: faker.number.int({
+      min: 1,
+      max: 1000,
+    }).toString(),
     regular_price: faker.number.int({
       min: 1,
       max: 1000,
@@ -58,7 +62,16 @@ const generateRandomProduct = (): ProductType => {
       }),
     ),
     slug: faker.helpers.slugify(faker.commerce.productName()),
-
+    tax_class: faker.helpers.arrayElement([
+      "standard",
+      "reduced-rate",
+      "zero-rate",
+    ]),
+    tax_status: faker.helpers.arrayElement([
+      "taxable",
+      "shipping",
+      "none",
+    ]),
   };
 };
 
