@@ -3,11 +3,13 @@ import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
   ProductsCategoriesSchema,
-  type ProductsCategoriesType,
-  ProductsSchema, 
-} from "../models/products.type.js";
+  ProductsSchema,
+} from "../index.js";
 
-import type {ProductsCategoriesFromWooType } from "../models/products.type.js";
+import type {
+  ProductsCategoriesFromWooType,
+  ProductsCategoriesType,
+} from "../index.js";
 import type {
   AxiosError,
   AxiosResponse,

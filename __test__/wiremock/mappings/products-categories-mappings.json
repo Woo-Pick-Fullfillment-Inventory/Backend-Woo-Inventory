@@ -1,0 +1,62 @@
+{
+    "mappings": [
+
+      {
+        "scenarioName": "trigger total items",
+        "request": {
+          "method": "GET",
+          "url": "/wp-json/wc/v3/products/categories?per_page=1&page=1",
+          "basicAuth": {
+            "username": "ck_1111",
+            "password": "cs_2222"
+          }
+        },
+        "response": {
+          "status": 200,
+          "bodyFileName": "products-categories/GET-products-categories-1.json",
+          "headers": {
+            "X-WP-Total": "64",
+            "X-WP-TotalPages": "1"
+          }
+        }
+      },
+      {
+        "scenarioName": "get first 50 categories",
+        "request": {
+          "method": "GET",
+          "url": "/wp-json/wc/v3/products/categories?per_page=50&page=1",
+          "basicAuth": {
+            "username": "ck_1111",
+            "password": "cs_2222"
+          }
+        },
+        "response": {
+          "status": 200,
+          "bodyFileName": "products-categories/GET-products-categories-50.json",
+          "headers": {
+            "X-WP-Total": "64",
+            "X-WP-TotalPages": "1"
+          }
+        }
+      },
+      {
+        "scenarioName": "get last 14 categories",
+        "request": {
+          "method": "GET",
+          "url": "/wp-json/wc/v3/products/categories?per_page=50&page=2",
+          "basicAuth": {
+            "username": "ck_1111",
+            "password": "cs_2222"
+          }
+        },
+        "response": {
+          "status": 200,
+          "bodyFileName": "products-categories/GET-products-categories-14.json",
+          "headers": {
+            "X-WP-Total": "64",
+            "X-WP-TotalPages": "1"
+          }
+        }
+      }
+    ]
+}

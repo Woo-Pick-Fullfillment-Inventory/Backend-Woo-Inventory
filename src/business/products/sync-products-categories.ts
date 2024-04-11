@@ -1,3 +1,4 @@
+import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
@@ -6,6 +7,7 @@ import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-head
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
+import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
@@ -37,9 +39,28 @@ const SERVICE_ERRORS = {
     type: "/products/categories/sync/request-failed",
     message: "invalid request",
   },
+  dataSyncedAlready: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/categories/sync/synced-already",
+    message: "products categories already synced",
+  },
 };
 
+const SyncProductsCategoriesSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products-categories") ]) });
+
 export const syncProductsCategories = async (req: Request, res: Response) => {
+  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeTrue(
+    SyncProductsCategoriesSchema,
+    req.body,
+    false,
+  );
+  if (!isSyncProductsCategoriesRequestTypeValid.isValid) {
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsCategoriesRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsCategoriesSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
+  }
 
   const userId = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
@@ -62,6 +83,14 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
       `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
+  }
+
+  if (userFoundInFirestore.sync.are_products_categories_synced) {
+    logger.log(
+      "warn",
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** products categories already synced`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
 
   const wooBasicAuth = createBasicAuthHeaderToken(
@@ -108,13 +137,14 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
       userId,
     );
   }
+
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await firestoreRepository.user.updateUserProductsSynced(userId, true);
+  await firestoreRepository.user.updateUserProductsCategoriesSynced(userId, true);
 
-  return res.status(200);
+  return res.sendStatus(201);
 };

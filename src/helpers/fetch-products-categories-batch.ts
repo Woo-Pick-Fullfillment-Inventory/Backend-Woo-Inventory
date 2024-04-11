@@ -1,6 +1,7 @@
-import { wooApiRepository } from "../repository/woo-api/index.js";
-
-import type { ProductsCategoriesType } from "../repository/woo-api/models/products.type.js";
+import {
+  type ProductsCategoriesType,
+  wooApiRepository,
+} from "../repository/woo-api/index.js";
 
 const PER_PAGE = 50;
 

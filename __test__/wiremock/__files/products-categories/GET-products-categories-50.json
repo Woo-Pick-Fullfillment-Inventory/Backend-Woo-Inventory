@@ -1,0 +1,1397 @@
+[
+    {
+        "id": 27,
+        "name": "Bottoms",
+        "slug": "bottoms",
+        "parent": 17,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 25,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/27"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/17"
+                }
+            ]
+        }
+    },
+    {
+        "id": 63,
+        "name": "Bras &amp; Tanks",
+        "slug": "bras-tanks",
+        "parent": 57,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/63"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/57"
+                }
+            ]
+        }
+    },
+    {
+        "id": 58,
+        "name": "Bras &amp; Tanks|Clothing",
+        "slug": "bras-tanksclothing",
+        "parent": 57,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/58"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/57"
+                }
+            ]
+        }
+    },
+    {
+        "id": 16,
+        "name": "Clothing",
+        "slug": "clothing",
+        "parent": 0,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 88,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/16"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ]
+        }
+    },
+    {
+        "id": 20,
+        "name": "Collections",
+        "slug": "collections",
+        "parent": 19,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/20"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/19"
+                }
+            ]
+        }
+    },
+    {
+        "id": 25,
+        "name": "Collections",
+        "slug": "collections-jacketsclothing",
+        "parent": 24,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/25"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/24"
+                }
+            ]
+        }
+    },
+    {
+        "id": 31,
+        "name": "Collections",
+        "slug": "collections-pantsclothing-promotions",
+        "parent": 30,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 9,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/31"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/30"
+                }
+            ]
+        }
+    },
+    {
+        "id": 35,
+        "name": "Collections",
+        "slug": "collections-new-luma-yoga-collectionclothing",
+        "parent": 33,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/35"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/33"
+                }
+            ]
+        }
+    },
+    {
+        "id": 40,
+        "name": "Collections",
+        "slug": "collections-teesclothing",
+        "parent": 39,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/40"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/39"
+                }
+            ]
+        }
+    },
+    {
+        "id": 43,
+        "name": "Collections",
+        "slug": "collections-shortsclothing",
+        "parent": 42,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 6,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/43"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/42"
+                }
+            ]
+        }
+    },
+    {
+        "id": 50,
+        "name": "Collections",
+        "slug": "collections-men-saleclothing",
+        "parent": 49,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/50"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/49"
+                }
+            ]
+        }
+    },
+    {
+        "id": 54,
+        "name": "Collections",
+        "slug": "collections-tanksclothing",
+        "parent": 53,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/54"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/53"
+                }
+            ]
+        }
+    },
+    {
+        "id": 61,
+        "name": "Collections",
+        "slug": "collections-women-saleclothing",
+        "parent": 60,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/61"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/60"
+                }
+            ]
+        }
+    },
+    {
+        "id": 64,
+        "name": "Collections",
+        "slug": "collections-bras-tanksclothing",
+        "parent": 58,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/64"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/58"
+                }
+            ]
+        }
+    },
+    {
+        "id": 66,
+        "name": "Collections",
+        "slug": "collections-new-luma-yoga-collectionclothing-collections-bras-tanksclothing",
+        "parent": 65,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/66"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/65"
+                }
+            ]
+        }
+    },
+    {
+        "id": 69,
+        "name": "Collections",
+        "slug": "collections-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 68,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 4,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/69"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/68"
+                }
+            ]
+        }
+    },
+    {
+        "id": 71,
+        "name": "Collections",
+        "slug": "collections-new-luma-yoga-collectionclothing-collections-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 70,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/71"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/70"
+                }
+            ]
+        }
+    },
+    {
+        "id": 76,
+        "name": "Collections",
+        "slug": "collections-women-saleclothing-promotions-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 74,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/76"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/74"
+                }
+            ]
+        }
+    },
+    {
+        "id": 21,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing",
+        "parent": 20,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/21"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/20"
+                }
+            ]
+        }
+    },
+    {
+        "id": 26,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-jacketsclothing",
+        "parent": 25,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/26"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/25"
+                }
+            ]
+        }
+    },
+    {
+        "id": 34,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-pantsclothing-promotions",
+        "parent": 31,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/34"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/31"
+                }
+            ]
+        }
+    },
+    {
+        "id": 41,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-teesclothing",
+        "parent": 40,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/41"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/40"
+                }
+            ]
+        }
+    },
+    {
+        "id": 55,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-tanksclothing",
+        "parent": 54,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/55"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/54"
+                }
+            ]
+        }
+    },
+    {
+        "id": 62,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-women-saleclothing",
+        "parent": 61,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/62"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/61"
+                }
+            ]
+        }
+    },
+    {
+        "id": 78,
+        "name": "Eco Friendly|Clothing",
+        "slug": "eco-friendlyclothing-collections-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 69,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/78"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/69"
+                }
+            ]
+        }
+    },
+    {
+        "id": 36,
+        "name": "Erin Recommends|Clothing",
+        "slug": "erin-recommendsclothing",
+        "parent": 35,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/36"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/35"
+                }
+            ]
+        }
+    },
+    {
+        "id": 37,
+        "name": "Erin Recommends|Clothing",
+        "slug": "erin-recommendsclothing-collections-pantsclothing-promotions",
+        "parent": 31,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/37"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/31"
+                }
+            ]
+        }
+    },
+    {
+        "id": 44,
+        "name": "Erin Recommends|Clothing",
+        "slug": "erin-recommendsclothing-collections-shortsclothing",
+        "parent": 43,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/44"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/43"
+                }
+            ]
+        }
+    },
+    {
+        "id": 51,
+        "name": "Erin Recommends|Clothing",
+        "slug": "erin-recommendsclothing-collections-men-saleclothing",
+        "parent": 50,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/51"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/50"
+                }
+            ]
+        }
+    },
+    {
+        "id": 72,
+        "name": "Erin Recommends|Clothing",
+        "slug": "erin-recommendsclothing-collections-new-luma-yoga-collectionclothing-collections-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 71,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/72"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/71"
+                }
+            ]
+        }
+    },
+    {
+        "id": 22,
+        "name": "Hoodies &amp; Sweatshirts",
+        "slug": "hoodies-sweatshirts",
+        "parent": 18,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 10,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/22"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/18"
+                }
+            ]
+        }
+    },
+    {
+        "id": 75,
+        "name": "Hoodies &amp; Sweatshirts",
+        "slug": "hoodies-sweatshirts-tops-women",
+        "parent": 57,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 4,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/75"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/57"
+                }
+            ]
+        }
+    },
+    {
+        "id": 19,
+        "name": "Hoodies &amp; Sweatshirts|Clothing",
+        "slug": "hoodies-sweatshirtsclothing",
+        "parent": 18,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/19"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/18"
+                }
+            ]
+        }
+    },
+    {
+        "id": 68,
+        "name": "Hoodies &amp; Sweatshirts|Clothing",
+        "slug": "hoodies-sweatshirtsclothing-tops-women",
+        "parent": 57,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 6,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/68"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/57"
+                }
+            ]
+        }
+    },
+    {
+        "id": 23,
+        "name": "Jackets",
+        "slug": "jackets",
+        "parent": 18,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 9,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/23"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/18"
+                }
+            ]
+        }
+    },
+    {
+        "id": 24,
+        "name": "Jackets|Clothing",
+        "slug": "jacketsclothing",
+        "parent": 18,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/24"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/18"
+                }
+            ]
+        }
+    },
+    {
+        "id": 17,
+        "name": "Men",
+        "slug": "men",
+        "parent": 16,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 73,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/17"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/16"
+                }
+            ]
+        }
+    },
+    {
+        "id": 49,
+        "name": "Men Sale|Clothing",
+        "slug": "men-saleclothing",
+        "parent": 48,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/49"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/48"
+                }
+            ]
+        }
+    },
+    {
+        "id": 33,
+        "name": "New Luma Yoga Collection|Clothing",
+        "slug": "new-luma-yoga-collectionclothing",
+        "parent": 31,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 5,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/33"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/31"
+                }
+            ]
+        }
+    },
+    {
+        "id": 47,
+        "name": "New Luma Yoga Collection|Clothing",
+        "slug": "new-luma-yoga-collectionclothing-collections-shortsclothing",
+        "parent": 43,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 2,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/47"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/43"
+                }
+            ]
+        }
+    },
+    {
+        "id": 65,
+        "name": "New Luma Yoga Collection|Clothing",
+        "slug": "new-luma-yoga-collectionclothing-collections-bras-tanksclothing",
+        "parent": 64,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/65"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/64"
+                }
+            ]
+        }
+    },
+    {
+        "id": 70,
+        "name": "New Luma Yoga Collection|Clothing",
+        "slug": "new-luma-yoga-collectionclothing-collections-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 69,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/70"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/69"
+                }
+            ]
+        }
+    },
+    {
+        "id": 28,
+        "name": "Pants|Clothing",
+        "slug": "pantsclothing",
+        "parent": 27,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 12,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/28"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/27"
+                }
+            ]
+        }
+    },
+    {
+        "id": 30,
+        "name": "Pants|Clothing",
+        "slug": "pantsclothing-promotions",
+        "parent": 29,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 12,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/30"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/29"
+                }
+            ]
+        }
+    },
+    {
+        "id": 32,
+        "name": "Performance Fabrics|Clothing",
+        "slug": "performance-fabricsclothing",
+        "parent": 31,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/32"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/31"
+                }
+            ]
+        }
+    },
+    {
+        "id": 46,
+        "name": "Performance Fabrics|Clothing",
+        "slug": "performance-fabricsclothing-collections-shortsclothing",
+        "parent": 43,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/46"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/43"
+                }
+            ]
+        }
+    },
+    {
+        "id": 67,
+        "name": "Performance Fabrics|Clothing",
+        "slug": "performance-fabricsclothing-collections-new-luma-yoga-collectionclothing-collections-bras-tanksclothing",
+        "parent": 66,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/67"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/66"
+                }
+            ]
+        }
+    },
+    {
+        "id": 77,
+        "name": "Performance Fabrics|Clothing",
+        "slug": "performance-fabricsclothing-collections-women-saleclothing-promotions-hoodies-sweatshirtsclothing-tops-women",
+        "parent": 76,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 1,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/77"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/76"
+                }
+            ]
+        }
+    },
+    {
+        "id": 29,
+        "name": "Promotions",
+        "slug": "promotions",
+        "parent": 28,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 12,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/29"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/28"
+                }
+            ]
+        }
+    },
+    {
+        "id": 48,
+        "name": "Promotions",
+        "slug": "promotions-shortsclothing",
+        "parent": 42,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 3,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/48"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/42"
+                }
+            ]
+        }
+    }
+]

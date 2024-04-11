@@ -125,7 +125,10 @@ export const signup = async (req: Request, res: Response) => {
       is_authorized: true,
     },
     last_login: new Date().toISOString(),
-    are_products_synced: false,
+    sync: {
+      are_products_synced: false,
+      are_products_categories_synced: false,
+    },
   });
 
   return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"] as string)}` });

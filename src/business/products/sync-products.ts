@@ -83,7 +83,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.are_products_synced) {
+  if (userFoundInFirestore.sync.are_products_synced) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`,

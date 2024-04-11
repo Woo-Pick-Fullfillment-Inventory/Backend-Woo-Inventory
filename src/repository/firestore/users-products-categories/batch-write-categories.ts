@@ -10,7 +10,7 @@ export const batchWriteProductsCategoriesFactory = (
       const productRef = firestoreClient
         .collection("users-products-categories")
         .doc(`users-${userId}-products-categories`)
-        .collection("categories")
+        .collection("products-categories")
         .doc(category.id.toString());
       batch.set(productRef, category);
     });
