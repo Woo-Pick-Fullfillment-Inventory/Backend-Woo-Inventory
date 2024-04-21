@@ -5,6 +5,7 @@ import {
 } from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
+import { recursiveSortById } from "../../src/helpers/sort-by-id.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { batchWriteProductsCategoriesFactory } from "../../src/repository/firestore/users-products-categories/batch-write-categories.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
@@ -172,8 +173,8 @@ describe("get products categories test", () => {
         },
       },
     );
-    expect(response.status).toEqual(200);
-    expect(response.data).toEqual([
+    expect(response.status).toEqual(201);
+    const expectedCategories = recursiveSortById([
       {
         id: 127,
         name: "Đồ ăn vặt",
@@ -327,5 +328,6 @@ describe("get products categories test", () => {
         children: [],
       },
     ]);
+    expect(recursiveSortById(response.data)).toEqual(expectedCategories);
   });
 });

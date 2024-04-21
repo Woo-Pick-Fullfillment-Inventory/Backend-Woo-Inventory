@@ -2,14 +2,12 @@ import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
+  type ProductsCategoriesFromWooType,
   ProductsCategoriesSchema,
+  type ProductsCategoriesType,
   ProductsSchema,
-} from "../index.js";
+} from "../models/products.type.js";
 
-import type {
-  ProductsCategoriesFromWooType,
-  ProductsCategoriesType,
-} from "../index.js";
 import type {
   AxiosError,
   AxiosResponse,

@@ -14,6 +14,7 @@ export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => 
         .collection("users")
         .where(userAttribute, "==", value)
         .get();
+
       if (
         snapshot.empty ||
         !snapshot ||
@@ -22,6 +23,7 @@ export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => 
       ) {
         return undefined;
       }
+
       const isUserTypeValid = isResponseTypeTrue(
         UserFireStoreSchema,
         snapshot.docs[0].data(),

@@ -1,6 +1,6 @@
 {
     "roots": ["<rootDir>"],
-    "testMatch": ["**/sync-products-categories.integration.test.ts"],
+    "testMatch": ["**/get-products-categories.integration.test.ts"],
     "extensionsToTreatAsEsm": [".ts"],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"

@@ -25,8 +25,8 @@ export const UserFireStoreSchema = Type.Object({
   }),
   last_login: Type.String(),
   sync: Type.Object({
-    are_products_synced: Type.Boolean({ default: false }),
-    are_products_categories_synced: Type.Boolean({ default: false }),
+    are_products_synced: Type.Boolean(),
+    are_products_categories_synced: Type.Boolean(),
   }),
 });
 

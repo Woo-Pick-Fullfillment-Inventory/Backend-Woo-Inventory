@@ -38,6 +38,6 @@ export const getProductsCategoriesFactory = (
       throw new Error("Products Categories Firestore Type Not Expected");
     }
 
-    return { ...categories as ProductsCategoriesType };
+    return categories as ProductsCategoriesType;
   };
 };
