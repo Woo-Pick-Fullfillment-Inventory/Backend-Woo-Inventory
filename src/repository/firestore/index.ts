@@ -13,7 +13,17 @@ import { updateUserFactory } from "./users/update-user.js";
 import { batchWriteProductsFactory } from "./users-products/batch-write-products.js";
 import { getProductsFactory } from "./users-products/get-products.js";
 import { insertProductFactory } from "./users-products/insert-product.js";
+import { batchWriteProductsCategoriesFactory } from "./users-products-categories/batch-write-categories.js";
+import { getProductsCategoriesFactory } from "./users-products-categories/get-categories.js";
 
+import type {
+  ProductsCategoriesFirestoreSchema,
+  ProductsCategoriesFirestoreType,
+  ProductsCategoriesType,
+  ProductsCategoryFirestoreSchema,
+  ProductsCategoryFirestoreType,
+  ProductsCategoryType,
+} from "./models/category.type.js";
 import type {
   AddProductFireStoreType,
   ProductFireStoreAttributeType
@@ -36,11 +46,16 @@ export const firestoreRepository = {
     insertUser: insertUserFactory(firestoreClient),
     updateUserLastLogin: updateUserFactory(firestoreClient)("last_login"),
     updateUserProductsSynced: updateUserFactory(firestoreClient)("are_products_synced"),
+    updateUserProductsCategoriesSynced: updateUserFactory(firestoreClient)("are_products_categories_synced"),
   },
   product: {
     batchWriteProducts: batchWriteProductsFactory(firestoreClient),
     getProducts: getProductsFactory(firestoreClient),
     insertProduct: insertProductFactory(firestoreClient),
+  },
+  productCategory: {
+    batchWriteProductsCategories: batchWriteProductsCategoriesFactory(firestoreClient),
+    getProductsCategories: getProductsCategoriesFactory(firestoreClient),
   },
   collection: {
     viewCollection: viewCollectionFactory(firestoreClient),
@@ -59,4 +74,10 @@ export {
   UserFireStoreSchema,
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
+  ProductsCategoriesFirestoreSchema,
+  ProductsCategoryFirestoreSchema,
+  ProductsCategoryFirestoreType,
+  ProductsCategoriesFirestoreType,
+  ProductsCategoryType,
+  ProductsCategoriesType,
 };

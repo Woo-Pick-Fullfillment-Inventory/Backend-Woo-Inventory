@@ -47,5 +47,5 @@ export const areProductsSynced = async (req: Request, res: Response) => {
 
   return res
     .status(200)
-    .send({ are_products_synced: userFoundInFirestore.are_products_synced });
+    .send({ are_products_synced: userFoundInFirestore.sync.are_products_synced });
 };

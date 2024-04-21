@@ -19,3 +19,5 @@ type = {
   dimensions: "length" | "width" | "height";
   weight: string;
 };
+
+3. Name dupplicates between firestore and woo Repository

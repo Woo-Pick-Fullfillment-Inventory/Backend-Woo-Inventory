@@ -44,15 +44,15 @@ export const getProductsFactory = (
       const snapshot = await query.get();
 
       const products = snapshot.docs.map((doc) => doc.data());
-      const isSyncProductsRequestTypeValid = isResponseTypeTrue(
+      const isProductsReturnFromFirestoreTypeValid = isResponseTypeTrue(
         ProductsFireStoreSchema,
         products,
         true,
       );
-      if (!isSyncProductsRequestTypeValid.isValid) {
+      if (!isProductsReturnFromFirestoreTypeValid.isValid) {
         logger.log(
           "warn",
-          `***ERROR*** invalid products response type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(
+          `***ERROR*** invalid products response type  ${isProductsReturnFromFirestoreTypeValid.errorMessage} **Expected** ${JSON.stringify(
             ProductsFireStoreSchema,
           )} **RECEIVED** ${JSON.stringify(products)}`,
         );

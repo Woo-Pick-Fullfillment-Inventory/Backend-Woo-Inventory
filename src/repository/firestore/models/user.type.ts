@@ -4,7 +4,7 @@ import type { Static } from "@sinclair/typebox";
 
 export type UserAttributeType = "user_id" | "email" | "username";
 
-export type UserUpdateAttributeType = "last_login" | "are_products_synced";
+export type UserUpdateAttributeType = "last_login" | "are_products_synced" | "are_products_categories_synced";
 
 export const UserFireStoreSchema = Type.Object({
   user_id: Type.String(),
@@ -24,7 +24,10 @@ export const UserFireStoreSchema = Type.Object({
     is_authorized: Type.Boolean(),
   }),
   last_login: Type.String(),
-  are_products_synced: Type.Boolean({ default: false }),
+  sync: Type.Object({
+    are_products_synced: Type.Boolean(),
+    are_products_categories_synced: Type.Boolean(),
+  }),
 });
 
 export type UserFireStoreType = Static<typeof UserFireStoreSchema>;

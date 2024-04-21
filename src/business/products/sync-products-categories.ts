@@ -1,9 +1,8 @@
 import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
-import { performance } from "perf_hooks";
 
-import { fetchAllProducts } from "../../helpers/index.js";
+import fetchAllProductsCategories from "../../helpers/fetch-products-categories-batch.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -17,49 +16,48 @@ import type {
   Request,
   Response,
 } from "express";
-
 dotenv.config();
 
 const SERVICE_ERRORS = {
   notAuthorized: {
     statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/products/sync-process/not-authorized",
+    type: "/products/categories/sync/not-authorized",
     message: "not authorized",
   },
   resourceNotFound: {
     statusCode: StatusCodes.NOT_FOUND,
-    type: "/products/sync-process/not-found",
+    type: "/products/categories/sync/not-found",
     message: "resource not found",
+  },
+  notAllowed: {
+    statusCode: StatusCodes.FORBIDDEN,
+    type: "/products/categories/sync/not-allowed",
+    message: "query missing or not allowed",
   },
   invalidRequestType: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/sync-process/invalid-request-type",
+    type: "/products/categories/sync/request-failed",
     message: "invalid request",
   },
   dataSyncedAlready: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/sync-process/synced-already",
-    message: "products synced",
+    type: "/products/categories/sync/synced-already",
+    message: "products categories already synced",
   },
 };
 
-const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
+const SyncProductsCategoriesSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products-categories") ]) });
 
-// TODO:
-// 1. Add tracing
-// 2. Add error handling
-// 3. Add tests
-// 4. Cloud functions?
-export const syncProducts = async (req: Request, res: Response) => {
-  const isSyncProductsRequestTypeValid = isResponseTypeTrue(
-    SyncProductsSchema,
+export const syncProductsCategories = async (req: Request, res: Response) => {
+  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeTrue(
+    SyncProductsCategoriesSchema,
     req.body,
     false,
   );
-  if (!isSyncProductsRequestTypeValid.isValid) {
+  if (!isSyncProductsCategoriesRequestTypeValid.isValid) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsCategoriesRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsCategoriesSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
@@ -68,7 +66,11 @@ export const syncProducts = async (req: Request, res: Response) => {
   if (!userId) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${userId} header`,
+      `${req.method} ${
+        req.url
+      } - 400 - Not Authorized ***ERROR*** no decoded token from ${JSON.stringify(
+        req.headers["authorization"],
+      )} authorization header`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
@@ -83,10 +85,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.sync.are_products_synced) {
+  if (userFoundInFirestore.sync.are_products_categories_synced) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`,
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** products categories already synced`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
@@ -97,11 +99,11 @@ export const syncProducts = async (req: Request, res: Response) => {
   );
 
   const baseUrl =
-    process.env["NODE_ENV"] === "production"
-      ? userFoundInFirestore.store.app_url
-      : (process.env["WOO_BASE_URL"] as string);
+      process.env["NODE_ENV"] === "production"
+        ? userFoundInFirestore.store.app_url
+        : (process.env["WOO_BASE_URL"] as string);
 
-  const { totalItems } = await wooApiRepository.product.getProductsPagination({
+  const { totalItems } = await wooApiRepository.product.getProductsCategoriesPagination({
     baseUrl: baseUrl,
     token: wooBasicAuth,
     perPage: 1,
@@ -109,39 +111,40 @@ export const syncProducts = async (req: Request, res: Response) => {
   });
 
   const startTimeGettingProducts = performance.now();
-  const products = await fetchAllProducts({
+  const categories = await fetchAllProductsCategories({
     baseUrl,
     wooBasicAuth,
     totalItems,
   });
-  if (products.length !== totalItems) {
+  if (categories.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Categories Syncing failed`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
   const endTimeGettingProducts = performance.now();
   logger.log(
     "info",
-    `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`,
+    `Total time taken to get products categories from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`,
   );
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < products.length; i += 100) {
-    await firestoreRepository.product.batchWriteProducts(
-      products.slice(i, i + 100),
+  for (let i = 0; i < categories.length; i += 100) {
+    await firestoreRepository.productCategory.batchWriteProductsCategories(
+      categories.slice(i, i + 100),
       userId,
     );
   }
+
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await firestoreRepository.user.updateUserProductsSynced(userId, true);
+  await firestoreRepository.user.updateUserProductsCategoriesSynced(userId, true);
 
   return res.sendStatus(201);
 };

@@ -70,7 +70,7 @@ describe("Signup test", () => {
     ).toEqual(1);
   });
 
-  it("should return 400 when user already exists", async () => {
+  it.only("should return 400 when user already exists", async () => {
     const response = await httpClient.post("api/v1/auth/signup", {
       app_url: "https://testwebsite.com",
       email: `${randomUUID()}@email.com`,

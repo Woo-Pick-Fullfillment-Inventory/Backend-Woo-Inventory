@@ -46,7 +46,6 @@ export const postAddProductFactory = async ({
   token: string;
   addProductRequestFromUser: AddProductRequestFromUserType;
 }): Promise<Pick<ProductType, "id" | "images">> => {
-  console.log("baseUrl", baseUrl);
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,

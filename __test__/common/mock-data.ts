@@ -16,7 +16,10 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
     is_authorized: true,
   },
   last_login: "2024-02-06T00:00:00.000Z",
-  are_products_synced: false,
+  sync: {
+    are_products_categories_synced: false,
+    are_products_synced: false,
+  },
 };
 
 export const mockUserWrongType = {
@@ -51,7 +54,10 @@ export const mockUserForSyncingProducts: UserFireStoreType = {
     is_authorized: true,
   },
   last_login: "2024-02-06T00:00:00.000Z",
-  are_products_synced: false,
+  sync: {
+    are_products_categories_synced: false,
+    are_products_synced: false,
+  },
 };
 
 export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType = {
@@ -69,7 +75,10 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType
     is_authorized: true,
   },
   last_login: "2024-02-06T00:00:00.000Z",
-  are_products_synced: false,
+  sync: {
+    are_products_categories_synced: false,
+    are_products_synced: false,
+  },
 };
 
 export const mockProducts: ProductsType = [
