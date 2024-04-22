@@ -39,7 +39,7 @@ describe("Add product test", () => {
   it("should increase products count", async () => {
 
     const productListBefore = await viewCollectionFactory(db)(
-      `users-products/users-${userId}-products/products`,
+      `products/users-${userId}/users-products`,
     );
 
     expect(productListBefore.length).toEqual(5);
@@ -47,7 +47,7 @@ describe("Add product test", () => {
     const response = await httpClient.post("api/v1/products", { name: "Premium Quality" }, { headers: { authorization: createAuthorizationHeader(userId) } });
 
     const productListAfter = await viewCollectionFactory(db)(
-      `users-products/users-${userId}-products/products`,
+      `products/users-${userId}/users-products`,
     );
 
     expect(productListAfter.length).toEqual(6);

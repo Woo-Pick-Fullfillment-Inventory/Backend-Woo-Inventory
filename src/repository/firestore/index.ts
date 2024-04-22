@@ -3,6 +3,10 @@ import { Firestore } from "@google-cloud/firestore";
 import { clearCollectionFactory } from "./collection/clear-collection.js";
 import { viewCollectionFactory } from "./collection/view-collection.js";
 import {
+  ProductsCategoriesFirestoreSchema,
+  ProductsCategoryFirestoreSchema,
+} from "./models/category.type.js";
+import {
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
 } from "./models/product.type.js";
@@ -17,12 +21,10 @@ import { batchWriteProductsCategoriesFactory } from "./users-products-categories
 import { getProductsCategoriesFactory } from "./users-products-categories/get-categories.js";
 
 import type {
-  ProductsCategoriesFirestoreSchema,
+  ProductsCategoriesFireStoreClientType,
   ProductsCategoriesFirestoreType,
-  ProductsCategoriesType,
-  ProductsCategoryFirestoreSchema,
+  ProductsCategoryFireStoreClientType,
   ProductsCategoryFirestoreType,
-  ProductsCategoryType,
 } from "./models/category.type.js";
 import type {
   AddProductFireStoreType,
@@ -71,13 +73,13 @@ export {
   ProductsFireStoreType,
   ProductFireStoreAttributeType,
   AddProductFireStoreType,
+  ProductsCategoryFirestoreType,
+  ProductsCategoriesFirestoreType,
+  ProductsCategoryFireStoreClientType,
+  ProductsCategoriesFireStoreClientType,
   UserFireStoreSchema,
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
   ProductsCategoriesFirestoreSchema,
   ProductsCategoryFirestoreSchema,
-  ProductsCategoryFirestoreType,
-  ProductsCategoriesFirestoreType,
-  ProductsCategoryType,
-  ProductsCategoriesType,
 };

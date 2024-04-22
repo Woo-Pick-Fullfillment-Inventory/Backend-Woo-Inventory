@@ -2,8 +2,9 @@ import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
   ProductsCategoriesFirestoreSchema,
-  type ProductsCategoriesType,
-} from "../models/category.type.js";
+  type ProductsCategoriesFirestoreType,
+} from "../index.js";
+
 type GetProductsCategoriesInputType = {
   userId: string;
 };
@@ -12,11 +13,11 @@ type GetProductsCategoriesInputType = {
 export const getProductsCategoriesFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
 ) => {
-  return async ({ userId }: GetProductsCategoriesInputType): Promise<ProductsCategoriesType> => {
+  return async ({ userId }: GetProductsCategoriesInputType): Promise<ProductsCategoriesFirestoreType> => {
     const query = firestoreClient
-      .collection("users-products-categories")
-      .doc(`users-${userId}-products-categories`)
-      .collection("products-categories");
+      .collection("categories")
+      .doc(`users-${userId}`)
+      .collection("users-categories");
 
     const snapshot = await query.get();
 
@@ -38,6 +39,6 @@ export const getProductsCategoriesFactory = (
       throw new Error("Products Categories Firestore Type Not Expected");
     }
 
-    return categories as ProductsCategoriesType;
+    return categories as ProductsCategoriesFirestoreType;
   };
 };

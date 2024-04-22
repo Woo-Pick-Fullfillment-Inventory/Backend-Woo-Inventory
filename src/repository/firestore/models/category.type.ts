@@ -17,11 +17,11 @@ export type ProductsCategoryFirestoreType = Static<typeof ProductsCategoryFirest
 export type ProductsCategoriesFirestoreType = Static<typeof ProductsCategoriesFirestoreSchema>;
 
 // type return to users
-export type ProductsCategoryType = {
+export type ProductsCategoryFireStoreClientType = {
     id: number;
     name: string;
     slug: string;
     parent: number;
 };
 
-export type ProductsCategoriesType = ProductsCategoryType[];
+export type ProductsCategoriesFireStoreClientType = ProductsCategoryFireStoreClientType[];

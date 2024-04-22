@@ -2,9 +2,9 @@ import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
-  SystemStatusSchema,
-  type SystemStatusType,
-} from "../models/systems.type.js";
+  SystemStatusFromWooSchema,
+  type SystemStatusFromWooType,
+} from "../index.js";
 
 import type {
   AxiosError,
@@ -17,8 +17,8 @@ export const getSystemStatusFactory = async ({
 }: {
   baseUrl: string;
   token: string;
-}): Promise<SystemStatusType> => {
-  const { get } = createAxiosClient<SystemStatusType>({
+}): Promise<SystemStatusFromWooType> => {
+  const { get } = createAxiosClient<SystemStatusFromWooType>({
     config: {
       baseURL: baseUrl,
       headers: {
@@ -37,7 +37,7 @@ export const getSystemStatusFactory = async ({
             throw new Error("Response status code not expected");
           }
           const isSystemStatusTypeValid = isResponseTypeTrue(
-            SystemStatusSchema,
+            SystemStatusFromWooSchema,
             response.data,
             true,
           );
@@ -45,7 +45,7 @@ export const getSystemStatusFactory = async ({
             logger.log(
               "error",
               `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
-                ` ***Expected*** ${JSON.stringify(SystemStatusSchema)} ***Received*** ${JSON.stringify(response.data)}`,
+                ` ***Expected*** ${JSON.stringify(SystemStatusFromWooSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
           }

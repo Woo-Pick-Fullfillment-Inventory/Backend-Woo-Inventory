@@ -1,10 +1,11 @@
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import {
-  type ProductFireStoreAttributeType,
-  ProductsFireStoreSchema,
-  type ProductsFireStoreType,
-} from "../models/product.type.js";
+import { ProductsFireStoreSchema } from "../index.js";
+
+import type {
+  ProductFireStoreAttributeType,
+  ProductsFireStoreType,
+} from "../index.js";
 
 type GetProductsInputType = {
   userId: string;
@@ -31,9 +32,9 @@ export const getProductsFactory = (
       lastProductFromPrevious?: string | number,
     ): Promise<ProductsFireStorePaginationType> => {
       let query = firestoreClient
-        .collection("users-products")
-        .doc(`users-${userId}-products`)
         .collection("products")
+        .doc(`users-${userId}`)
+        .collection("users-products")
         .orderBy(field, direction)
         .limit(limit);
 

@@ -1,9 +1,4 @@
-type ProductsCategoryType = {
-  id: number;
-  name: string;
-  slug: string;
-  parent: number;
-};
+import type { ProductsCategoryFireStoreClientType } from "../repository/firestore/index.js";
 
 type HierarchicalObjectType = {
   [key: number]: {
@@ -11,7 +6,7 @@ type HierarchicalObjectType = {
     name: string;
     slug: string;
     parent: number;
-    children?: HierarchicalObjectType | null | ProductsCategoryType[];
+    children?: HierarchicalObjectType | null | ProductsCategoryFireStoreClientType[];
   };
 };
 
@@ -19,10 +14,10 @@ export const convertCategoriesToCLient = ({
   data,
   parentId,
 }: {
-    data: ProductsCategoryType[];
+    data: ProductsCategoryFireStoreClientType[];
     parentId: number;
 }): HierarchicalObjectType => {
-  const children: ProductsCategoryType[] = [];
+  const children: ProductsCategoryFireStoreClientType[] = [];
   data
     .filter((item) => item.parent === parentId)
     .forEach((item) => {

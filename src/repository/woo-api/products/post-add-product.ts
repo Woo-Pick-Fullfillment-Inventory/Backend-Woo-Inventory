@@ -3,12 +3,12 @@ import { response } from "express";
 import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { ProductSchema } from "../models/products.type.js";
+import {
+  ProductFromWooSchema,
+  type ProductFromWooType,
+  type ProductWooClientType,
+} from "../index.js";
 
-import type {
-  ProductFromWooType,
-  ProductType,
-} from "../models/products.type.js";
 import type {
   AxiosError,
   AxiosResponse,
@@ -45,7 +45,7 @@ export const postAddProductFactory = async ({
   baseUrl: string;
   token: string;
   addProductRequestFromUser: AddProductRequestFromUserType;
-}): Promise<Pick<ProductType, "id" | "images">> => {
+}): Promise<Pick<ProductWooClientType, "id" | "images">> => {
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -64,11 +64,11 @@ export const postAddProductFactory = async ({
             );
             throw new Error("Response not expected");
           }
-          if (!isResponseTypeTrue(ProductSchema, response.data, true).isValid) {
+          if (!isResponseTypeTrue(ProductFromWooSchema, response.data, true).isValid) {
             logger.log(
               "error",
               `onTrue Intercepted: request ${baseUrl}${response.config.url} with ${response.data} does not return expected system status type`+
-              ` ***Expected*** ${JSON.stringify(ProductSchema)} ***Received*** ${JSON.stringify(response.data)}`,
+              ` ***Expected*** ${JSON.stringify(ProductFromWooSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response not expected");
           }

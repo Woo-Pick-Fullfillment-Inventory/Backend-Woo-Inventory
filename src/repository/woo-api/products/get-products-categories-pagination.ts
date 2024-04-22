@@ -2,11 +2,10 @@ import createAxiosClient from "../../../modules/create-axios-client.js";
 import logger from "../../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
 import {
+  ProductsCategoriesFromWooSchema,
   type ProductsCategoriesFromWooType,
-  ProductsCategoriesSchema,
-  type ProductsCategoriesType,
-  ProductsSchema,
-} from "../models/products.type.js";
+  ProductsFromWooSchema,
+} from "../index.js";
 
 import type {
   AxiosError,
@@ -14,7 +13,7 @@ import type {
 } from "axios";
 
 type getAllProductsPaginationResponse = {
-  categories: ProductsCategoriesType;
+  categories: ProductsCategoriesFromWooType;
   totalItems: number;
   totalPages: number;
 };
@@ -50,7 +49,7 @@ export const getProductsCategoriesPaginationFactory = async ({
             throw new Error("Response status code not expected");
           }
           const isProductsCategoriesTypeValid = isResponseTypeTrue(
-            ProductsCategoriesSchema,
+            ProductsCategoriesFromWooSchema,
             response.data,
             true,
           );
@@ -58,7 +57,7 @@ export const getProductsCategoriesPaginationFactory = async ({
             logger.log(
               "error",
               `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isProductsCategoriesTypeValid.errorMessage}` +
-                ` ***Expected*** ${JSON.stringify(ProductsSchema)} ***Received*** ${JSON.stringify(response.data)}`,
+                ` ***Expected*** ${JSON.stringify(ProductsFromWooSchema)} ***Received*** ${JSON.stringify(response.data)}`,
             );
             throw new Error("Response type not expected");
           }

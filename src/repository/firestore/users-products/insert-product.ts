@@ -1,4 +1,4 @@
-import type { AddProductFireStoreType } from "..";
+import type { AddProductFireStoreType } from "../index.js";
 
 export const insertProductFactory = (
   firestoreClient: FirebaseFirestore.Firestore,
@@ -8,9 +8,9 @@ export const insertProductFactory = (
     userId: string,
   ): Promise<void> => {
     await firestoreClient
-      .collection("users-products")
-      .doc(`users-${userId}-products`)
       .collection("products")
+      .doc(`users-${userId}`)
+      .collection("users-products")
       .doc(product.id.toString())
       .set(product);
   };

@@ -12,7 +12,7 @@ import { createAuthorizationHeader } from "../common/create-authorization-header
 import { httpClient } from "../common/http-client";
 import { mockUserForSyncingProducts } from "../common/mock-data";
 
-import type { ProductsCategoriesType } from "../../src/repository/woo-api/index.js";
+import type { ProductsCategoriesFromWooType } from "../../src/repository/woo-api/index.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },
@@ -21,7 +21,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
 describe("get products categories test", () => {
   let db: FirebaseFirestore.Firestore;
 
-  const categories: ProductsCategoriesType = [
+  const categories: ProductsCategoriesFromWooType = [
     {
       id: 131,
       name: "Bia &amp; Rượu",
@@ -148,7 +148,7 @@ describe("get products categories test", () => {
       slug: "uncategorized",
       parent: 0,
     },
-  ] as ProductsCategoriesType;
+  ] as ProductsCategoriesFromWooType;
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();

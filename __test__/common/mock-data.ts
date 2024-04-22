@@ -1,5 +1,5 @@
 import type { UserFireStoreType } from "../../src/repository/firestore";
-import type { ProductsType } from "../../src/repository/woo-api";
+import type { ProductsFromWooType } from "../../src/repository/woo-api";
 
 export const mockUserWithHashedPassword: UserFireStoreType = {
   user_id: "1",
@@ -81,7 +81,7 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType
   },
 };
 
-export const mockProducts: ProductsType = [
+export const mockProducts: ProductsFromWooType = [
   {
     id: 1,
     name: "product 1",

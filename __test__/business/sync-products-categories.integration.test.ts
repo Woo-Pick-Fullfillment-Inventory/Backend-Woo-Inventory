@@ -66,7 +66,7 @@ describe("Syncing products categories test", () => {
         })
       ).count,
     ).toEqual(1);
-    const fireStoreUsersProductsCategories = await viewCollectionFactory(db)(`users-products-categories/users-${mockUserForSyncingProducts.user_id}-products-categories/products-categories`);
+    const fireStoreUsersProductsCategories = await viewCollectionFactory(db)(`categories/users-${mockUserForSyncingProducts.user_id}/users-categories`);
     expect(fireStoreUsersProductsCategories.length).toEqual(64);
   });
 });
