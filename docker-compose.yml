@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  firestore-emulator:
+    image: fixl/firebase-emulator-suite:12.7
+    ports:
+      - "8888:8888"
+    environment:
+      - FIREBASE_PROJECT_ID=test-project
+      - FIRESTORE=true
+      - FIRESTORE_PORT=8888
+      - STORAGE=true
+      - STORAGE_PORT=9199
+      - AUTH=false
+  wiremock:
+    image: wiremock/wiremock:3.1.0
+    command: --verbose
+    ports:
+      - "1080:8080"
+    volumes:
+      - ${PWD}/__test__/wiremock:/home/wiremock

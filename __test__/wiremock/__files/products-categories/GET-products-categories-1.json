@@ -1,0 +1,30 @@
+[
+    {
+        "id": 27,
+        "name": "Bottoms",
+        "slug": "bottoms",
+        "parent": 17,
+        "description": "",
+        "display": "default",
+        "image": null,
+        "menu_order": 0,
+        "count": 25,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/27"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://sandbox.nextmoin.com/wp-json/wc/v3/products/categories/17"
+                }
+            ]
+        }
+    }
+]

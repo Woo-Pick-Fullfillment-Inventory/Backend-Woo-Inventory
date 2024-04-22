@@ -1,0 +1,78 @@
+on:
+  push:
+    branches:
+      - "main"
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  IMAGE_NAME: woopick-backend
+
+jobs:
+  build-push-gcr:
+    name: Build and push to GCR
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: Woo-Pick-Fullfillment-Inventory/Backend-Woo-Inventory
+          token: ${{ secrets.WOOPICK_GITHUB_TOKEN }}
+
+      - name: Authenticate to WIF
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SA_GH_ACTIONS }}
+          token_format: access_token
+          export_environment_variables: true
+
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
+        run: |
+          bash ./auto_update_tag.sh -v patch
+
+      - name: Build and push Docker image
+        env:
+          GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        run: |-
+          gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
+          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest .
+          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG
+
+  deploy-to-cloudrun:
+    name: Deploy to Cloud Run
+    needs: 
+      build-push-gcr
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Authenticate to WIF
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SA_GH_ACTIONS }}
+          token_format: access_token
+          export_environment_variables: true
+
+      - name: Prepare and Deploy to Cloud Run
+        run: |
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
+          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment.yml
+          sed -i "s|\$PRODUCTS_IMAGES_BUCKET|${{ secrets.PRODUCTS_IMAGES_BUCKET }}|g" cloudrun_deployment.yml
+
+          gcloud run services replace cloudrun_deployment.yml

@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  firebase-emulator:
+    image: fixl/firebase-emulator-suite:12.7
+    ports:
+      - "8888:8888"
+    environment:
+      - FIREBASE_PROJECT_ID=test-project
+      - FIRESTORE=true
+      - FIRESTORE_PORT=8888
+      - STORAGE=true
+      - STORAGE_PORT=9199
+      - AUTH=false
+  wiremock:
+    image: wiremock/wiremock:3.1.0
+    container_name: wiremock-container
+    command: --verbose
+    ports:
+      - "1080:8080"
+    volumes:
+      - ${PWD}/__test__/wiremock:/home/wiremock
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5003:5003
+    environment:
+      NODE_ENV: test
+      SERVICE_PORT: 5003
+      WOO_BASE_URL: http://wiremock:8080
+      JWT_SECRET: secret
+      FIRESTORE_EMULATOR_HOST: firebase-emulator:8888
+      FIRESTORE_PROJECT_ID: test-project
+      PROJECT_ID: test-project
+      PRODUCTS_IMAGES_BUCKET: test-bucket
+      FIREBASE_STORAGE_EMULATOR_HOST: firebase-emulator:9199
+    depends_on:
+      firebase-emulator:
+        condition: service_started
+      wiremock:
+        condition: service_started

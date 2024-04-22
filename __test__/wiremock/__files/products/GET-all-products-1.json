@@ -1,0 +1,336 @@
+[
+  {
+    "id": 2144,
+    "name": "Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis",
+    "slug": "gao-thuyen-rong-thai-premium-reis-hom-mali-reis",
+    "permalink": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/",
+    "date_created": "2022-06-19T11:04:50",
+    "date_created_gmt": "2022-06-19T09:04:50",
+    "date_modified": "2022-06-28T08:26:18",
+    "date_modified_gmt": "2022-06-28T06:26:18",
+    "type": "variable",
+    "status": "publish",
+    "featured": false,
+    "catalog_visibility": "visible",
+    "description": "<p>Nhóm: Gạo và Mì</p>\n<p>Xuất xứ : Thái Lan</p>\n<p>Nhà nhập khẩu: Thanh Cong Asia GmbH , Herzbergstraße 128-139/Halle 4, 10365 Berlin</p>\n<p>Hạn sử dụng: xem trên bao bì và để nơi thoáng mát.</p>\n",
+    "short_description": "<p>short description</p>\n",
+    "sku": "",
+    "price": "",
+    "regular_price": "",
+    "sale_price": "",
+    "date_on_sale_from": null,
+    "date_on_sale_from_gmt": null,
+    "date_on_sale_to": null,
+    "date_on_sale_to_gmt": null,
+    "on_sale": false,
+    "purchasable": false,
+    "total_sales": 0,
+    "virtual": false,
+    "downloadable": false,
+    "downloads": [],
+    "download_limit": -1,
+    "download_expiry": -1,
+    "external_url": "",
+    "button_text": "",
+    "tax_status": "taxable",
+    "tax_class": "",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "backorders": "no",
+    "backorders_allowed": false,
+    "backordered": false,
+    "low_stock_amount": "",
+    "sold_individually": false,
+    "weight": "",
+    "dimensions": {
+      "length": "",
+      "width": "",
+      "height": ""
+    },
+    "shipping_required": true,
+    "shipping_taxable": true,
+    "shipping_class": "",
+    "shipping_class_id": 0,
+    "reviews_allowed": true,
+    "average_rating": "0.00",
+    "rating_count": 0,
+    "upsell_ids": [],
+    "cross_sell_ids": [],
+    "parent_id": 0,
+    "purchase_note": "",
+    "categories": [
+      {
+        "id": 118,
+        "name": "Gạo",
+        "slug": "reis"
+      },
+      {
+        "id": 116,
+        "name": "Gạo và Mì",
+        "slug": "reis-nudeln"
+      }
+    ],
+    "tags": [],
+    "images": [
+      {
+        "id": 2209,
+        "date_created": "2022-06-28T10:20:25",
+        "date_created_gmt": "2022-06-28T06:20:25",
+        "date_modified": "2022-06-28T10:20:25",
+        "date_modified_gmt": "2022-06-28T06:20:25",
+        "src": "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/06/mali-rice.jpg",
+        "name": "mali rice",
+        "alt": ""
+      },
+      {
+        "id": 2213,
+        "date_created": "2022-06-28T10:25:42",
+        "date_created_gmt": "2022-06-28T06:25:42",
+        "date_modified": "2022-06-28T10:25:42",
+        "date_modified_gmt": "2022-06-28T06:25:42",
+        "src": "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/06/mali-rice-2.jpg",
+        "name": "mali rice 2",
+        "alt": ""
+      }
+    ],
+    "attributes": [
+      {
+        "id": 0,
+        "name": "Size",
+        "position": 0,
+        "visible": true,
+        "variation": true,
+        "options": ["18kg", "10kg", "5kg"],
+        "option_ids": ["18kg", "10kg", "5kg"]
+      }
+    ],
+    "default_attributes": [
+      {
+        "id": 0,
+        "name": "Size",
+        "option": "18kg"
+      }
+    ],
+    "variations": [2155, 2154, 2156],
+    "grouped_products": [],
+    "menu_order": 0,
+    "price_html": "",
+    "related_ids": [2555, 2181, 2558, 2186, 2624],
+    "meta_data": [
+      {
+        "id": 7343,
+        "key": "_last_editor_used_jetpack",
+        "value": "classic-editor"
+      },
+      {
+        "id": 7405,
+        "key": "klb_product_type",
+        "value": "Reis"
+      },
+      {
+        "id": 7406,
+        "key": "klb_product_badge_type",
+        "value": "type1"
+      },
+      {
+        "id": 7407,
+        "key": "_klb_single_video_input",
+        "value": ""
+      },
+      {
+        "id": 7408,
+        "key": "_klb_quantity_check",
+        "value": ""
+      },
+      {
+        "id": 7409,
+        "key": "_klb_min_quantity",
+        "value": ""
+      },
+      {
+        "id": 7410,
+        "key": "_klb_max_quantity",
+        "value": ""
+      },
+      {
+        "id": 7411,
+        "key": "_klb_step_quantity",
+        "value": ""
+      },
+      {
+        "id": 7415,
+        "key": "bacola_post_views_count",
+        "value": "1322"
+      },
+      {
+        "id": 7851,
+        "key": "_yoast_wpseo_content_score",
+        "value": "90"
+      },
+      {
+        "id": 7852,
+        "key": "_yoast_wpseo_estimated-reading-time-minutes",
+        "value": ""
+      }
+    ],
+    "stock_status": "instock",
+    "has_options": true,
+    "post_password": "",
+    "purchase_price": null,
+    "supplier_id": null,
+    "supplier_sku": "",
+    "barcode": null,
+    "atum_controlled": true,
+    "out_stock_date": null,
+    "out_stock_threshold": null,
+    "inheritable": false,
+    "inbound_stock": null,
+    "stock_on_hold": 0,
+    "sold_today": 0,
+    "sales_last_days": 0,
+    "reserved_stock": null,
+    "customer_returns": null,
+    "warehouse_damage": null,
+    "lost_in_post": null,
+    "other_logs": null,
+    "out_stock_days": 0,
+    "lost_sales": 0,
+    "has_location": null,
+    "update_date": "2024-03-18T01:17:09",
+    "atum_locations": [],
+    "atum_stock_status": "instock",
+    "restock_status": false,
+    "sales_update_date": "2024-03-18T01:17:09",
+    "calc_backorders": null,
+    "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v21.6 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH</title>\n<!-- Admin only notice: this page does not show a meta description because it does not have one, either write it for this page specifically or go into the [Yoast SEO - Settings] menu and set up a template. -->\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:locale\" content=\"en_US\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:type\" content=\"article\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:title\" content=\"Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:description\" content=\"short description\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:url\" content=\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:site_name\" content=\"Thanh Cong Asia GmbH\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"article:modified_time\" content=\"2022-06-28T06:26:18+00:00\" class=\"yoast-seo-meta-tag\" />\n<meta property=\"og:image\" content=\"https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/06/mali-rice.jpg\" class=\"yoast-seo-meta-tag\" />\n\t<meta property=\"og:image:width\" content=\"1000\" class=\"yoast-seo-meta-tag\" />\n\t<meta property=\"og:image:height\" content=\"1000\" class=\"yoast-seo-meta-tag\" />\n\t<meta property=\"og:image:type\" content=\"image/jpeg\" class=\"yoast-seo-meta-tag\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" class=\"yoast-seo-meta-tag\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/\",\"url\":\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/\",\"name\":\"Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH\",\"isPartOf\":{\"@id\":\"https://thanhcong-asia-gmbh.de/#website\"},\"datePublished\":\"2022-06-19T09:04:50+00:00\",\"dateModified\":\"2022-06-28T06:26:18+00:00\",\"breadcrumb\":{\"@id\":\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://thanhcong-asia-gmbh.de/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Shop\",\"item\":\"https://thanhcong-asia-gmbh.de/shop/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Gạo Thuyền Rồng &#8211; Thai Premium Reis Hom Mali Reis\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://thanhcong-asia-gmbh.de/#website\",\"url\":\"https://thanhcong-asia-gmbh.de/\",\"name\":\"Thanh Cong Asia GmbH\",\"description\":\"lieben Lebensmittel\",\"publisher\":{\"@id\":\"https://thanhcong-asia-gmbh.de/#/schema/person/0a87ae1f4ca1c4226195ab9f503c4b46\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://thanhcong-asia-gmbh.de/?s={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}],\"inLanguage\":\"en-US\"},{\"@type\":[\"Person\",\"Organization\"],\"@id\":\"https://thanhcong-asia-gmbh.de/#/schema/person/0a87ae1f4ca1c4226195ab9f503c4b46\",\"name\":\"vantinh-it\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https://thanhcong-asia-gmbh.de/#/schema/person/image/\",\"url\":\"https://secure.gravatar.com/avatar/e7c6862e1163ca9f7f8678367c0cdecb?s=96&d=mm&r=g\",\"contentUrl\":\"https://secure.gravatar.com/avatar/e7c6862e1163ca9f7f8678367c0cdecb?s=96&d=mm&r=g\",\"caption\":\"vantinh-it\"},\"logo\":{\"@id\":\"https://thanhcong-asia-gmbh.de/#/schema/person/image/\"},\"sameAs\":[\"http://localhost:8888/thanh-cong-asia-gmbh.de\"]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+    "yoast_head_json": {
+      "title": "Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH",
+      "robots": {
+        "index": "index",
+        "follow": "follow",
+        "max-snippet": "max-snippet:-1",
+        "max-image-preview": "max-image-preview:large",
+        "max-video-preview": "max-video-preview:-1"
+      },
+      "canonical": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/",
+      "og_locale": "en_US",
+      "og_type": "article",
+      "og_title": "Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH",
+      "og_description": "short description",
+      "og_url": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/",
+      "og_site_name": "Thanh Cong Asia GmbH",
+      "article_modified_time": "2022-06-28T06:26:18+00:00",
+      "og_image": [
+        {
+          "width": 1000,
+          "height": 1000,
+          "url": "https://thanhcong-asia-gmbh.de/wp-content/uploads/2022/06/mali-rice.jpg",
+          "type": "image/jpeg"
+        }
+      ],
+      "twitter_card": "summary_large_image",
+      "schema": {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/",
+            "url": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/",
+            "name": "Gạo Thuyền Rồng - Thai Premium Reis Hom Mali Reis - Thanh Cong Asia GmbH",
+            "isPartOf": {
+              "@id": "https://thanhcong-asia-gmbh.de/#website"
+            },
+            "datePublished": "2022-06-19T09:04:50+00:00",
+            "dateModified": "2022-06-28T06:26:18+00:00",
+            "breadcrumb": {
+              "@id": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/#breadcrumb"
+            },
+            "inLanguage": "en-US",
+            "potentialAction": [
+              {
+                "@type": "ReadAction",
+                "target": [
+                  "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/"
+                ]
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://thanhcong-asia-gmbh.de/product/gao-thuyen-rong-thai-premium-reis-hom-mali-reis/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://thanhcong-asia-gmbh.de/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Shop",
+                "item": "https://thanhcong-asia-gmbh.de/shop/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Gạo Thuyền Rồng &#8211; Thai Premium Reis Hom Mali Reis"
+              }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://thanhcong-asia-gmbh.de/#website",
+            "url": "https://thanhcong-asia-gmbh.de/",
+            "name": "Thanh Cong Asia GmbH",
+            "description": "lieben Lebensmittel",
+            "publisher": {
+              "@id": "https://thanhcong-asia-gmbh.de/#/schema/person/0a87ae1f4ca1c4226195ab9f503c4b46"
+            },
+            "potentialAction": [
+              {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://thanhcong-asia-gmbh.de/?s={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
+            ],
+            "inLanguage": "en-US"
+          },
+          {
+            "@type": ["Person", "Organization"],
+            "@id": "https://thanhcong-asia-gmbh.de/#/schema/person/0a87ae1f4ca1c4226195ab9f503c4b46",
+            "name": "vantinh-it",
+            "image": {
+              "@type": "ImageObject",
+              "inLanguage": "en-US",
+              "@id": "https://thanhcong-asia-gmbh.de/#/schema/person/image/",
+              "url": "https://secure.gravatar.com/avatar/e7c6862e1163ca9f7f8678367c0cdecb?s=96&d=mm&r=g",
+              "contentUrl": "https://secure.gravatar.com/avatar/e7c6862e1163ca9f7f8678367c0cdecb?s=96&d=mm&r=g",
+              "caption": "vantinh-it"
+            },
+            "logo": {
+              "@id": "https://thanhcong-asia-gmbh.de/#/schema/person/image/"
+            },
+            "sameAs": ["http://localhost:8888/thanh-cong-asia-gmbh.de"]
+          }
+        ]
+      }
+    },
+    "jetpack_sharing_enabled": true,
+    "_links": {
+      "self": [
+        {
+          "href": "https://thanhcong-asia-gmbh.de/wp-json/wc/v3/products/2144"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://thanhcong-asia-gmbh.de/wp-json/wc/v3/products"
+        }
+      ]
+    }
+  }
+]
