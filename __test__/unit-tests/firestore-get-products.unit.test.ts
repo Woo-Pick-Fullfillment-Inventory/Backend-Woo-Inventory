@@ -4,8 +4,8 @@ import {
   initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 
-import { firestoreRepository } from "../../src/repository/firestore/index.js";
 import { batchWriteProductsFactory } from "../../src/repository/firestore/users-products/batch-write-products.js";
+import { getProductsFactory } from "../../src/repository/firestore/users-products/get-products.js";
 import { generateProductsArray } from "../common/faker.js";
 
 import type { ProductsFireStorePaginationType } from "../../src/repository/firestore/users-products/get-products.js";
@@ -25,7 +25,7 @@ describe("Firestore get product", () => {
   });
 
   it("should get 10 products order by product id direction desc", async () => {
-    const result = (await firestoreRepository.product.getProducts({
+    const result = (await getProductsFactory(db)({
       userId: "1",
       field: "id",
       direction: "desc",
@@ -42,7 +42,7 @@ describe("Firestore get product", () => {
   });
 
   it("should get 10 products order by product name direction desc", async () => {
-    const result = (await firestoreRepository.product.getProducts({
+    const result = (await getProductsFactory(db)({
       userId: "1",
       field: "name",
       direction: "desc",
