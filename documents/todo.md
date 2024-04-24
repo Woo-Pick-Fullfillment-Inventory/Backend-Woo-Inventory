@@ -4,3 +4,4 @@
 4. Update node
 5. Use other config lib
 6. Use own docker
+7. use https://www.npmjs.com/package/envalid
