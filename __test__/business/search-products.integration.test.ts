@@ -4,8 +4,8 @@ import {
   initializeAdminApp,
 } from "@firebase/rules-unit-testing";
 
+import { batchWriteProductsFactory } from "../../src/repository/firestore/products/batch-write-products.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
-import { batchWriteProductsFactory } from "../../src/repository/firestore/users-products/batch-write-products.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { generateProductsArray } from "../common/faker.js";
 import { httpClient } from "../common/http-client.js";

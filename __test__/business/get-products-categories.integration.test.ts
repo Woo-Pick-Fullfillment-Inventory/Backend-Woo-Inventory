@@ -6,8 +6,8 @@ import {
 import { WireMockRestClient } from "wiremock-rest-client";
 
 import { recursiveSortById } from "../../src/helpers/sort-by-id.js";
+import { batchWriteProductsCategoriesFactory } from "../../src/repository/firestore/products-categories/batch-write-categories.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
-import { batchWriteProductsCategoriesFactory } from "../../src/repository/firestore/users-products-categories/batch-write-categories.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client";
 import { mockUserForSyncingProducts } from "../common/mock-data";

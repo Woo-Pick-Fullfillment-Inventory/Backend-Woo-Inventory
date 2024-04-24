@@ -1,6 +1,6 @@
 {
     "roots": ["<rootDir>"],
-    "testMatch": ["**/firestore-get-products.unit.test.ts"],
+    "testMatch": ["**/firestore-operations.unit.test.ts"],
     "extensionsToTreatAsEsm": [".ts"],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"

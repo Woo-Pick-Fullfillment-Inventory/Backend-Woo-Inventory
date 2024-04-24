@@ -1,11 +1,10 @@
-import logger from "../../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { ProductsFireStoreSchema } from "../index.js";
-
-import type {
-  ProductFireStoreAttributeType,
-  ProductsFireStoreType,
-} from "../index.js";
+import logger from "../../../src/modules/create-logger.js";
+import { isResponseTypeTrue } from "../../../src/modules/create-response-type-guard.js";
+import {
+  type ProductFireStoreAttributeType,
+  ProductsFireStoreSchema,
+  type ProductsFireStoreType,
+} from "../../../src/repository/firestore/index.js";
 
 type GetProductsInputType = {
   userId: string;
@@ -14,13 +13,13 @@ type GetProductsInputType = {
   limit: number;
 };
 
-export type ProductsFireStorePaginationType = {
+type ProductsFireStorePaginationType = {
   lastProduct: number | string | null;
   products: ProductsFireStoreType | [];
 };
-// todo: type check
-export const getProductsFactory = (
-  firestoreClient: FirebaseFirestore.Firestore,
+
+export const getProductsFactoryEmulator = (
+  firestoreEmulator: FirebaseFirestore.Firestore,
 ) => {
   return ({
     userId,
@@ -31,7 +30,7 @@ export const getProductsFactory = (
     return async (
       lastProductFromPrevious?: string | number,
     ): Promise<ProductsFireStorePaginationType> => {
-      let query = firestoreClient
+      let query = firestoreEmulator
         .collection("products")
         .doc(`users-${userId}`)
         .collection("users-products")

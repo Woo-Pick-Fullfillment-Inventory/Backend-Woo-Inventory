@@ -12,6 +12,7 @@
     "build": "tsc -p tsconfig-build.json",
     "test": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.config.json --detectOpenHandles",
     "test-local": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.local.config.json --detectOpenHandles",
+    "test-clear-cache": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.local.config.json --clearCache --detectOpenHandles",
     "dev": "nodemon"
   },
   "author": "",

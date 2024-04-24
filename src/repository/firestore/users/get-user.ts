@@ -7,7 +7,6 @@ import type {
   UserFireStoreType,
 } from "../index.js";
 
-// todo: type check
 export const getUserFactory = (firestoreClient: FirebaseFirestore.Firestore) => {
   return (userAttribute: UserAttributeType) => {
     return async (value: string): Promise<UserFireStoreType | undefined> => {
