@@ -7,8 +7,8 @@ import type {
 } from "axios";
 
 type InterceptorType = {
-  onTrue: (response: AxiosResponse) => AxiosResponse;
-  onError: (error: AxiosError) => AxiosError;
+  onFulfillment: (response: AxiosResponse) => AxiosResponse;
+  onRejected: (error: AxiosError) => Promise<AxiosError>;
 };
 
 type axiosOptions = {
@@ -24,8 +24,8 @@ const createAxiosClient = <R>({
 
   interceptors.forEach((interceptor) => {
     axiosClient.interceptors.response.use(
-      interceptor.onTrue,
-      interceptor.onError,
+      interceptor.onFulfillment,
+      interceptor.onRejected,
     );
   });
 

@@ -1,17 +1,13 @@
-import createAxiosClient from "../../../modules/create-axios-client.js";
-import logger from "../../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
+import createAxiosClient from "../../../modules/axios/create-axios-client.js";
+import {
+  axiosOnFulfillmentErrorLogger,
+  axiosOnRejectedErrorLogger,
+} from "../../../modules/axios/create-axios-error-logger-mappings.js";
 import {
   type ProductFromWooType,
   ProductsFromWooSchema,
   type ProductsFromWooType,
 } from "../index.js";
-
-import type {
-  AxiosError,
-  AxiosResponse,
-} from "axios";
-
 type getAllProductsPaginationResponse = {
   products: ProductFromWooType[];
   totalItems: number;
@@ -39,39 +35,11 @@ export const getProductsPaginationFactory = async ({
     },
     interceptors: [
       {
-        onTrue: (response: AxiosResponse) => {
-          if (response.status !== 200) {
-            logger.log(
-              "error",
-              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} 
-               with status code ${response.status} is not expected`,
-            );
-            throw new Error("Response status code not expected");
-          }
-          const isSystemStatusTypeValid = isResponseTypeTrue(
-            ProductsFromWooSchema,
-            response.data,
-            true,
-          );
-          if (!isSystemStatusTypeValid.isValid) {
-            logger.log(
-              "error",
-              `onTrue Intercepted: request ${baseUrl}${response.config.url}${response.config.url} response error ${isSystemStatusTypeValid.errorMessage}` +
-                ` ***Expected*** ${JSON.stringify(ProductsFromWooSchema)} ***Received*** ${JSON.stringify(response.data)}`,
-            );
-            throw new Error("Response type not expected");
-          }
-          return response;
-        },
-        onError: (error: AxiosError) => {
-          if (error.config) {
-            logger.log(
-              "error",
-              `onError Intercepted: request ${baseUrl}${error.config.url}, ${JSON.stringify(error)}`,
-            );
-          }
-          throw new Error("Axios Error");
-        },
+        onFulfillment: axiosOnFulfillmentErrorLogger({
+          expectedStatusCode: 200,
+          expectedSchema: ProductsFromWooSchema,
+        }),
+        onRejected: axiosOnRejectedErrorLogger,
       },
     ],
   });

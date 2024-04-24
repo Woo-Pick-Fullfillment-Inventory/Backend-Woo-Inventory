@@ -1,9 +1,8 @@
+import { PRODUCT_PER_PAGE } from "../constants/products-categories.js";
 import {
   type ProductsWooClientType,
   wooApiRepository,
 } from "../repository/woo-api/index.js";
-
-const PER_PAGE = 50;
 
 const fetchProductsBatch = async (
   baseUrl: string,
@@ -13,7 +12,7 @@ const fetchProductsBatch = async (
   const result = await wooApiRepository.product.getProductsPagination({
     baseUrl: baseUrl,
     token: wooBasicAuth,
-    perPage: PER_PAGE,
+    perPage: PRODUCT_PER_PAGE,
     page: currentPage,
   });
   return result.products;

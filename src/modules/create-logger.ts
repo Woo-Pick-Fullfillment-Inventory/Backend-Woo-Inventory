@@ -13,6 +13,8 @@ const logger =
             switch (level) {
               case "info":
                 return colors.cyan(level);
+              case "debug":
+                return colors.magenta(level);
               case "warn":
                 return colors.yellow(level);
               case "error":
