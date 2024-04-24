@@ -1,16 +1,18 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
+import { ERRORS } from "../constants/error.js";
+
 dotenv.config();
 
 export const verifyAuthorizationHeader = (
   authorizationHeader: string | undefined,
 ): string => {
-  if (!authorizationHeader) throw new Error("no authorization header found");
+  if (!authorizationHeader) throw new Error(ERRORS.NO_AUTHORIZATION_HEADER);
 
   const token = authorizationHeader.split(" ")[1];
   if (!token)
-    throw new Error("no token found");
+    throw new Error(ERRORS.NO_TOKEN_FOUND);
 
   return (
     jwt.verify(token, process.env["JWT_SECRET"] as string) as {

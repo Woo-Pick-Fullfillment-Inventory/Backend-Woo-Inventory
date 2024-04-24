@@ -8,6 +8,7 @@ import authRouter from "./business/authentication/index.js";
 import fileRouter from "./business/files/index.js";
 import productRouter from "./business/products/index.js";
 import logger from "./modules/create-logger.js";
+import redisClient from "./repository/redis/index.js";
 import webhookRouter from "./webhook/index.js";
 
 import type {
@@ -63,6 +64,10 @@ if (
   logger.log("info", process.env);
   process.exit(1);
 }
+
+redisClient;
+
+redisClient.set("key", "value");
 
 app.listen(process.env["SERVICE_PORT"], () => {
   console.log(`Server is running on port ${process.env["SERVICE_PORT"]}`);

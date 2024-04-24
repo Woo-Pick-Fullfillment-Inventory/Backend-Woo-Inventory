@@ -1,5 +1,7 @@
 import { Firestore } from "@google-cloud/firestore";
 
+import { batchWriteProductsCategoriesFactory } from "./categories/batch-write-categories.js";
+import { getProductsCategoriesFactory } from "./categories/get-categories.js";
 import { clearCollectionFactory } from "./collection/clear-collection.js";
 import { viewCollectionFactory } from "./collection/view-collection.js";
 import {
@@ -17,8 +19,6 @@ import {
   getProductsFactory,
 } from "./products/get-products.js";
 import { insertProductFactory } from "./products/insert-product.js";
-import { batchWriteProductsCategoriesFactory } from "./products-categories/batch-write-categories.js";
-import { getProductsCategoriesFactory } from "./products-categories/get-categories.js";
 import { getUserFactory } from "./users/get-user.js";
 import { insertUserFactory } from "./users/insert-user.js";
 import { updateUserFactory } from "./users/update-user.js";

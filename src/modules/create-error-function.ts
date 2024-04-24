@@ -9,7 +9,6 @@ import type {
 export const handleErrorFunction =
   (fn: (req: Request, res: Response) => Promise<unknown>) =>
     async (req: Request, res: Response, next: NextFunction) => {
-      logger.log("info", `${req.method} ${req.url} - ${res.statusCode}`);
       try {
         await Promise.resolve(fn(req, res));
       } catch (error: Error | unknown) {
