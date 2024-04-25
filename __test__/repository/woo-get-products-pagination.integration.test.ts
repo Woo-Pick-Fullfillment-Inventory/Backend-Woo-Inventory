@@ -59,7 +59,7 @@ describe("Get products from woo api test", () => {
         perPage: 1,
         page: 1,
       }),
-    ).rejects.toThrow("Axios Error");
+    ).rejects.toThrow();
     expect(
       (
         await woocommerceApiMockServer.requests.getCount({

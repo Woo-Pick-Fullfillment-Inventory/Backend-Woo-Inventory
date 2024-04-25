@@ -1,18 +1,13 @@
-import { response } from "express";
-
-import createAxiosClient from "../../../modules/create-axios-client.js";
-import logger from "../../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../../modules/create-response-type-guard.js";
-import { ProductSchema } from "../models/products.type.js";
-
-import type {
-  ProductFromWooType,
-  ProductType,
-} from "../models/products.type.js";
-import type {
-  AxiosError,
-  AxiosResponse,
-} from "axios";
+import createAxiosClient from "../../../modules/axios/create-axios-client.js";
+import {
+  axiosOnFulfillmentErrorLogger,
+  axiosOnRejectedErrorLogger,
+} from "../../../modules/axios/create-axios-error-logger-mappings.js";
+import {
+  ProductFromWooSchema,
+  type ProductFromWooType,
+  type ProductWooClientType,
+} from "../index.js";
 
 type AddProductRequestFromUserType = {
   name: string;
@@ -45,7 +40,7 @@ export const postAddProductFactory = async ({
   baseUrl: string;
   token: string;
   addProductRequestFromUser: AddProductRequestFromUserType;
-}): Promise<Pick<ProductType, "id" | "images">> => {
+}): Promise<Pick<ProductWooClientType, "id" | "images">> => {
   const { post } = createAxiosClient<ProductFromWooType>({
     config: {
       baseURL: baseUrl,
@@ -56,37 +51,15 @@ export const postAddProductFactory = async ({
     },
     interceptors: [
       {
-        onTrue: (response: AxiosResponse) => {
-          if (response.status !== 201) {
-            logger.log(
-              "error",
-              `onTrue Intercepted: request ${baseUrl}${response.config.url} with status code ${response.status} is not expected`,
-            );
-            throw new Error("Response not expected");
-          }
-          if (!isResponseTypeTrue(ProductSchema, response.data, true).isValid) {
-            logger.log(
-              "error",
-              `onTrue Intercepted: request ${baseUrl}${response.config.url} with ${response.data} does not return expected system status type`+
-              ` ***Expected*** ${JSON.stringify(ProductSchema)} ***Received*** ${JSON.stringify(response.data)}`,
-            );
-            throw new Error("Response not expected");
-          }
-          return response;
-        },
-        onError: (error: AxiosError) => {
-          if (error.config) {
-            logger.log(
-              "error",
-              `onError Intercepted: request ${baseUrl}${error.config.url} with response status ${response.status}:`,
-              JSON.stringify(error),
-            );
-          }
-          throw new Error("Axios Error");
-        },
+        onFulfillment: axiosOnFulfillmentErrorLogger({
+          expectedStatusCode: 201,
+          expectedSchema: ProductFromWooSchema,
+        }),
+        onRejected: axiosOnRejectedErrorLogger,
       },
     ],
   });
+
   const { data } = await post(
     "/wp-json/wc/v3/products",
     addProductRequestFromUser,

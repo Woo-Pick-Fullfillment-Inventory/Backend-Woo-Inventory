@@ -3,7 +3,7 @@ import {
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
 } from "../../src/repository/firestore/index.js";
-import { ProductSchema } from "../../src/repository/woo-api/index.js";
+import { ProductFromWooSchema } from "../../src/repository/woo-api/index.js";
 
 describe("return type check tests", () => {
   it("should return error", async () => {
@@ -52,7 +52,7 @@ describe("return type check tests", () => {
       ],
       stock_quantity: null,
     };
-    const result = isResponseTypeTrue(ProductSchema, data, true) as {
+    const result = isResponseTypeTrue(ProductFromWooSchema, data, true) as {
       isValid: boolean;
       errorMessage: string;
     };

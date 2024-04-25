@@ -2,12 +2,12 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
-const ImageSchema = Type.Object({
+const ImageFromWooSchema = Type.Object({
   id: Type.Number(),
   src: Type.String(),
 });
 
-export const ProductSchema = Type.Object({
+export const ProductFromWooSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
   sku: Type.String(),
@@ -19,7 +19,7 @@ export const ProductSchema = Type.Object({
       slug: Type.String(),
     }),
   ),
-  images: Type.Array(ImageSchema),
+  images: Type.Array(ImageFromWooSchema),
   price: Type.String(),
   regular_price: Type.String(),
   sale_price: Type.String(),
@@ -41,14 +41,14 @@ export const ProductSchema = Type.Object({
   ]),
 });
 
-export type ProductFromWooType = Static<typeof ProductSchema>;
+export type ProductFromWooType = Static<typeof ProductFromWooSchema>;
 
-export const ProductsSchema = Type.Array(ProductSchema);
+export const ProductsFromWooSchema = Type.Array(ProductFromWooSchema);
 
-export type ProductsFromWooType = Static<typeof ProductsSchema>;
+export type ProductsFromWooType = Static<typeof ProductsFromWooSchema>;
 
 // User receive this product type with id
-export type ProductType = {
+export type ProductWooClientType = {
     id: number;
     name: string;
     sku: string;
@@ -70,53 +70,4 @@ export type ProductType = {
     tax_class: "standard" | "reduced-rate" | "zero-rate" | "";
 }
 
-export type ProductsType = ProductType[];
-
-export const ProductsCategorySchema = Type.Object({
-  id: Type.Number(),
-  name: Type.String(),
-  slug: Type.String(),
-  parent: Type.Number(),
-  description: Type.String(),
-  display: Type.Union([
-    Type.Literal("default"),
-    Type.Literal("products"),
-    Type.Literal("subcategories"),
-    Type.Literal("both"),
-  ]),
-  image: Type.Union([
-    ImageSchema,
-    Type.Null(),
-  ]),
-  menu_order: Type.Union([
-    Type.Number(),
-    Type.Null(),
-  ]),
-  count: Type.Union([
-    Type.Number(),
-    Type.Null(),
-  ]),
-});
-
-export const ProductsCategoriesSchema = Type.Array(ProductsCategorySchema);
-
-export type ProductsCategoryFromWooType = Static<typeof ProductsCategorySchema>;
-
-export type ProductsCategoriesFromWooType = Static<typeof ProductsCategoriesSchema>;
-
-export type ProductsCategoryType = {
-  id: number;
-  name: string;
-  slug: string;
-  parent: number;
-  description: string;
-  display: "default" | "products" | "subcategories" | "both";
-  image: {
-    id: number;
-    src: string;
-  } | null;
-  menu_order: number | null;
-  count: number | null;
-};
-
-export type ProductsCategoriesType = ProductsCategoryType[];
+export type ProductsWooClientType = ProductWooClientType[];

@@ -9,8 +9,6 @@ services:
       - FIREBASE_PROJECT_ID=test-project
       - FIRESTORE=true
       - FIRESTORE_PORT=8888
-      - STORAGE=true
-      - STORAGE_PORT=9199
       - AUTH=false
   wiremock:
     image: wiremock/wiremock:3.1.0
@@ -19,3 +17,8 @@ services:
       - "1080:8080"
     volumes:
       - ${PWD}/__test__/wiremock:/home/wiremock
+  redis:
+    image: redis:6.2
+    restart: always
+    ports:
+      - "6379:6379"

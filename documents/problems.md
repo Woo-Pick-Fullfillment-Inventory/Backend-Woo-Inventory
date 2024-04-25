@@ -20,4 +20,8 @@ type = {
   weight: string;
 };
 
-3. Name dupplicates between firestore and woo Repository
+=> Resolved
+
+3. Name dupplicates between firestore and woo Repository => Resolved
+
+4. check system status at opening app => ensure that token is available!

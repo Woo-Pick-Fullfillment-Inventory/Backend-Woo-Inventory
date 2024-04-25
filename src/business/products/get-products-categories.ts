@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
+import { ROOT_CATEGORY_PARENT_ID } from "../../constants/products-categories.js";
 import { convertCategoriesToCLient } from "../../helpers/convert-categories.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -13,8 +14,6 @@ import type {
 } from "express";
 
 dotenv.config();
-
-const ROOT_CATEGORY_ID = 0;
 
 const SERVICE_ERRORS = {
   notAuthorized: {
@@ -74,7 +73,7 @@ export const getProductsCategories = async (req: Request, res: Response) => {
   return res.status(201).send(
     convertCategoriesToCLient({
       data: categories,
-      parentId: ROOT_CATEGORY_ID,
+      parentId: ROOT_CATEGORY_PARENT_ID,
     }),
   );
 };
