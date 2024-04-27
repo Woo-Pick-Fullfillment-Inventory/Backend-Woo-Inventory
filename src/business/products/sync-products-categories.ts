@@ -2,6 +2,7 @@ import { Type } from "@sinclair/typebox";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
+import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../constants/products-categories.js";
 import fetchAllProductsCategories from "../../helpers/fetch-products-categories-batch.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
@@ -131,9 +132,9 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < categories.length; i += 100) {
+  for (let i = 0; i < categories.length; i += FIRESTORE_ALLOWED_BATCH_SIZE) {
     await firestoreRepository.productCategory.batchWriteProductsCategories(
-      categories.slice(i, i + 100),
+      categories.slice(i, i + FIRESTORE_ALLOWED_BATCH_SIZE),
       userId,
     );
   }

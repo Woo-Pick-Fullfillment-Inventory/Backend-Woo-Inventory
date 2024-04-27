@@ -1,15 +1,17 @@
+import { ERRORS } from "../../../constants/error.js";
 import createAxiosClient from "../../../modules/axios/create-axios-client.js";
 import {
   axiosOnFulfillmentErrorLogger,
   axiosOnRejectedErrorLogger,
 } from "../../../modules/axios/create-axios-error-logger-mappings.js";
 import {
-  type ProductFromWooType,
-  ProductsFromWooSchema,
-  type ProductsFromWooType,
+  type ProductWooType,
+  ProductsWooSchema,
+  type ProductsWooType,
 } from "../index.js";
+
 type getAllProductsPaginationResponse = {
-  products: ProductFromWooType[];
+  products: ProductWooType[];
   totalItems: number;
   totalPages: number;
 };
@@ -25,7 +27,7 @@ export const getProductsPaginationFactory = async ({
   perPage: number;
   page: number;
 }): Promise<getAllProductsPaginationResponse> => {
-  const { get } = createAxiosClient<ProductsFromWooType>({
+  const { get } = createAxiosClient<ProductsWooType>({
     config: {
       baseURL: baseUrl,
       headers: {
@@ -37,7 +39,7 @@ export const getProductsPaginationFactory = async ({
       {
         onFulfillment: axiosOnFulfillmentErrorLogger({
           expectedStatusCode: 200,
-          expectedSchema: ProductsFromWooSchema,
+          expectedSchema: ProductsWooSchema,
         }),
         onRejected: axiosOnRejectedErrorLogger,
       },
@@ -56,31 +58,11 @@ export const getProductsPaginationFactory = async ({
     headers["x-wp-total"] === undefined ||
     headers["x-wp-totalpages"] === undefined
   ) {
-    throw new Error("Response headers not expected");
+    throw new Error(ERRORS.INVALID_RESPONSE_HEADERS);
   }
 
   return {
-    products: data.map((product) => ({
-      id: product.id,
-      name: product.name,
-      sku: product.sku,
-      slug: product.slug,
-      categories: product.categories.map((category) => ({
-        id: category.id,
-        name: category.name,
-        slug: category.slug,
-      })),
-      images: product.images.map((image) => ({
-        id: image.id,
-        src: image.src,
-      })),
-      price: product.price,
-      regular_price: product.regular_price,
-      sale_price: product.sale_price,
-      tax_class: product.tax_class,
-      tax_status: product.tax_status,
-      stock_quantity: product.stock_quantity,
-    })),
+    products: data,
     totalItems: parseInt(headers["x-wp-total"] as string, 10),
     totalPages: parseInt(headers["x-wp-totalpages"] as string, 10),
   };

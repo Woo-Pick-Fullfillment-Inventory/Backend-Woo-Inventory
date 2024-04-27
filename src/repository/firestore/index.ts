@@ -33,7 +33,9 @@ import type {
   AddProductFireStoreType,
   ProductFireStoreAttributeType,
   ProductFireStoreType,
+  ProductFirestoreInputType,
   ProductsFireStoreType,
+  ProductsFirestoreInputType,
 } from "./models/product.type.js";
 import type {
   UserAttributeType,
@@ -91,4 +93,6 @@ export {
   ProductsCategoryFireStoreClientType,
   ProductsCategoriesFireStoreClientType,
   ProductsFireStorePaginationType,
+  ProductFirestoreInputType,
+  ProductsFirestoreInputType,
 };

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
+import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../constants/products-categories.js";
 import { fetchAllProducts } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
@@ -129,9 +130,9 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < products.length; i += 100) {
+  for (let i = 0; i < products.length; i += FIRESTORE_ALLOWED_BATCH_SIZE) {
     await firestoreRepository.product.batchWriteProducts(
-      products.slice(i, i + 100),
+      products.slice(i, i + FIRESTORE_ALLOWED_BATCH_SIZE),
       userId,
     );
   }

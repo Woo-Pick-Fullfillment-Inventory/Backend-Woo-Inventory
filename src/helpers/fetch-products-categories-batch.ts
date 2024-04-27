@@ -1,6 +1,6 @@
 import { CATEGORIES_PER_PAGE } from "../constants/products-categories.js";
 import {
-  type ProductsCategoriesWooClientType,
+  type ProductsCategoriesWooType,
   wooApiRepository,
 } from "../repository/woo-api/index.js";
 
@@ -26,16 +26,16 @@ const fetchAllProductsCategories = async ({
   baseUrl: string;
   wooBasicAuth: string;
   totalItems: number;
-}): Promise<ProductsCategoriesWooClientType> => {
+}): Promise<ProductsCategoriesWooType> => {
   let currentChunk = 1;
   let shouldContinue = true;
-  let allProductsCategoriesToBeSynced: ProductsCategoriesWooClientType = [];
+  let allProductsCategoriesToBeSynced: ProductsCategoriesWooType = [];
   let totalChunks = Math.ceil(totalItems / 50);
 
   while (shouldContinue) {
     const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 50);
 
-    const promises: Promise<ProductsCategoriesWooClientType>[] = [];
+    const promises: Promise<ProductsCategoriesWooType>[] = [];
 
     for (let i = 0; i < numBatches; i++) {
       promises.push(fetchCategoriesBatch(baseUrl, wooBasicAuth, currentChunk));

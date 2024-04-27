@@ -2,6 +2,12 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
+export const ProductFirestoreSchemaInput = Type.Object({ id: Type.Number() });
+
+export type ProductFirestoreInputType = Static<typeof ProductFirestoreSchemaInput>;
+
+export type ProductsFirestoreInputType = ProductFirestoreInputType[];
+
 const ImageSchema = Type.Object({
   id: Type.Number(),
   src: Type.String(),

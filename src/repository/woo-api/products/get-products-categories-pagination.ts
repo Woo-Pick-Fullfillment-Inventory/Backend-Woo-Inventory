@@ -1,15 +1,16 @@
+import { ERRORS } from "../../../constants/error.js";
 import createAxiosClient from "../../../modules/axios/create-axios-client.js";
 import {
   axiosOnFulfillmentErrorLogger,
   axiosOnRejectedErrorLogger,
 } from "../../../modules/axios/create-axios-error-logger-mappings.js";
 import {
-  ProductsCategoriesFromWooSchema,
-  type ProductsCategoriesFromWooType,
+  ProductsCategoriesWooSchema,
+  type ProductsCategoriesWooType,
 } from "../index.js";
 
 type getAllProductsPaginationResponse = {
-  categories: ProductsCategoriesFromWooType;
+  categories: ProductsCategoriesWooType;
   totalItems: number;
   totalPages: number;
 };
@@ -25,7 +26,7 @@ export const getProductsCategoriesPaginationFactory = async ({
   perPage: number;
   page: number;
 }): Promise<getAllProductsPaginationResponse> => {
-  const { get } = createAxiosClient<ProductsCategoriesFromWooType>({
+  const { get } = createAxiosClient<ProductsCategoriesWooType>({
     config: {
       baseURL: baseUrl,
       headers: {
@@ -37,7 +38,7 @@ export const getProductsCategoriesPaginationFactory = async ({
       {
         onFulfillment: axiosOnFulfillmentErrorLogger({
           expectedStatusCode: 200,
-          expectedSchema: ProductsCategoriesFromWooSchema,
+          expectedSchema: ProductsCategoriesWooSchema,
         }),
         onRejected: axiosOnRejectedErrorLogger,
       },
@@ -56,24 +57,11 @@ export const getProductsCategoriesPaginationFactory = async ({
     headers["x-wp-total"] === undefined ||
     headers["x-wp-totalpages"] === undefined
   ) {
-    throw new Error("Response headers not expected");
+    throw new Error(ERRORS.INVALID_RESPONSE_HEADERS);
   }
 
   return {
-    categories: data.map((category) => ({
-      id: category.id,
-      name: category.name,
-      slug: category.slug,
-      parent: category.parent,
-      description: category.description,
-      display: category.display,
-      image: category.image ? {
-        id: category.image.id,
-        src: category.image.src,
-      } : null,
-      menu_order: category.menu_order || null,
-      count: category.count || null,
-    })),
+    categories: data,
     totalItems: parseInt(headers["x-wp-total"] as string, 10),
     totalPages: parseInt(headers["x-wp-totalpages"] as string, 10),
   };

@@ -1,13 +1,10 @@
 import { Type } from "@sinclair/typebox";
 
+import { ImageWooSchema } from "../index.js";
+
 import type { Static } from "@sinclair/typebox";
 
-const ImageFromWooSchema = Type.Object({
-  id: Type.Number(),
-  src: Type.String(),
-});
-
-export const ProductsCategoryFromWooSchema = Type.Object({
+export const ProductsCategoryWooSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),
   slug: Type.String(),
@@ -20,7 +17,7 @@ export const ProductsCategoryFromWooSchema = Type.Object({
     Type.Literal("both"),
   ]),
   image: Type.Union([
-    ImageFromWooSchema,
+    ImageWooSchema,
     Type.Null(),
   ]),
   menu_order: Type.Union([
@@ -33,27 +30,10 @@ export const ProductsCategoryFromWooSchema = Type.Object({
   ]),
 });
 
-export const ProductsCategoriesFromWooSchema = Type.Array(ProductsCategoryFromWooSchema);
+export const ProductsCategoriesWooSchema = Type.Array(ProductsCategoryWooSchema);
 
-export type ProductsCategoryFromWooType = Static<typeof ProductsCategoryFromWooSchema>;
+export type ProductsCategoryWooType = Static<typeof ProductsCategoryWooSchema>;
 
-export type ProductsCategoriesFromWooType = Static<
-  typeof ProductsCategoriesFromWooSchema
+export type ProductsCategoriesWooType = Static<
+  typeof ProductsCategoriesWooSchema
 >;
-
-export type ProductsCategoryWooClientType = {
-  id: number;
-  name: string;
-  slug: string;
-  parent: number;
-  description: string;
-  display: "default" | "products" | "subcategories" | "both";
-  image: {
-    id: number;
-    src: string;
-  } | null;
-  menu_order: number | null;
-  count: number | null;
-};
-
-export type ProductsCategoriesWooClientType = ProductsCategoryWooClientType[];

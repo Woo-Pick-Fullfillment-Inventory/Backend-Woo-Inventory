@@ -1,30 +1,32 @@
 import {
-  ProductsCategoriesFromWooSchema,
-  ProductsCategoryFromWooSchema,
+  ProductsCategoriesWooSchema,
+  ProductsCategoryWooSchema,
 } from "./models/category.tye.js";
 import {
-  ProductFromWooSchema,
-  ProductsFromWooSchema,
-} from "./models/products.type.js";
-import { SystemStatusFromWooSchema } from "./models/systems.type.js";
+  ImageWooSchema,
+  type ImageWooType,
+} from "./models/image.type.js";
+import {
+  ProductWooSchema,
+  ProductsWooSchema,
+} from "./models/product.type.js";
+import {
+  SystemStatusWooSchema,
+  type SystemStatusWooType,
+} from "./models/system.type.js";
 import { getProductsCategoriesPaginationFactory } from "./products/get-products-categories-pagination.js";
 import { getProductsPaginationFactory } from "./products/get-products-pagination.js";
 import { postAddProductFactory } from "./products/post-add-product.js";
 import { getSystemStatusFactory } from "./system/get-system-status.js";
 
 import type {
-  ProductsCategoriesFromWooType,
-  ProductsCategoriesWooClientType,
-  ProductsCategoryFromWooType,
-  ProductsCategoryWooClientType,
+  ProductsCategoriesWooType,
+  ProductsCategoryWooType,
 } from "./models/category.tye.js";
 import type {
-  ProductFromWooType,
-  ProductWooClientType,
-  ProductsFromWooType,
-  ProductsWooClientType,
-} from "./models/products.type.js";
-import type { SystemStatusFromWooType } from "./models/systems.type.js";
+  ProductWooType,
+  ProductsWooType,
+} from "./models/product.type.js";
 
 export const wooApiRepository = {
   system: { getSystemStatus: getSystemStatusFactory },
@@ -36,18 +38,16 @@ export const wooApiRepository = {
 };
 
 export {
-  ProductFromWooType,
-  ProductsFromWooType,
-  ProductWooClientType,
-  ProductsWooClientType,
-  SystemStatusFromWooType,
-  ProductsCategoryFromWooType,
-  ProductsCategoriesFromWooType,
-  ProductsCategoryWooClientType,
-  ProductsCategoriesWooClientType,
-  SystemStatusFromWooSchema,
-  ProductsFromWooSchema,
-  ProductFromWooSchema,
-  ProductsCategoryFromWooSchema,
-  ProductsCategoriesFromWooSchema,
+  ProductWooType,
+  ProductsWooType,
+  SystemStatusWooType,
+  ProductsCategoryWooType,
+  ProductsCategoriesWooType,
+  ImageWooType,
+  SystemStatusWooSchema,
+  ProductsWooSchema,
+  ProductWooSchema,
+  ProductsCategoryWooSchema,
+  ProductsCategoriesWooSchema,
+  ImageWooSchema,
 };

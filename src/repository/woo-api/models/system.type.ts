@@ -2,7 +2,7 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
-export const SystemStatusFromWooSchema = Type.Object({
+export const SystemStatusWooSchema = Type.Object({
   environment: Type.Object({
     home_url: Type.String(),
     site_url: Type.String(),
@@ -10,4 +10,4 @@ export const SystemStatusFromWooSchema = Type.Object({
   }),
 });
 
-export type SystemStatusFromWooType = Static<typeof SystemStatusFromWooSchema>;
+export type SystemStatusWooType = Static<typeof SystemStatusWooSchema>;

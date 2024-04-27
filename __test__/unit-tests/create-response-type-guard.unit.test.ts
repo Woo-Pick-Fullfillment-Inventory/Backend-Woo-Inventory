@@ -3,7 +3,7 @@ import {
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
 } from "../../src/repository/firestore/index.js";
-import { ProductFromWooSchema } from "../../src/repository/woo-api/index.js";
+import { ProductWooSchema } from "../../src/repository/woo-api/index.js";
 
 describe("return type check tests", () => {
   it("should return error", async () => {
@@ -52,13 +52,13 @@ describe("return type check tests", () => {
       ],
       stock_quantity: null,
     };
-    const result = isResponseTypeTrue(ProductFromWooSchema, data, true) as {
+    const result = isResponseTypeTrue(ProductWooSchema, data, true) as {
       isValid: boolean;
       errorMessage: string;
     };
     expect(result.isValid).toBe(false);
     expect(result.errorMessage).toBe(
-      "#/required must have required property 'sale_price'; #/required must have required property 'tax_status'; #/required must have required property 'tax_class'; #/properties/price/type must be string",
+      "#/required must have required property 'sale_price'; #/properties/price/type must be string",
     );
   });
 });
