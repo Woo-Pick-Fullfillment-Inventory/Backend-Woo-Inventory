@@ -1,8 +1,11 @@
 import { Type } from "@sinclair/typebox";
 
-import { ImageWooSchema } from "../index.js";
-
 import type { Static } from "@sinclair/typebox";
+
+export const ImageWooSchema = Type.Object({
+  id: Type.Number(),
+  src: Type.String(),
+});
 
 export const ProductWooSchema = Type.Object({
   id: Type.Number(),

@@ -3,10 +3,6 @@ import {
   ProductsCategoryWooSchema,
 } from "./models/category.tye.js";
 import {
-  ImageWooSchema,
-  type ImageWooType,
-} from "./models/image.type.js";
-import {
   OrderWooSchema,
   OrdersWooSchema,
 } from "./models/order.type.js";
@@ -53,7 +49,6 @@ export {
   ProductWooSchema,
   ProductsCategoryWooSchema,
   ProductsCategoriesWooSchema,
-  ImageWooSchema,
   OrderWooSchema,
   OrdersWooSchema,
   ProductWooType,
@@ -61,7 +56,6 @@ export {
   SystemStatusWooType,
   ProductsCategoryWooType,
   ProductsCategoriesWooType,
-  ImageWooType,
   OrderWooType,
   OrdersWooType,
 };
