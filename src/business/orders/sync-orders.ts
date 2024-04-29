@@ -4,8 +4,10 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../constants/size.constant.js";
-import { fetchAllOrders } from "../../helpers/index.js";
-import { fromWooToFirestoreOrder } from "../../helpers/order-woo-to-firestore-mappings.js";
+import {
+  fetchAllOrders,
+  fromWooToFirestoreOrdersMapping,
+} from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -41,17 +43,12 @@ const SERVICE_ERRORS = {
   dataSyncedAlready: {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/orders/sync-process/synced-already",
-    message: "Orders synced",
+    message: "orders synced",
   },
 };
 
 const SyncOrdersSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-orders") ]) });
 
-// TODO:
-// 1. Add tracing
-// 2. Add error handling
-// 3. Add tests
-// 4. Cloud functions?
 export const syncOrders = async (req: Request, res: Response) => {
   const isSyncOrdersRequestTypeValid = isResponseTypeTrue(
     SyncOrdersSchema,
@@ -88,7 +85,7 @@ export const syncOrders = async (req: Request, res: Response) => {
   if (userFoundInFirestore.sync.are_orders_synced) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced Orders`,
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced orders`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
@@ -116,6 +113,7 @@ export const syncOrders = async (req: Request, res: Response) => {
     wooBasicAuth,
     totalItems,
   });
+
   if (ordersFromWoo.length !== totalItems) {
     logger.log(
       "error",
@@ -133,7 +131,9 @@ export const syncOrders = async (req: Request, res: Response) => {
   const startTimeWritingToDb = performance.now();
   for (let i = 0; i < ordersFromWoo.length; i += FIRESTORE_ALLOWED_BATCH_SIZE) {
     await firestoreRepository.order.batchWriteOrders(
-      fromWooToFirestoreOrder(ordersFromWoo.slice(i, i + FIRESTORE_ALLOWED_BATCH_SIZE)),
+      fromWooToFirestoreOrdersMapping(
+        ordersFromWoo.slice(i, i + FIRESTORE_ALLOWED_BATCH_SIZE),
+      ),
       userId,
     );
   }

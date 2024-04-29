@@ -18,6 +18,7 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
   sync: {
     are_products_categories_synced: false,
     are_products_synced: false,
+    are_orders_synced: false,
   },
 };
 
@@ -56,6 +57,29 @@ export const mockUserForSyncingProducts: UserFireStoreType = {
   sync: {
     are_products_categories_synced: false,
     are_products_synced: false,
+    are_orders_synced: false,
+  },
+};
+
+export const mockUserForSyncingOrders: UserFireStoreType = {
+  user_id: "100",
+  email: "mock-order-user@gmail.com",
+  username: "mock-order-user",
+  password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
+  store: { app_url: "https://testwebsite.com" },
+  woo_credentials: {
+    token: "mock-order-token",
+    secret: "mock-order-secret",
+  },
+  authentication: {
+    method: "woo_credentials",
+    is_authorized: true,
+  },
+  last_login: "2024-02-06T00:00:00.000Z",
+  sync: {
+    are_products_categories_synced: false,
+    are_products_synced: false,
+    are_orders_synced: false,
   },
 };
 
@@ -77,6 +101,7 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType
   sync: {
     are_products_categories_synced: false,
     are_products_synced: false,
+    are_orders_synced: false,
   },
 };
 

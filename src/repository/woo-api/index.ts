@@ -48,14 +48,6 @@ export const wooApiRepository = {
 };
 
 export {
-  ProductWooType,
-  ProductsWooType,
-  SystemStatusWooType,
-  ProductsCategoryWooType,
-  ProductsCategoriesWooType,
-  ImageWooType,
-  OrderWooType,
-  OrdersWooType,
   SystemStatusWooSchema,
   ProductsWooSchema,
   ProductWooSchema,
@@ -64,4 +56,12 @@ export {
   ImageWooSchema,
   OrderWooSchema,
   OrdersWooSchema,
+  ProductWooType,
+  ProductsWooType,
+  SystemStatusWooType,
+  ProductsCategoryWooType,
+  ProductsCategoriesWooType,
+  ImageWooType,
+  OrderWooType,
+  OrdersWooType,
 };
