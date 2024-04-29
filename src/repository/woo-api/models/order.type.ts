@@ -168,7 +168,7 @@ const currencyCodes = [
 
 const CurrencyUnion = Type.Union(currencyCodes.map((code) => Type.Literal(code)));
 
-export const OrderFromWooSchema = Type.Object({
+export const OrderWooSchema = Type.Object({
   id: Type.Number(),
   status: Type.Union([
     Type.Literal("pending"),
@@ -184,4 +184,8 @@ export const OrderFromWooSchema = Type.Object({
   total: Type.String(),
 });
 
-export type OrderFromWooType = Static<typeof OrderFromWooSchema>;
+export type OrderWooType = Static<typeof OrderWooSchema>;
+
+export const OrdersWooSchema = Type.Array(OrderWooSchema);
+
+export type OrdersWooType = Static<typeof OrdersWooSchema>;

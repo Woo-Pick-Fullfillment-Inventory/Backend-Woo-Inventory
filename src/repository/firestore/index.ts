@@ -9,10 +9,15 @@ import {
   ProductsCategoryFirestoreSchema,
 } from "./models/category.type.js";
 import {
+  OrderFirestoreInputSchema,
+  OrdersFirestoreInputSchema,
+} from "./models/order.type.js";
+import {
   ProductFireStoreSchema,
   ProductsFireStoreSchema,
 } from "./models/product.type.js";
 import { UserFireStoreSchema } from "./models/user.type.js";
+import { batchWriteOrdersFactory } from "./orders/batch-write-orders.js";
 import { batchWriteProductsFactory } from "./products/batch-write-products.js";
 import {
   type ProductsFireStorePaginationType,
@@ -29,6 +34,10 @@ import type {
   ProductsCategoryFireStoreClientType,
   ProductsCategoryFirestoreType,
 } from "./models/category.type.js";
+import type {
+  OrderFirestoreInputType,
+  OrdersFirestoreInputType,
+} from "./models/order.type.js";
 import type {
   AddProductFireStoreType,
   ProductFireStoreAttributeType,
@@ -58,6 +67,9 @@ export const firestoreRepository = {
     updateUserProductsCategoriesSynced: updateUserFactory(firestoreClient)(
       "are_products_categories_synced",
     ),
+    updateUserOrdersSynced: updateUserFactory(firestoreClient)(
+      "are_orders_synced",
+    ),
   },
   product: {
     batchWriteProducts: batchWriteProductsFactory(firestoreClient),
@@ -69,6 +81,7 @@ export const firestoreRepository = {
       batchWriteProductsCategoriesFactory(firestoreClient),
     getProductsCategories: getProductsCategoriesFactory(firestoreClient),
   },
+  order: { batchWriteOrders: batchWriteOrdersFactory(firestoreClient) },
   collection: {
     viewCollection: viewCollectionFactory(firestoreClient),
     clearCollection: clearCollectionFactory(firestoreClient),
@@ -76,6 +89,13 @@ export const firestoreRepository = {
 };
 
 export {
+  UserFireStoreSchema,
+  ProductFireStoreSchema,
+  ProductsFireStoreSchema,
+  ProductsCategoriesFirestoreSchema,
+  ProductsCategoryFirestoreSchema,
+  OrderFirestoreInputSchema,
+  OrdersFirestoreInputSchema,
   UserAttributeType,
   UserUpdateAttributeType,
   UserFireStoreType,
@@ -83,11 +103,6 @@ export {
   ProductsFireStoreType,
   ProductFireStoreAttributeType,
   AddProductFireStoreType,
-  UserFireStoreSchema,
-  ProductFireStoreSchema,
-  ProductsFireStoreSchema,
-  ProductsCategoriesFirestoreSchema,
-  ProductsCategoryFirestoreSchema,
   ProductsCategoryFirestoreType,
   ProductsCategoriesFirestoreType,
   ProductsCategoryFireStoreClientType,
@@ -95,4 +110,6 @@ export {
   ProductsFireStorePaginationType,
   ProductFirestoreInputType,
   ProductsFirestoreInputType,
+  OrdersFirestoreInputType,
+  OrderFirestoreInputType,
 };

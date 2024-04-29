@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 import type { AxiosRequestConfig } from "axios";
 dotenv.config();
-const PORT = process.env["SERVICE_PORT"] || 5003;
+const PORT = process.env["SERVICE_PORT"] as string;
 
 export const instance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}`,

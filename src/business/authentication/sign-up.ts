@@ -128,6 +128,7 @@ export const signup = async (req: Request, res: Response) => {
     sync: {
       are_products_synced: false,
       are_products_categories_synced: false,
+      are_orders_synced: false,
     },
   });
 

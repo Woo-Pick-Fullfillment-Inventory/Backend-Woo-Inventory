@@ -1,5 +1,5 @@
-import { ERRORS } from "../../../constants/error.js";
-import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../../constants/products-categories.js";
+import { ERRORS } from "../../../constants/error.constant.js";
+import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../../constants/size.constant.js";
 
 import type { ProductsFirestoreInputType } from "../index.js";
 

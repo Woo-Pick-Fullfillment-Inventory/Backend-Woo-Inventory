@@ -1,24 +1,24 @@
 import { PRODUCT_PER_PAGE } from "../constants/size.constant.js";
 import {
-  type ProductsWooType,
+  type OrdersWooType,
   wooApiRepository,
 } from "../repository/woo-api/index.js";
 
-const fetchProductsBatch = async (
+const fetchordersBatch = async (
   baseUrl: string,
   wooBasicAuth: string,
   currentPage: number,
 ) => {
-  const result = await wooApiRepository.product.getProductsPagination({
+  const result = await wooApiRepository.order.getOrdersPagination({
     baseUrl: baseUrl,
     token: wooBasicAuth,
     perPage: PRODUCT_PER_PAGE,
     page: currentPage,
   });
-  return result.products;
+  return result.orders;
 };
 
-const fetchAllProducts = async ({
+const fetchAllorders = async ({
   baseUrl,
   wooBasicAuth,
   totalItems,
@@ -26,25 +26,25 @@ const fetchAllProducts = async ({
   baseUrl: string;
   wooBasicAuth: string;
   totalItems: number;
-}): Promise<ProductsWooType> => {
+}): Promise<OrdersWooType> => {
   let currentChunk = 1;
   let shouldContinue = true;
-  let allProductsToBeSynced: ProductsWooType = [];
+  let allordersToBeSynced: OrdersWooType = [];
   let totalChunks = Math.ceil(totalItems / 50);
 
   while (shouldContinue) {
     const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 50);
 
-    const promises: Promise<ProductsWooType>[] = [];
+    const promises: Promise<OrdersWooType>[] = [];
 
     for (let i = 0; i < numBatches; i++) {
-      promises.push(fetchProductsBatch(baseUrl, wooBasicAuth, currentChunk));
+      promises.push(fetchordersBatch(baseUrl, wooBasicAuth, currentChunk));
       currentChunk += 1;
     }
 
     const results = await Promise.all(promises);
 
-    allProductsToBeSynced = allProductsToBeSynced.concat(...results);
+    allordersToBeSynced = allordersToBeSynced.concat(...results);
 
     if (
       results.some((result) => result.length === 0) ||
@@ -58,7 +58,7 @@ const fetchAllProducts = async ({
     if (totalItems > 200) totalItems -= 200;
   }
 
-  return allProductsToBeSynced;
+  return allordersToBeSynced;
 };
 
-export default fetchAllProducts;
+export default fetchAllorders;

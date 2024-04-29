@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-import { ERRORS } from "../constants/error.js";
+import { ERRORS } from "../constants/error.constant.js";
 
 dotenv.config();
 

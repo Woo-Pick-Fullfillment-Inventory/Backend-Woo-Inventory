@@ -1,4 +1,4 @@
-import { CATEGORIES_PER_PAGE } from "../constants/products-categories.js";
+import { CATEGORIES_PER_PAGE } from "../constants/size.constant.js";
 import {
   type ProductsCategoriesWooType,
   wooApiRepository,

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
-import { ROOT_CATEGORY_PARENT_ID } from "../../constants/products-categories.js";
+import { ROOT_CATEGORY_PARENT_ID } from "../../constants/size.constant.js";
 import { convertCategoriesToCLient } from "../../helpers/convert-categories.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";

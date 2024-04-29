@@ -1,4 +1,4 @@
-import { ERRORS } from "../../constants/error.js";
+import { ERRORS } from "../../constants/error.constant.js";
 import logger from "../create-logger.js";
 import { isResponseTypeTrue } from "../create-response-type-guard.js";
 

@@ -1,4 +1,4 @@
-import { ERRORS } from "../../../constants/error.js";
+import { ERRORS } from "../../../constants/error.constant.js";
 import createAxiosClient from "../../../modules/axios/create-axios-client.js";
 import {
   axiosOnFulfillmentErrorLogger,
