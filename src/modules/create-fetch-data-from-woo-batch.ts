@@ -6,6 +6,8 @@ type FetchDataBatchParams = {
   currentPage: number;
   endpoint: "order" | "product" | "productCategories";
   perPage: number;
+  dateAfter?: string;
+  status?: string[];
 }
 
 type fetchAllDataFromWooParams = {
@@ -14,6 +16,8 @@ type fetchAllDataFromWooParams = {
   totalItems: number;
   endpoint: "order" | "product" | "productCategories";
   perPage: number;
+  dateAfter?: string;
+  status?: string[];
 }
 
 // Generic function for fetching data with pagination and batching
@@ -23,16 +27,20 @@ const fetchDataBatch = async <T>({
   currentPage,
   endpoint,
   perPage,
+  dateAfter,
+  status,
 }: FetchDataBatchParams): Promise<T[]> => {
-  // Call the appropriate method from the WooCommerce repository based on the endpoint
   let result;
   switch (endpoint) {
     case "order":
+      if (!dateAfter || !status) throw new Error("dateAfter and status are required for fetching orders");
       result = await wooApiRepository.order.getOrdersPagination({
         baseUrl,
         token: wooBasicAuth,
         perPage,
         page: currentPage,
+        dateAfter,
+        status,
       });
       return result.orders as T[];
 
@@ -59,12 +67,14 @@ const fetchDataBatch = async <T>({
   }
 };
 
-const fetchAllDataFromWooFromWoo = async <T>({
+const fetchAllDataFromWoo = async <T>({
   baseUrl,
   wooBasicAuth,
   totalItems,
   endpoint,
   perPage,
+  dateAfter,
+  status,
 }: fetchAllDataFromWooParams): Promise<T[]> => {
   let currentChunk = 1;
   let shouldContinue = true;
@@ -83,6 +93,10 @@ const fetchAllDataFromWooFromWoo = async <T>({
         currentPage: currentChunk,
         endpoint,
         perPage,
+        // eslint-disable-next-line
+        dateAfter: dateAfter!,     
+        // eslint-disable-next-line
+        status: status!,
       }));
       currentChunk += 1;
     }
@@ -102,4 +116,4 @@ const fetchAllDataFromWooFromWoo = async <T>({
   return allDataToBeSynced;
 };
 
-export default fetchAllDataFromWooFromWoo;
+export default fetchAllDataFromWoo;

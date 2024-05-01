@@ -22,11 +22,15 @@ export const getOrdersPaginationFactory = async ({
   token,
   perPage,
   page,
+  dateAfter,
+  status,
 }: {
     baseUrl: string;
     token: string;
     perPage: number;
     page: number;
+    dateAfter: string;
+    status: string[];
 }): Promise<getAllOrdersPaginationResponse> => {
   const { get } = createAxiosClient<OrdersWooType>({
     config: {
@@ -51,13 +55,13 @@ export const getOrdersPaginationFactory = async ({
     data,
     headers,
   } = await get(
-    `/wp-json/wc/v3/orders?per_page=${perPage}&page=${page}&after=2023-12-31T00:00:00&status=pending,processing,on-hold`,
+    `/wp-json/wc/v3/orders?per_page=${perPage}&page=${page}&after=${dateAfter}&status=${status.join(",")}`,
     { headers: { Authorization: token } },
   );
 
   if (
     headers["x-wp-total"] === undefined ||
-        headers["x-wp-totalpages"] === undefined
+    headers["x-wp-totalpages"] === undefined
   ) {
     throw new Error(ERRORS.INVALID_RESPONSE_HEADERS);
   }

@@ -51,7 +51,23 @@ const SERVICE_ERRORS = {
   },
 };
 
-const SyncOrdersSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-orders") ]) });
+const SyncOrdersSchema = Type.Object({
+  action: Type.String({ const: "sync-orders" }),
+  date_after: Type.String({ format: "date-time" }),
+  status: Type.Array(
+    Type.String({
+      enum: [
+        "pending",
+        "processing",
+        "on-hold",
+        "completed",
+        "cancelled",
+        "refunded",
+        "failed",
+      ],
+    }),
+  ),
+});
 
 export const syncOrders = async (req: Request, res: Response) => {
   const isSyncOrdersRequestTypeValid = isResponseTypeTrue(
@@ -109,6 +125,8 @@ export const syncOrders = async (req: Request, res: Response) => {
     token: wooBasicAuth,
     perPage: 1,
     page: 1,
+    dateAfter: req.body.date_after,
+    status: req.body.status,
   });
 
   const startTimeGettingOrders = performance.now();
@@ -118,6 +136,8 @@ export const syncOrders = async (req: Request, res: Response) => {
     totalItems,
     perPage: ORDERS_PER_PAGE,
     endpoint: "order",
+    dateAfter: req.body.date_after,
+    status: req.body.status,
   });
 
   if (ordersFromWoo.length !== totalItems) {

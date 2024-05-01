@@ -34,7 +34,15 @@ describe("Syncing orders test", () => {
   it("should have orders synced", async () => {
     const response = await httpClient.post(
       "api/v1/orders/sync",
-      { action: "sync-orders" },
+      {
+        action: "sync-orders",
+        date_after: "2023-12-31T00:00:00",
+        status: [
+          "pending",
+          "processing",
+          "on-hold",
+        ],
+      },
       {
         headers: {
           Authorization: createAuthorizationHeader(
@@ -60,7 +68,9 @@ describe("Syncing orders test", () => {
         })
       ).count,
     ).toEqual(1);
-    const orders: OrdersFirestoreInputType = await viewCollectionFactory(db)(`orders/users-${mockUserForSyncingOrders.user_id}/users-orders`);
+    const orders: OrdersFirestoreInputType = await viewCollectionFactory(db)(
+      `orders/users-${mockUserForSyncingOrders.user_id}/users-orders`,
+    );
     expect(orders.length).toEqual(4);
     for (const order of orders) {
       expect(order.picking_status).toBeDefined();
