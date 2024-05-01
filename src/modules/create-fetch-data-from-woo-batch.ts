@@ -79,10 +79,10 @@ const fetchAllDataFromWoo = async <T>({
   let currentChunk = 1;
   let shouldContinue = true;
   let allDataToBeSynced: T[] = [];
-  let totalChunks = Math.ceil(totalItems / 50);
+  let totalChunks = Math.ceil(totalItems / 100);
 
   while (shouldContinue) {
-    const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 50);
+    const numBatches = totalChunks >= 4 ? 4 : Math.ceil(totalItems / 100);
 
     const promises: Promise<T[]>[] = [];
 
@@ -110,7 +110,7 @@ const fetchAllDataFromWoo = async <T>({
     }
 
     totalChunks -= numBatches;
-    if (totalItems > 200) totalItems -= 200;
+    if (totalItems > 400) totalItems -= 400;
   }
 
   return allDataToBeSynced;
