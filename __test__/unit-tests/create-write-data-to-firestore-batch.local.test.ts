@@ -6,8 +6,8 @@ import {
 
 import writeAllDataToFirestore from "../../src/modules/create-write-data-to-firestore-batch.js";
 import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection.js";
-import { insertUserFactory } from "../../src/repository/firestore/users/insert-user";
-import { generateOrdersArray } from "../common/faker/generate-mock-orders";
+import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
+import { generateOrdersArray } from "../common/faker/generate-mock-orders.js";
 import { mockUserForSyncingOrders } from "../common/mock-data.js";
 
 describe("batch data write firestore tests", () => {

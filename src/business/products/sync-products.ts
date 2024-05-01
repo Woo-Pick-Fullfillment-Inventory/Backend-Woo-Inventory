@@ -121,6 +121,8 @@ export const syncProducts = async (req: Request, res: Response) => {
     endpoint: "product",
     perPage: PRODUCT_PER_PAGE,
   });
+  console.log("productsFromWoo", productsFromWoo.length);
+  console.log("totalItems", totalItems);
   if (productsFromWoo.length !== totalItems) {
     logger.log(
       "error",
