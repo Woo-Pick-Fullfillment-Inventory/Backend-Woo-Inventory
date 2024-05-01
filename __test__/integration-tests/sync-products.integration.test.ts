@@ -7,8 +7,8 @@ import { WireMockRestClient } from "wiremock-rest-client";
 
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
-import { httpClient } from "../common/http-client";
-import { mockUserForSyncingProducts } from "../common/mock-data";
+import { httpClient } from "../common/http-client.js";
+import { mockUserForSyncingProducts } from "../common/mock-data.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },

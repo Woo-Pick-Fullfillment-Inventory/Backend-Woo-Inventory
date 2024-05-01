@@ -1,13 +1,10 @@
 import { faker } from "@faker-js/faker";
 
-import type {
-  ProductFromWooType,
-  ProductsFromWooType,
-} from "../../src/repository/woo-api/index.js";
+import type { ProductsWooType } from "../../../src/repository/woo-api/index.js";
 
 let productIdCounter = 0;
 
-const generateRandomProduct = (): ProductFromWooType => {
+const generateRandomProduct = () => {
   productIdCounter++;
 
   return {
@@ -77,7 +74,7 @@ const generateRandomProduct = (): ProductFromWooType => {
 
 export const generateProductsArray = async (
   numberOfProducts: number,
-): Promise<ProductsFromWooType> => {
+): Promise<ProductsWooType> => {
   productIdCounter = 0;
   return Array.from({ length: numberOfProducts }, () =>
     generateRandomProduct(),

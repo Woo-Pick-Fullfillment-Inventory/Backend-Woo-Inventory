@@ -4,8 +4,8 @@ import {
   axiosOnRejectedErrorLogger,
 } from "../../../modules/axios/create-axios-error-logger-mappings.js";
 import {
-  SystemStatusFromWooSchema,
-  type SystemStatusFromWooType,
+  SystemStatusWooSchema,
+  type SystemStatusWooType,
 } from "../index.js";
 
 export const getSystemStatusFactory = async ({
@@ -14,8 +14,8 @@ export const getSystemStatusFactory = async ({
 }: {
   baseUrl: string;
   token: string;
-}): Promise<SystemStatusFromWooType> => {
-  const { get } = createAxiosClient<SystemStatusFromWooType>({
+}): Promise<SystemStatusWooType> => {
+  const { get } = createAxiosClient<SystemStatusWooType>({
     config: {
       baseURL: baseUrl,
       headers: {
@@ -27,7 +27,7 @@ export const getSystemStatusFactory = async ({
       {
         onFulfillment: axiosOnFulfillmentErrorLogger({
           expectedStatusCode: 200,
-          expectedSchema: SystemStatusFromWooSchema,
+          expectedSchema: SystemStatusWooSchema,
         }),
         onRejected: axiosOnRejectedErrorLogger,
       },

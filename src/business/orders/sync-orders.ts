@@ -3,8 +3,11 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
-import { PRODUCT_PER_PAGE } from "../../constants/size.constant.js";
-import { fetchAllDataFromWoo } from "../../helpers/index.js";
+import { ORDERS_PER_PAGE } from "../../constants/size.constant.js";
+import {
+  fetchAllDataFromWoo,
+  fromWooToFirestoreOrdersMapping,
+} from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
@@ -14,7 +17,7 @@ import { verifyAuthorizationHeader } from "../../modules/create-verify-authoriza
 import writeAllDataToFirestore from "../../modules/create-write-data-to-firestore-batch.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
 import {
-  type ProductWooType,
+  type OrderWooType,
   wooApiRepository,
 } from "../../repository/woo-api/index.js";
 
@@ -28,43 +31,54 @@ dotenv.config();
 const SERVICE_ERRORS = {
   notAuthorized: {
     statusCode: StatusCodes.UNAUTHORIZED,
-    type: "/products/sync-process/not-authorized",
+    type: "/orders/sync-process/not-authorized",
     message: "not authorized",
   },
   resourceNotFound: {
     statusCode: StatusCodes.NOT_FOUND,
-    type: "/products/sync-process/not-found",
+    type: "/orders/sync-process/not-found",
     message: "resource not found",
   },
   invalidRequestType: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/sync-process/invalid-request-type",
+    type: "/orders/sync-process/invalid-request-type",
     message: "invalid request",
   },
   dataSyncedAlready: {
     statusCode: StatusCodes.BAD_REQUEST,
-    type: "/products/sync-process/synced-already",
-    message: "products synced",
+    type: "/orders/sync-process/synced-already",
+    message: "orders synced",
   },
 };
 
-const SyncProductsSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products") ]) });
+const SyncOrdersSchema = Type.Object({
+  action: Type.String({ const: "sync-orders" }),
+  date_after: Type.String({ format: "date-time" }),
+  status: Type.Array(
+    Type.String({
+      enum: [
+        "pending",
+        "processing",
+        "on-hold",
+        "completed",
+        "cancelled",
+        "refunded",
+        "failed",
+      ],
+    }),
+  ),
+});
 
-// TODO:
-// 1. Add tracing
-// 2. Add error handling
-// 3. Add tests
-// 4. Cloud functions?
-export const syncProducts = async (req: Request, res: Response) => {
-  const isSyncProductsRequestTypeValid = isResponseTypeTrue(
-    SyncProductsSchema,
+export const syncOrders = async (req: Request, res: Response) => {
+  const isSyncOrdersRequestTypeValid = isResponseTypeTrue(
+    SyncOrdersSchema,
     req.body,
     false,
   );
-  if (!isSyncProductsRequestTypeValid.isValid) {
+  if (!isSyncOrdersRequestTypeValid.isValid) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync products request type  ${isSyncProductsRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncProductsSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** invalid sync Orders request type  ${isSyncOrdersRequestTypeValid.errorMessage} **Expected** ${JSON.stringify(SyncOrdersSchema)} **RECEIVED** ${JSON.stringify(req.body)}`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
@@ -88,10 +102,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.sync.are_products_synced) {
+  if (userFoundInFirestore.sync.are_orders_synced) {
     logger.log(
       "warn",
-      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced products`,
+      `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** user ${userId} has already synced orders`,
     );
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
@@ -106,39 +120,44 @@ export const syncProducts = async (req: Request, res: Response) => {
       ? userFoundInFirestore.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
-  const { totalItems } = await wooApiRepository.product.getProductsPagination({
+  const { totalItems } = await wooApiRepository.order.getOrdersPagination({
     baseUrl: baseUrl,
     token: wooBasicAuth,
     perPage: 1,
     page: 1,
+    dateAfter: req.body.date_after,
+    status: req.body.status,
   });
 
-  const startTimeGettingProducts = performance.now();
-  const productsFromWoo = await fetchAllDataFromWoo<ProductWooType>({
+  const startTimeGettingOrders = performance.now();
+  const ordersFromWoo = await fetchAllDataFromWoo<OrderWooType>({
     baseUrl,
     wooBasicAuth,
     totalItems,
-    endpoint: "product",
-    perPage: PRODUCT_PER_PAGE,
+    perPage: ORDERS_PER_PAGE,
+    endpoint: "order",
+    dateAfter: req.body.date_after,
+    status: req.body.status,
   });
-  if (productsFromWoo.length !== totalItems) {
+
+  if (ordersFromWoo.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Orders Syncing failed`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
-  const endTimeGettingProducts = performance.now();
+  const endTimeGettingOrders = performance.now();
   logger.log(
     "info",
-    `Total time taken to get products from WooCommerce: ${measureTime(startTimeGettingProducts, endTimeGettingProducts)} milliseconds`,
+    `Total time taken to get Orders from WooCommerce: ${measureTime(startTimeGettingOrders, endTimeGettingOrders)} milliseconds`,
   );
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
   await writeAllDataToFirestore({
-    data: productsFromWoo,
-    usecase: "products",
+    data: fromWooToFirestoreOrdersMapping(ordersFromWoo),
+    usecase: "orders",
     userId,
   });
   const endTimeWritingToDb = performance.now();
@@ -147,7 +166,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await firestoreRepository.user.updateUserProductsSynced(userId, true);
+  await firestoreRepository.user.updateUserOrdersSynced(userId, true);
 
   return res.sendStatus(201);
 };

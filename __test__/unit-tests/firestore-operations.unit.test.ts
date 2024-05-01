@@ -7,7 +7,7 @@ import {
 import { getProductsFactoryEmulator } from "./firestore-emulator/get-product-factory";
 import { getUserFactoryEmulator } from "./firestore-emulator/get-user-factory";
 import { batchWriteProductsFactory } from "../../src/repository/firestore/products/batch-write-products";
-import { generateProductsArray } from "../common/faker";
+import { generateProductsArray } from "../common/faker/generate-mock-products";
 
 import type { ProductsFireStorePaginationType } from "../../src/repository/firestore/index.js";
 

@@ -9,8 +9,8 @@ import { viewCollectionFactory } from "../../src/repository/firestore/collection
 import { batchWriteProductsFactory } from "../../src/repository/firestore/products/batch-write-products.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
-import { generateProductsArray } from "../common/faker.js";
-import { httpClient } from "../common/http-client";
+import { generateProductsArray } from "../common/faker/generate-mock-products.js";
+import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(

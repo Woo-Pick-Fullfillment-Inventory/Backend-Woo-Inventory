@@ -6,11 +6,11 @@ import {
 import { randomUUID } from "crypto";
 
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
-import { httpClient } from "../common/http-client";
+import { httpClient } from "../common/http-client.js";
 import {
   mockUserWithHashedPassword,
   mockUserWrongType,
-} from "../common/mock-data";
+} from "../common/mock-data.js";
 
 import type { UserFireStoreType } from "../../src/repository/firestore/index.js";
 

@@ -11,9 +11,9 @@ export const batchWriteProductsFactory = (
     const batch = firestoreClient.batch();
     products.forEach((product) => {
       const productRef = firestoreClient
-        .collection("products")
-        .doc(`users-${userId}`)
         .collection("users-products")
+        .doc(`users-${userId}-products`)
+        .collection("products")
         .doc(product.id.toString());
       batch.set(productRef, product);
     });

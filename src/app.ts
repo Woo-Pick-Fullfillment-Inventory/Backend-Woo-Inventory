@@ -6,6 +6,7 @@ import createError from "http-errors";
 
 import authRouter from "./business/authentication/index.js";
 import fileRouter from "./business/files/index.js";
+import orderRouter from "./business/orders/index.js";
 import productRouter from "./business/products/index.js";
 import logger from "./modules/create-logger.js";
 import webhookRouter from "./webhook/index.js";
@@ -28,6 +29,7 @@ app.use(webhookRouter);
 app.use(authRouter);
 app.use(productRouter);
 app.use(fileRouter);
+app.use(orderRouter);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("This is the backend service of Woo Pick Inventory!");

@@ -9,10 +9,10 @@ import { recursiveSortById } from "../../src/helpers/sort-by-id.js";
 import { batchWriteProductsCategoriesFactory } from "../../src/repository/firestore/categories/batch-write-categories.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
-import { httpClient } from "../common/http-client";
-import { mockUserForSyncingProducts } from "../common/mock-data";
+import { httpClient } from "../common/http-client.js";
+import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
-import type { ProductsCategoriesFromWooType } from "../../src/repository/woo-api/index.js";
+import type { ProductsCategoriesWooType } from "../../src/repository/woo-api/index.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },
@@ -21,7 +21,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
 describe("get products categories test", () => {
   let db: FirebaseFirestore.Firestore;
 
-  const categories: ProductsCategoriesFromWooType = [
+  const categories: ProductsCategoriesWooType = [
     {
       id: 131,
       name: "Bia &amp; Rượu",
@@ -148,7 +148,7 @@ describe("get products categories test", () => {
       slug: "uncategorized",
       parent: 0,
     },
-  ] as ProductsCategoriesFromWooType;
+  ] as ProductsCategoriesWooType;
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();

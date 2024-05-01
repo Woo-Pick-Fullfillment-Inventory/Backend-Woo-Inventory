@@ -4,9 +4,8 @@ import {
   axiosOnRejectedErrorLogger,
 } from "../../../modules/axios/create-axios-error-logger-mappings.js";
 import {
-  ProductFromWooSchema,
-  type ProductFromWooType,
-  type ProductWooClientType,
+  ProductWooSchema,
+  type ProductWooType,
 } from "../index.js";
 
 type AddProductRequestFromUserType = {
@@ -40,8 +39,8 @@ export const postAddProductFactory = async ({
   baseUrl: string;
   token: string;
   addProductRequestFromUser: AddProductRequestFromUserType;
-}): Promise<Pick<ProductWooClientType, "id" | "images">> => {
-  const { post } = createAxiosClient<ProductFromWooType>({
+}): Promise<Pick<ProductWooType, "id" | "images">> => {
+  const { post } = createAxiosClient<ProductWooType>({
     config: {
       baseURL: baseUrl,
       headers: {
@@ -53,7 +52,7 @@ export const postAddProductFactory = async ({
       {
         onFulfillment: axiosOnFulfillmentErrorLogger({
           expectedStatusCode: 201,
-          expectedSchema: ProductFromWooSchema,
+          expectedSchema: ProductWooSchema,
         }),
         onRejected: axiosOnRejectedErrorLogger,
       },
