@@ -112,7 +112,10 @@ const fetchAllDataFromWoo = async <T>({
       // overcome woocommerce API rate limit
       if (currentChunk % 20 === 0) await delayAction(10000);
       currentChunk += 1;
-      if (currentChunk > totalChunks) break;
+      if (currentChunk > totalChunks) {
+        shouldContinue = false;
+        break;
+      }
     }
 
     const results = await Promise.all(promises);

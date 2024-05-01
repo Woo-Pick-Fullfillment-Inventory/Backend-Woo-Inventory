@@ -104,16 +104,17 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   );
 
   const baseUrl =
-      process.env["NODE_ENV"] === "production"
-        ? userFoundInFirestore.store.app_url
-        : (process.env["WOO_BASE_URL"] as string);
+    process.env["NODE_ENV"] === "production"
+      ? userFoundInFirestore.store.app_url
+      : (process.env["WOO_BASE_URL"] as string);
 
-  const { totalItems } = await wooApiRepository.product.getProductsCategoriesPagination({
-    baseUrl: baseUrl,
-    token: wooBasicAuth,
-    perPage: 1,
-    page: 1,
-  });
+  const { totalItems } =
+    await wooApiRepository.product.getProductsCategoriesPagination({
+      baseUrl: baseUrl,
+      token: wooBasicAuth,
+      perPage: 1,
+      page: 1,
+    });
 
   const startTimeGettingProducts = performance.now();
   const categoriesFromWoo = await fetchAllDataFromWoo<ProductsCategoryWooType>({
@@ -126,7 +127,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   if (categoriesFromWoo.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Categories Syncing failed`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Categories Syncing failed. Expected ${totalItems} but received ${categoriesFromWoo.length} products categories from WooCommerce.`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
@@ -149,7 +150,10 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await firestoreRepository.user.updateUserProductsCategoriesSynced(userId, true);
+  await firestoreRepository.user.updateUserProductsCategoriesSynced(
+    userId,
+    true,
+  );
 
   return res.sendStatus(201);
 };

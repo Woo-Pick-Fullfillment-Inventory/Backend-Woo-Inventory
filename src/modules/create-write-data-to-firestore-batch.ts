@@ -1,4 +1,5 @@
 import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../constants/size.constant.js";
+import delayAction from "../helpers/delay.js";
 import { firestoreRepository } from "../repository/firestore/index.js";
 
 import type {
@@ -65,6 +66,7 @@ const writeAllDataToFirestore = async ({
 
       currentChunkIndex += 1;
     }
+    await delayAction(5000);
     await Promise.all(promises);
   }
 };
