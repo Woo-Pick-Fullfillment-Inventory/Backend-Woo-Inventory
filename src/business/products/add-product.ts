@@ -38,6 +38,11 @@ const SERVICE_ERRORS = {
     type: "/products/add-product/add-product-failed",
     message: "request body is not valid",
   },
+  dataNotSynced: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/add-product/data-not-synced",
+    message: "products must be synced first",
+  },
 };
 
 const AddProductRequest = Type.Object({
@@ -107,6 +112,11 @@ export const addProduct = async (req: Request, res: Response) => {
   if (!userFoundInFirestore) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
+  }
+
+  if (userFoundInFirestore.sync.are_products_synced === false) {
+    logger.log("error", `user ${userId} needs to sync products first`);
+    return createErrorResponse(res, SERVICE_ERRORS.dataNotSynced);
   }
 
   const product = await wooApiRepository.product.postAddProduct({
