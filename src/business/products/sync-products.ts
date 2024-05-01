@@ -4,9 +4,9 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { PRODUCT_PER_PAGE } from "../../constants/size.constant.js";
-import { fetchAllDataFromWoo } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
+import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
@@ -121,12 +121,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     endpoint: "product",
     perPage: PRODUCT_PER_PAGE,
   });
-  console.log("productsFromWoo", productsFromWoo.length);
-  console.log("totalItems", totalItems);
   if (productsFromWoo.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${totalItems} but got ${productsFromWoo.length} products.`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
