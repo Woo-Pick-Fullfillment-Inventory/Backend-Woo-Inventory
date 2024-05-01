@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
-import { FIRESTORE_ALLOWED_BATCH_SIZE } from "../../constants/size.constant.js";
+import { ORDERS_PER_PAGE } from "../../constants/size.constant.js";
 import {
-  fetchAllOrders,
+  fetchAllDataFromWoo,
   fromWooToFirestoreOrdersMapping,
 } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
@@ -14,8 +14,12 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import writeAllDataToFirestore from "../../modules/create-write-data-to-firestore-batch.js";
 import { firestoreRepository } from "../../repository/firestore/index.js";
-import { wooApiRepository } from "../../repository/woo-api/index.js";
+import {
+  type OrderWooType,
+  wooApiRepository,
+} from "../../repository/woo-api/index.js";
 
 import type {
   Request,
@@ -108,10 +112,12 @@ export const syncOrders = async (req: Request, res: Response) => {
   });
 
   const startTimeGettingOrders = performance.now();
-  const ordersFromWoo = await fetchAllOrders({
+  const ordersFromWoo = await fetchAllDataFromWoo<OrderWooType>({
     baseUrl,
     wooBasicAuth,
     totalItems,
+    perPage: ORDERS_PER_PAGE,
+    endpoint: "order",
   });
 
   if (ordersFromWoo.length !== totalItems) {
@@ -129,14 +135,11 @@ export const syncOrders = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < ordersFromWoo.length; i += FIRESTORE_ALLOWED_BATCH_SIZE) {
-    await firestoreRepository.order.batchWriteOrders(
-      fromWooToFirestoreOrdersMapping(
-        ordersFromWoo.slice(i, i + FIRESTORE_ALLOWED_BATCH_SIZE),
-      ),
-      userId,
-    );
-  }
+  await writeAllDataToFirestore({
+    data: fromWooToFirestoreOrdersMapping(ordersFromWoo),
+    usecase: "orders",
+    userId,
+  });
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",

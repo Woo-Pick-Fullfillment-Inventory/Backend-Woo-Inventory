@@ -7,8 +7,8 @@ import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
-import { httpClient } from "../common/http-client";
-import { mockUserWithHashedPassword } from "../common/mock-data";
+import { httpClient } from "../common/http-client.js";
+import { mockUserWithHashedPassword } from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",

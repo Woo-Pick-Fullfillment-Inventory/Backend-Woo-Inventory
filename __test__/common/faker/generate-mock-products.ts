@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-import type { ProductsWooType } from "../../src/repository/woo-api/index.js";
+import type { ProductsWooType } from "../../../src/repository/woo-api/index.js";
 
 let productIdCounter = 0;
 

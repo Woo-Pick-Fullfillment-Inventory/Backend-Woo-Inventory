@@ -168,6 +168,19 @@ const currencyCodes = [
 
 const CurrencyUnion = Type.Union(currencyCodes.map((code) => Type.Literal(code)));
 
+const MetaDataSchema = Type.Object({
+  id: Type.Number(),
+  key: Type.String(),
+  value: Type.String(),
+});
+
+const LineItemSchema = Type.Object({
+  id: Type.Number(),
+  name: Type.String(),
+  product_id: Type.Number(),
+  meta_data: Type.Optional(Type.Array(MetaDataSchema)),
+});
+
 export const OrderWooSchema = Type.Object({
   id: Type.Number(),
   status: Type.Union([
@@ -182,6 +195,8 @@ export const OrderWooSchema = Type.Object({
   ]),
   currency: CurrencyUnion,
   total: Type.String(),
+  meta_data: Type.Optional(Type.Array(MetaDataSchema)),
+  line_items: Type.Array(LineItemSchema),
 });
 
 export type OrderWooType = Static<typeof OrderWooSchema>;

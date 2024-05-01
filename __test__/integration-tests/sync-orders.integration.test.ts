@@ -8,19 +8,21 @@ import { WireMockRestClient } from "wiremock-rest-client";
 import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
-import { httpClient } from "../common/http-client";
-import { mockUserForSyncingProducts } from "../common/mock-data";
+import { httpClient } from "../common/http-client.js";
+import { mockUserForSyncingOrders } from "../common/mock-data.js";
+
+import type { OrdersFirestoreInputType } from "../../src/repository/firestore/index.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },
 );
 
-describe("Syncing products categories test", () => {
+describe("Syncing orders test", () => {
   let db: FirebaseFirestore.Firestore;
 
   beforeEach(async () => {
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    await insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserForSyncingOrders);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -29,14 +31,14 @@ describe("Syncing products categories test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
 
-  it("should have products synced", async () => {
+  it("should have orders synced", async () => {
     const response = await httpClient.post(
-      "api/v1/products/categories/sync",
-      { action: "sync-products-categories" },
+      "api/v1/orders/sync",
+      { action: "sync-orders" },
       {
         headers: {
           Authorization: createAuthorizationHeader(
-            mockUserForSyncingProducts.user_id,
+            mockUserForSyncingOrders.user_id,
           ),
         },
       },
@@ -46,7 +48,7 @@ describe("Syncing products categories test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/products/categories?per_page=1&page=1",
+          url: "/wp-json/wc/v3/orders?per_page=1&page=1&after=2023-12-31T00:00:00&status=pending,processing,on-hold",
         })
       ).count,
     ).toEqual(1);
@@ -54,19 +56,15 @@ describe("Syncing products categories test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/products/categories?per_page=50&page=1",
+          url: "/wp-json/wc/v3/orders?per_page=50&page=1&after=2023-12-31T00:00:00&status=pending,processing,on-hold",
         })
       ).count,
     ).toEqual(1);
-    expect(
-      (
-        await woocommerceApiMockServer.requests.getCount({
-          method: "GET",
-          url: "/wp-json/wc/v3/products/categories?per_page=50&page=2",
-        })
-      ).count,
-    ).toEqual(1);
-    const fireStoreUsersProductsCategories = await viewCollectionFactory(db)(`categories/users-${mockUserForSyncingProducts.user_id}/users-categories`);
-    expect(fireStoreUsersProductsCategories.length).toEqual(64);
+    const orders: OrdersFirestoreInputType = await viewCollectionFactory(db)(`orders/users-${mockUserForSyncingOrders.user_id}/users-orders`);
+    expect(orders.length).toEqual(4);
+    for (const order of orders) {
+      expect(order.picking_status).toBeDefined();
+      expect(order.picking_status).toEqual("unfulfilled");
+    }
   });
 });

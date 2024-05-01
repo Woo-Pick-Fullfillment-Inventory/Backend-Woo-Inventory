@@ -29,6 +29,7 @@ import { insertUserFactory } from "./users/insert-user.js";
 import { updateUserFactory } from "./users/update-user.js";
 
 import type {
+  ProductCategoriesFirestoreInputType,
   ProductsCategoriesFireStoreClientType,
   ProductsCategoriesFirestoreType,
   ProductsCategoryFireStoreClientType,
@@ -112,4 +113,5 @@ export {
   ProductsFirestoreInputType,
   OrdersFirestoreInputType,
   OrderFirestoreInputType,
+  ProductCategoriesFirestoreInputType,
 };

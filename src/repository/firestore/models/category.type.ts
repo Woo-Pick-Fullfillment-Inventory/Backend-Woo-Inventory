@@ -2,6 +2,10 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
+export const productCategoriesFirestoreInputType = Type.Array(Type.Object({ id: Type.Number() }));
+
+export type ProductCategoriesFirestoreInputType = Static<typeof productCategoriesFirestoreInputType>;
+
 export const ProductsCategoryFirestoreSchema = Type.Object({
   id: Type.Number(),
   name: Type.String(),

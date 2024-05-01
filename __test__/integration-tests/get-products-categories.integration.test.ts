@@ -9,8 +9,8 @@ import { recursiveSortById } from "../../src/helpers/sort-by-id.js";
 import { batchWriteProductsCategoriesFactory } from "../../src/repository/firestore/categories/batch-write-categories.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
-import { httpClient } from "../common/http-client";
-import { mockUserForSyncingProducts } from "../common/mock-data";
+import { httpClient } from "../common/http-client.js";
+import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 import type { ProductsCategoriesWooType } from "../../src/repository/woo-api/index.js";
 const woocommerceApiMockServer = new WireMockRestClient(

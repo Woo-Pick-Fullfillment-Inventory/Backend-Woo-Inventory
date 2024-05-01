@@ -7,11 +7,11 @@ import { WireMockRestClient } from "wiremock-rest-client";
 
 import { createBasicAuthHeaderToken } from "../../src/modules/create-basic-auth-header.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
-import { getProductsPaginationFactory } from "../../src/repository/woo-api/products/get-products-pagination";
+import { getProductsPaginationFactory } from "../../src/repository/woo-api/products/get-products-pagination.js";
 import {
   mockUserForSyncingProducts,
   mockUserForSyncingProductsFalsyTypeProductReturn,
-} from "../common/mock-data";
+} from "../common/mock-data.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },
