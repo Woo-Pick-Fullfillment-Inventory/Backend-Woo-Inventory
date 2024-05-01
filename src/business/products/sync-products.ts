@@ -121,12 +121,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     endpoint: "product",
     perPage: PRODUCT_PER_PAGE,
   });
-  console.log("productsFromWoo", productsFromWoo.length);
-  console.log("totalItems", totalItems);
   if (productsFromWoo.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${totalItems} but got ${productsFromWoo.length} products.`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
