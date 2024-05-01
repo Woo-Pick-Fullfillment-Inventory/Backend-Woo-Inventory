@@ -6,9 +6,9 @@ export type UserAttributeType = "user_id" | "email" | "username";
 
 export type UserUpdateAttributeType =
   | "last_login"
-  | "are_products_synced"
-  | "are_products_categories_synced"
-  | "are_orders_synced";
+  | "sync.are_products_synced"
+  | "sync.are_products_categories_synced"
+  | "sync.are_orders_synced";
 
 export const UserFireStoreSchema = Type.Object({
   user_id: Type.String(),

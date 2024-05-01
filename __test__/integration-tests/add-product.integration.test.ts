@@ -11,7 +11,10 @@ import { insertUserFactory } from "../../src/repository/firestore/users/insert-u
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { generateProductsArray } from "../common/faker/generate-mock-products.js";
 import { httpClient } from "../common/http-client.js";
-import { mockUserForSyncingProducts } from "../common/mock-data.js";
+import {
+  mockUserDidntSync,
+  mockUserForSyncingProducts,
+} from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
@@ -23,9 +26,9 @@ describe("Add product test", () => {
   const userId = mockUserForSyncingProducts.user_id;
 
   beforeEach(async () => {
-    // Initialize Firestore for each test
     db = initializeAdminApp({ projectId: "test-project" }).firestore();
     await insertUserFactory(db)(mockUserForSyncingProducts);
+    await insertUserFactory(db)(mockUserDidntSync);
     const mockProducts = await generateProductsArray(5);
     await batchWriteProductsFactory(db)(mockProducts, userId);
     await woocommerceApiMockServer.requests.deleteAllRequests();
@@ -37,20 +40,34 @@ describe("Add product test", () => {
   });
 
   it("should increase products count", async () => {
-
-    const productListBefore = await viewCollectionFactory(db)(
+    const response_sync = await httpClient.post(
+      "api/v1/products/sync",
+      { action: "sync-products" },
+      {
+        headers: {
+          Authorization: createAuthorizationHeader(
+            userId,
+          ),
+        },
+      },
+    );
+    expect(response_sync.status).toEqual(201);
+    const productListBefore = (await viewCollectionFactory(db)(
       `products/users-${userId}/users-products`,
+    )).length;
+
+    const response = await httpClient.post(
+      "api/v1/products",
+      { name: "Premium Quality" },
+      { headers: { authorization: createAuthorizationHeader(userId) } },
     );
 
-    expect(productListBefore.length).toEqual(5);
-
-    const response = await httpClient.post("api/v1/products", { name: "Premium Quality" }, { headers: { authorization: createAuthorizationHeader(userId) } });
-
-    const productListAfter = await viewCollectionFactory(db)(
+    const productListAfter = (await viewCollectionFactory(db)(
       `products/users-${userId}/users-products`,
-    );
+    )).length;
 
-    expect(productListAfter.length).toEqual(6);
+    expect(productListAfter).toBeGreaterThan(productListBefore);
+    expect(productListAfter).toBe(productListBefore + 1);
 
     expect(
       (
@@ -63,4 +80,13 @@ describe("Add product test", () => {
     expect(response.status).toBe(201);
   });
 
+  it("should return 400 when user didnt sync products", async () => {
+    const response = await httpClient.post(
+      "api/v1/products",
+      { name: "Premium Quality" },
+      { headers: { authorization: createAuthorizationHeader(mockUserDidntSync.user_id) } },
+    );
+
+    expect(response.status).toBe(400);
+  });
 });

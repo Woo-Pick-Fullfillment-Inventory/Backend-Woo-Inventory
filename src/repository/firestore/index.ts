@@ -63,13 +63,13 @@ export const firestoreRepository = {
     insertUser: insertUserFactory(firestoreClient),
     updateUserLastLogin: updateUserFactory(firestoreClient)("last_login"),
     updateUserProductsSynced: updateUserFactory(firestoreClient)(
-      "are_products_synced",
+      "sync.are_products_synced",
     ),
     updateUserProductsCategoriesSynced: updateUserFactory(firestoreClient)(
-      "are_products_categories_synced",
+      "sync.are_products_categories_synced",
     ),
     updateUserOrdersSynced: updateUserFactory(firestoreClient)(
-      "are_orders_synced",
+      "sync.are_orders_synced",
     ),
   },
   product: {
