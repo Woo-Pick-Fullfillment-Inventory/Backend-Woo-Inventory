@@ -5,6 +5,7 @@ import {
 } from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
+import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection.js";
 import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
@@ -41,6 +42,9 @@ describe("Syncing products test", () => {
       },
     );
     expect(response.status).toEqual(201);
+    // eslint-disable-next-line
+    const users: any = await viewCollectionFactory(db)("users");
+    expect(users[0].sync.are_products_synced).toEqual(true);
     expect(
       (
         await woocommerceApiMockServer.requests.getCount({
