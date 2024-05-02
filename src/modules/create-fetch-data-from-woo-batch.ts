@@ -75,6 +75,21 @@ const fetchDataBatch = async <T>({
   }
 };
 
+/**
+ * Fetches all data from WooCommerce with periodic delays.
+ * @param {object} params - Parameters for fetching data.
+ * @param {string} params.baseUrl - The WooCommerce base URL.
+ * @param {string} params.wooBasicAuth - Basic authentication token.
+ * @param {number} params.totalItems - The total number of items to fetch.
+ * @param {"order" | "product" | "productCategories"} params.endpoint - The WooCommerce endpoint.
+ * @param {number} params.perPage - The number of items per page.
+ * @param {string} [params.dateAfter] - Date filter for orders.
+ * @param {string[]} [params.status] - Status filter for orders.
+ * @returns {Promise<T[]>} A promise that resolves to the fetched data.
+ * @function divide the total items into 400-items chunks
+ * @function fetch data in batches of 400 items per chunk
+ * @function delay for 10 seconds after every 20 requests - 2000 items
+ */
 const fetchAllDataFromWoo = async <T>({
   baseUrl,
   wooBasicAuth,
