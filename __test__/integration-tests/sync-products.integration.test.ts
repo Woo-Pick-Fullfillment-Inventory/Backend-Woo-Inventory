@@ -57,7 +57,7 @@ describe("Syncing products test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/products?per_page=50&page=1",
+          url: "/wp-json/wc/v3/products?per_page=100&page=1",
         })
       ).count,
     ).toEqual(1);
@@ -65,23 +65,7 @@ describe("Syncing products test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/products?per_page=50&page=2",
-        })
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await woocommerceApiMockServer.requests.getCount({
-          method: "GET",
-          url: "/wp-json/wc/v3/products?per_page=50&page=3",
-        })
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await woocommerceApiMockServer.requests.getCount({
-          method: "GET",
-          url: "/wp-json/wc/v3/products?per_page=50&page=4",
+          url: "/wp-json/wc/v3/products?per_page=100&page=2",
         })
       ).count,
     ).toEqual(1);

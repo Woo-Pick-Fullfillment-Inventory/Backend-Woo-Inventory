@@ -29,7 +29,7 @@ describe("Syncing products categories test", () => {
     await Promise.all(apps().map((app) => app.delete()));
   });
 
-  it("should have products synced", async () => {
+  it("should have products categories synced", async () => {
     const response = await httpClient.post(
       "api/v1/products/categories/sync",
       { action: "sync-products-categories" },
@@ -54,15 +54,7 @@ describe("Syncing products categories test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/products/categories?per_page=50&page=1",
-        })
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await woocommerceApiMockServer.requests.getCount({
-          method: "GET",
-          url: "/wp-json/wc/v3/products/categories?per_page=50&page=2",
+          url: "/wp-json/wc/v3/products/categories?per_page=100&page=1",
         })
       ).count,
     ).toEqual(1);

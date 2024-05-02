@@ -64,7 +64,7 @@ describe("Syncing orders test", () => {
       (
         await woocommerceApiMockServer.requests.getCount({
           method: "GET",
-          url: "/wp-json/wc/v3/orders?per_page=50&page=1&after=2023-12-31T00:00:00&status=pending,processing,on-hold",
+          url: "/wp-json/wc/v3/orders?per_page=100&page=1&after=2023-12-31T00:00:00&status=pending,processing,on-hold",
         })
       ).count,
     ).toEqual(1);

@@ -10,7 +10,9 @@ import {
 } from "./models/category.type.js";
 import {
   OrderFirestoreInputSchema,
+  OrderFirestoreSchema,
   OrdersFirestoreInputSchema,
+  OrdersFirestoreSchema,
 } from "./models/order.type.js";
 import {
   ProductFireStoreSchema,
@@ -37,7 +39,9 @@ import type {
 } from "./models/category.type.js";
 import type {
   OrderFirestoreInputType,
+  OrderFirestoreType,
   OrdersFirestoreInputType,
+  OrdersFirestoreType,
 } from "./models/order.type.js";
 import type {
   AddProductFireStoreType,
@@ -97,6 +101,8 @@ export {
   ProductsCategoryFirestoreSchema,
   OrderFirestoreInputSchema,
   OrdersFirestoreInputSchema,
+  OrderFirestoreSchema,
+  OrdersFirestoreSchema,
   UserAttributeType,
   UserUpdateAttributeType,
   UserFireStoreType,
@@ -114,4 +120,6 @@ export {
   OrdersFirestoreInputType,
   OrderFirestoreInputType,
   ProductCategoriesFirestoreInputType,
+  OrderFirestoreType,
+  OrdersFirestoreType,
 };
