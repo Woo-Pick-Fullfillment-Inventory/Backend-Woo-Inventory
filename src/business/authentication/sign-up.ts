@@ -3,14 +3,14 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { randomUUID } from "node:crypto";
+import { ObjectId } from "mongodb";
 
 import { emailValidator } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongoDB/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
@@ -78,10 +78,10 @@ export const signup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await firestoreRepository.user.getUserByEmail(req.body.email))
+  if (await mongoRepository.user.getUserByEmail(req.body.email))
     return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await firestoreRepository.user.getUserByUsername(req.body.username))
+  if (await mongoRepository.user.getUserByUsername(req.body.username))
     return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator(req.body.email))
@@ -106,12 +106,11 @@ export const signup = async (req: Request, res: Response) => {
   if (!systemStatusResult)
     return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
-  const userId = randomUUID();
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   // todo : products can actually be synced from another users of same store
-  await firestoreRepository.user.insertUser({
-    user_id: userId,
+  const userInserted = await mongoRepository.user.insertUser({
+    user_id: new ObjectId().toHexString(),
     store: { app_url: req.body.app_url },
     email: req.body.email,
     username: req.body.username,
@@ -132,7 +131,7 @@ export const signup = async (req: Request, res: Response) => {
     },
   });
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ userId }, process.env["JWT_SECRET"] as string)}` });
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ user_id: userInserted.user_id }, process.env["JWT_SECRET"] as string)}` });
 };
 
 export default signup;

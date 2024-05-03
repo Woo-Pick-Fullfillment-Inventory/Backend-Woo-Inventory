@@ -7,8 +7,8 @@ import jwt from "jsonwebtoken";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
 import { UserFireStoreSchema } from "../../repository/firestore/models/user.type.js";
+import { mongoRepository } from "../../repository/mongoDB/index.js";
 
 import type { Static } from "@sinclair/typebox";
 import type {
@@ -51,10 +51,10 @@ export const signin = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userFoundByEmail = await firestoreRepository.user.getUserByEmail(
+  const userFoundByEmail = await mongoRepository.user.getUserByEmail(
     req.body.email_or_username,
   );
-  const userFoundByUsername = await firestoreRepository.user.getUserByUsername(
+  const userFoundByUsername = await mongoRepository.user.getUserByUsername(
     req.body.email_or_username,
   );
 
@@ -82,7 +82,7 @@ export const signin = async (req: Request, res: Response) => {
   if (!isPasswordMatched)
     return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
 
-  await firestoreRepository.user.updateUserLastLogin(
+  await mongoRepository.user.updateUserLastLogin(
     userFound.user_id,
     new Date().toISOString(),
   );

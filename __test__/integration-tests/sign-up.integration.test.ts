@@ -1,14 +1,7 @@
-import {
-  apps,
-  clearFirestoreData,
-  initializeAdminApp,
-} from "@firebase/rules-unit-testing";
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
 import { httpClient } from "../common/http-client.js";
-import { mockUserWithHashedPassword } from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
@@ -16,17 +9,9 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Signup test", () => {
-  let db: FirebaseFirestore.Firestore;
 
   beforeEach(async () => {
-    db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    await insertUserFactory(db)(mockUserWithHashedPassword);
     await woocommerceApiMockServer.requests.deleteAllRequests();
-  });
-
-  afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
   });
 
   it("should return token when signup is successful", async () => {
