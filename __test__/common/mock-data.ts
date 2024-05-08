@@ -1,6 +1,6 @@
-import type { UserFireStoreType } from "../../src/repository/firestore";
+import type { UserMongoType } from "../../src/repository/mongo/index.js";
 
-export const mockUserWithHashedPassword: UserFireStoreType = {
+export const mockUserWithHashedPassword: UserMongoType = {
   user_id: "1",
   email: "someone@gmail.com",
   username: "someone",
@@ -20,7 +20,7 @@ export const mockUserWithHashedPassword: UserFireStoreType = {
     are_products_synced: false,
     are_orders_synced: false,
   },
-};
+} as UserMongoType;
 
 export const mockUserWrongType = {
   user_id: "2",
@@ -37,10 +37,10 @@ export const mockUserWrongType = {
     method: "woo_credentials",
     is_authorized: true,
   },
-};
+} as UserMongoType;
 
-export const mockUserDidntSync: UserFireStoreType = {
-  user_id: "2",
+export const mockUserDidntSync: UserMongoType = {
+  user_id: "6634e9a7e541882e2b99ea74",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -59,10 +59,10 @@ export const mockUserDidntSync: UserFireStoreType = {
     are_products_synced: false,
     are_orders_synced: false,
   },
-};
+} as UserMongoType;
 
-export const mockUserForSyncingProducts: UserFireStoreType = {
-  user_id: "3",
+export const mockUserForSyncingProducts: UserMongoType = {
+  user_id: "6634e9a7e541882e2b99ea73",
   email: "someone33@gmail.com",
   username: "someone33",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -81,10 +81,10 @@ export const mockUserForSyncingProducts: UserFireStoreType = {
     are_products_synced: false,
     are_orders_synced: false,
   },
-};
+} as UserMongoType;
 
-export const mockUserForSyncingOrders: UserFireStoreType = {
-  user_id: "100",
+export const mockUserForSyncingOrders: UserMongoType = {
+  user_id: "6634e9a7e541882e2b99ea76",
   email: "mock-order-user@gmail.com",
   username: "mock-order-user",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -103,9 +103,9 @@ export const mockUserForSyncingOrders: UserFireStoreType = {
     are_products_synced: false,
     are_orders_synced: false,
   },
-};
+} as UserMongoType;
 
-export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType = {
+export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
   user_id: "4",
   email: "someone44@gmail.com",
   username: "someone44",
@@ -125,7 +125,29 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserFireStoreType
     are_products_synced: false,
     are_orders_synced: false,
   },
-};
+} as UserMongoType;
+
+export const mockUserForAddingProduct: UserMongoType = {
+  user_id: "6634e9a7e541882e2b99ea75",
+  email: "someone44@gmail.com",
+  username: "someone44",
+  password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
+  store: { app_url: "https://testwebsite.com" },
+  woo_credentials: {
+    token: "cs_1111",
+    secret: "cs_2222",
+  },
+  authentication: {
+    method: "woo_credentials",
+    is_authorized: true,
+  },
+  last_login: "2024-02-06T00:00:00.000Z",
+  sync: {
+    are_products_categories_synced: false,
+    are_products_synced: true,
+    are_orders_synced: false,
+  },
+} as UserMongoType;
 
 export const mockProducts = [
   {

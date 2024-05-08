@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 import { storageRepository } from "../../repository/storage/index.js";
 
 import type {
@@ -79,9 +79,9 @@ export const uploadImages = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,

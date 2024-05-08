@@ -10,8 +10,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import writeAllDataToFirestore from "../../modules/create-write-data-to-firestore-batch.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type ProductsCategoryWooType,
   wooApiRepository,
@@ -80,9 +79,9 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,
@@ -90,7 +89,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.sync.are_products_categories_synced) {
+  if (userFoundInMongo.sync.are_products_categories_synced) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 400 - Bad Request ***ERROR*** products categories already synced`,
@@ -99,13 +98,13 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   }
 
   const wooBasicAuth = createBasicAuthHeaderToken(
-    userFoundInFirestore.woo_credentials.token,
-    userFoundInFirestore.woo_credentials.secret,
+    userFoundInMongo.woo_credentials.token,
+    userFoundInMongo.woo_credentials.secret,
   );
 
   const baseUrl =
     process.env["NODE_ENV"] === "production"
-      ? userFoundInFirestore.store.app_url
+      ? userFoundInMongo.store.app_url
       : (process.env["WOO_BASE_URL"] as string);
 
   const { totalItems } =
@@ -122,7 +121,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     wooBasicAuth,
     totalItems,
     perPage: CATEGORIES_PER_PAGE,
-    endpoint: "productCategories",
+    endpoint: "products-categories",
   });
   if (categoriesFromWoo.length !== totalItems) {
     logger.log(
@@ -138,19 +137,19 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   );
 
   // what if internet connection is lost?
+  // todo: what if more than 1000 categories?
   const startTimeWritingToDb = performance.now();
-  await writeAllDataToFirestore({
-    data: categoriesFromWoo,
-    usecase: "productCategories",
+  await mongoRepository.category.batchWriteProductsCategories(
+    categoriesFromWoo,
     userId,
-  });
+  );
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await firestoreRepository.user.updateUserProductsCategoriesSynced(
+  await mongoRepository.user.updateUserProductsCategoriesSynced(
     userId,
     true,
   );

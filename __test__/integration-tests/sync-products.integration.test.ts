@@ -1,12 +1,7 @@
-import {
-  apps,
-  clearFirestoreData,
-  initializeAdminApp,
-} from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection.js";
-import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
+import { mongoRepository } from "../../src/repository/mongo/index.js";
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
@@ -16,17 +11,18 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Syncing products test", () => {
-  let db: FirebaseFirestore.Firestore;
+  const userId = mockUserForSyncingProducts.user_id;
 
-  beforeEach(async () => {
-    db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    await insertUserFactory(db)(mockUserForSyncingProducts);
+  afterEach(async () => {
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
+    await mongoRepository.collection.clearCollection(`user-${userId}-products`);
+  });
+
+  afterAll(async () => {
+    await mongoClient.close();
   });
 
   it("should have products synced", async () => {
@@ -36,15 +32,14 @@ describe("Syncing products test", () => {
       {
         headers: {
           Authorization: createAuthorizationHeader(
-            mockUserForSyncingProducts.user_id,
+            userId,
           ),
         },
       },
     );
     expect(response.status).toEqual(201);
+    expect(await mongoRepository.collection.countDocuments(`user-${userId}-products`)).toEqual(176);
     // eslint-disable-next-line
-    const users: any = await viewCollectionFactory(db)("users");
-    expect(users[0].sync.are_products_synced).toEqual(true);
     expect(
       (
         await woocommerceApiMockServer.requests.getCount({

@@ -6,7 +6,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 
 import type {
   Request,
@@ -39,7 +39,6 @@ const SERVICE_ERRORS = {
 
 const sortingCriteria = Type.Object({
   field: Type.Union([
-    Type.Literal("id"),
     Type.Literal("name"),
     Type.Literal("price"),
     Type.Literal("sku"),
@@ -52,11 +51,8 @@ const sortingCriteria = Type.Object({
 });
 
 const paginationCriteria = Type.Object({
-  last_product: Type.Optional(Type.Union([
-    Type.String(),
-    Type.Number(),
-  ])),
-  limit: Type.Number(),
+  page: Type.Number(),
+  per_page: Type.Number(),
 });
 
 const postGetProductsRequest = Type.Object({
@@ -97,9 +93,9 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,
@@ -107,16 +103,24 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  const firestoreResult = await firestoreRepository.product.getProducts({
+  const mongoProductseResult = await mongoRepository.product.getProducts(
     userId,
-    field: req.body.sorting_criteria.field,
-    direction: req.body.sorting_criteria.direction,
-    limit: req.body.pagination_criteria.limit,
-  })(req.body.pagination_criteria.last_product);
+    {
+      attribute: req.body.sorting_criteria.field,
+      direction: req.body.sorting_criteria.direction,
+      page: req.body.pagination_criteria.page,
+      per_page: req.body.pagination_criteria.per_page,
+    },
+  );
 
   return res.status(201).send({
-    products: firestoreResult.products,
-    last_product: firestoreResult.lastProduct,
-    total_products: firestoreResult.products.length,
+    products: mongoProductseResult.map((product) => ({
+      id: product.id,
+      name: product.name,
+      sku: product.sku ?? "N/A",
+      stock_quantity: product.stock_quantity ?? "N/A",
+      price: product.sale_price ?? "N/A",
+      expiration_date: product.expiration_date ?? "N/A",
+    })),
   });
 };

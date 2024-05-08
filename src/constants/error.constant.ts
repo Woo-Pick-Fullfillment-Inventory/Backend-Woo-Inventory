@@ -8,4 +8,7 @@ export const ERRORS = {
   NO_TOKEN_FOUND: "No token found",
   BATCH_SIZE_EXCEEDED: "Batch size exceeds limit",
   USER_NOT_FOUND: "User not found",
+  BATCH_WRITE_FAILED: "Batch write failed",
+  DATA_ALREADY_EXISTS: "Data already exists",
+  DATA_NOT_INSERTED: "Data not inserted",
 } as const;

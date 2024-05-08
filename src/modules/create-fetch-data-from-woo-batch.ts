@@ -9,7 +9,7 @@ type FetchDataBatchParams = {
   baseUrl: string;
   wooBasicAuth: string;
   currentPage: number;
-  endpoint: "order" | "product" | "productCategories";
+  endpoint: "orders" | "products" | "products-categories";
   perPage: number;
   dateAfter?: string;
   status?: string[];
@@ -19,7 +19,7 @@ type fetchAllDataFromWooParams = {
   baseUrl: string;
   wooBasicAuth: string;
   totalItems: number;
-  endpoint: "order" | "product" | "productCategories";
+  endpoint: "orders" | "products" | "products-categories";
   perPage: number;
   dateAfter?: string;
   status?: string[];
@@ -37,7 +37,7 @@ const fetchDataBatch = async <T>({
 }: FetchDataBatchParams): Promise<T[]> => {
   let result;
   switch (endpoint) {
-    case "order":
+    case "orders":
       if (!dateAfter || !status)
         throw new Error(
           "dateAfter and status are required for fetching orders",
@@ -52,7 +52,7 @@ const fetchDataBatch = async <T>({
       });
       return result.orders as T[];
 
-    case "product":
+    case "products":
       result = await wooApiRepository.product.getProductsPagination({
         baseUrl,
         token: wooBasicAuth,
@@ -61,7 +61,7 @@ const fetchDataBatch = async <T>({
       });
       return result.products as T[];
 
-    case "productCategories":
+    case "products-categories":
       result = await wooApiRepository.product.getProductsCategoriesPagination({
         baseUrl,
         token: wooBasicAuth,

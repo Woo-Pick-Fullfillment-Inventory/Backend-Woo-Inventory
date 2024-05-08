@@ -3,14 +3,13 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { ObjectId } from "mongodb";
 
 import { emailValidator } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
-import { mongoRepository } from "../../repository/mongoDB/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
@@ -102,7 +101,7 @@ export const signup = async (req: Request, res: Response) => {
       req.body.token.split("|")[1],
     ),
   });
-  // actually useless
+  // todo: go for 401 error code case
   if (!systemStatusResult)
     return createErrorResponse(res, SERVICE_ERRORS.invalidTokenOrAppUrl);
 
@@ -110,7 +109,6 @@ export const signup = async (req: Request, res: Response) => {
 
   // todo : products can actually be synced from another users of same store
   const userInserted = await mongoRepository.user.insertUser({
-    user_id: new ObjectId().toHexString(),
     store: { app_url: req.body.app_url },
     email: req.body.email,
     username: req.body.username,

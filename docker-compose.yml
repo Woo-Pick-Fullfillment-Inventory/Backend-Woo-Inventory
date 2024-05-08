@@ -27,12 +27,3 @@ services:
       - type: bind
         source: ${PWD}/__test__/mongo-init
         target: /docker-entrypoint-initdb.d
-  mongo_express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: pass

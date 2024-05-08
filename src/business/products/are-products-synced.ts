@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 
 import type {
   Request,
@@ -35,9 +35,9 @@ export const areProductsSynced = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 404 - Not Found ***ERROR*** user not found by id ${userId}`,
@@ -47,5 +47,5 @@ export const areProductsSynced = async (req: Request, res: Response) => {
 
   return res
     .status(200)
-    .send({ are_products_synced: userFoundInFirestore.sync.are_products_synced });
+    .send({ are_products_synced: userFoundInMongo.sync.are_products_synced });
 };

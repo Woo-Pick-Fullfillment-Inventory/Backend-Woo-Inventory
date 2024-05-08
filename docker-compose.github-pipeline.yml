@@ -1,15 +1,19 @@
 version: "3.9"
 
 services:
-  firebase-emulator:
-    image: fixl/firebase-emulator-suite:12.7
+  mongo:
+    image: mongo
+    restart: always
     ports:
-      - "8888:8888"
+      - "27017:27017"
     environment:
-      - FIREBASE_PROJECT_ID=test-project
-      - FIRESTORE=true
-      - FIRESTORE_PORT=8888
-      - AUTH=false
+      MONGO_INITDB_DATABASE: test-database
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - type: bind
+        source: ${PWD}/__test__/mongo-init
+        target: /docker-entrypoint-initdb.d
   wiremock:
     image: wiremock/wiremock:3.1.0
     container_name: wiremock-container
@@ -35,7 +39,7 @@ services:
       PRODUCTS_IMAGES_BUCKET: test-bucket
       FIREBASE_STORAGE_EMULATOR_HOST: firebase-emulator:9199
     depends_on:
-      firebase-emulator:
+      mongo:
         condition: service_started
       wiremock:
         condition: service_started

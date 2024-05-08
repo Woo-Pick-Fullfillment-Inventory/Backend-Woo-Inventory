@@ -1,12 +1,6 @@
-import {
-  apps,
-  clearFirestoreData,
-  initializeAdminApp,
-} from "@firebase/rules-unit-testing";
 import { WireMockRestClient } from "wiremock-rest-client";
 
-import { viewCollectionFactory } from "../../src/repository/firestore/collection/view-collection.js";
-import { insertUserFactory } from "../../src/repository/firestore/users/insert-user.js";
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
@@ -16,17 +10,12 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Syncing products categories test", () => {
-  let db: FirebaseFirestore.Firestore;
-
   beforeEach(async () => {
-    db = initializeAdminApp({ projectId: "test-project" }).firestore();
-    await insertUserFactory(db)(mockUserForSyncingProducts);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
-  afterEach(async () => {
-    await clearFirestoreData({ projectId: "test-project" });
-    await Promise.all(apps().map((app) => app.delete()));
+  afterAll(async () => {
+    await mongoClient.close();
   });
 
   it("should have products categories synced", async () => {
@@ -58,7 +47,5 @@ describe("Syncing products categories test", () => {
         })
       ).count,
     ).toEqual(1);
-    const fireStoreUsersProductsCategories = await viewCollectionFactory(db)(`categories/users-${mockUserForSyncingProducts.user_id}/users-categories`);
-    expect(fireStoreUsersProductsCategories.length).toEqual(64);
   });
 });
