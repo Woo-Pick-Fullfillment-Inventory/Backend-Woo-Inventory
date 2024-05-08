@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const username = process.env["MONGO_INITDB_ROOT_USERNAME"] || "admin";
-const password = process.env["MONGO_INITDB_ROOT_PASSWORD"] || "password";
+const password = process.env["MONGO_INITDB_ROOT_PASSWORD"] || "pass";
 const host = process.env["MONGO_HOST"] || "mongo";
 const port = process.env["MONGO_PORT"] || "27017";
 const database = process.env["MONGO_INITDB_DATABASE"] || "test-database";
