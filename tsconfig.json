@@ -24,5 +24,5 @@
     "importsNotUsedAsValues": "error",
     "checkJs": true
   },
-  "include": ["src/**/*", "__test__/**/*"]
+  "include": ["src/**/*", "__test__/**/*", "mongo-init"]
 }

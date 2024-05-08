@@ -15,8 +15,6 @@ const checkEnvVars = () => {
         "JWT_SECRET",
         "PROJECT_ID",
         "PRODUCTS_IMAGES_BUCKET",
-        "FIRESTORE_EMULATOR_HOST",
-        "FIREBASE_STORAGE_EMULATOR_HOST",
       ];
 
   const missingVars = requiredVars.filter((v) => !process.env[v]);

@@ -1,10 +1,10 @@
 import { MongoClient } from "mongodb";
 
-const mongoUri =
-  "mongodb://admin:pass@localhost:27017/test-database?retryWrites=true&writeConcern=majority&authSource=admin";
-
 // todo: add options
-const mongoClient = new MongoClient(mongoUri, { connectTimeoutMS: 30000 });
+const mongoClient = new MongoClient(
+  `mongodb://${process.env["MONGO_INITDB_ROOT_USERNAME"]}:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@${process.env["MONGO_HOST"]}:${process.env["MONGO_PORT"]}/${process.env["MONGO_INITDB_DATABASE"]}?retryWrites=true&writeConcern=majority&authSource=admin`,
+  { connectTimeoutMS: 30000 },
+);
 
 mongoClient
   .on("error", (err) => console.error("MongoDB Client Error:", err))
