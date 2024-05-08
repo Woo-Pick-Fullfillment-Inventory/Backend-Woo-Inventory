@@ -42,6 +42,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: pass
       MONGO_HOST: mongo
       MONGO_PORT: 27017
+      MONGO_URI: mongodb://admin:pass@mongo:27017/test-database?authSource=admin
     depends_on:
       mongo:
         condition: service_started
