@@ -6,7 +6,7 @@ export const getProductsCategoriesFactory = (
 ) => {
   return async (userId: string): Promise<ProductsCategoryMongoType[]> => {
     const categories = await mongoClient
-      .db("test-database")
+      .db(process.env["MONGO_INITDB_DATABASE"] as string)
       .collection(`user-${userId}-categories`)
       .find()
       .toArray();

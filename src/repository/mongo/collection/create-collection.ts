@@ -10,7 +10,7 @@ export const createCollectionFactory = (mongoClient: MongoClient) => {
     collectionName: string;
     caseType: CaseType;
   }): Promise<void> => {
-    const db = mongoClient.db("test-database");
+    const db = mongoClient.db(process.env["MONGO_INITDB_DATABASE"] as string);
     await db.createCollection(collectionName);
     const collection = db.collection(collectionName);
 

@@ -6,7 +6,7 @@ import type { MongoClient } from "mongodb";
 export const insertProductFactory = (mongoClient: MongoClient) => {
   return async (product: AddProductMongoType, userId: string): Promise<void> => {
     const productCollection = mongoClient
-      .db("test-database")
+      .db(process.env["MONGO_INITDB_DATABASE"] as string)
       .collection(`user-${userId}-products`);
     const existingProduct = await productCollection.findOne({
       $or: [

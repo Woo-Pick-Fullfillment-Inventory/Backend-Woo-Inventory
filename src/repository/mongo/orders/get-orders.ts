@@ -6,7 +6,7 @@ export const getOrdersFactory = (
 ) => {
   return async (userId: string): Promise<OrderMongoType[]> => {
     const Orders = await mongoClient
-      .db("test-database")
+      .db(process.env["MONGO_INITDB_DATABASE"] as string)
       .collection(`user-${userId}-orders`)
       .find()
       .toArray();

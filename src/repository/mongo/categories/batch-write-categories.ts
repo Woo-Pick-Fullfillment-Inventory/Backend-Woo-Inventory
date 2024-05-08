@@ -18,7 +18,7 @@ export const batchWriteProductsCategoriesFactory = (
     }
 
     const bulk = mongoClient
-      .db("test-database")
+      .db(process.env["MONGO_INITDB_DATABASE"] as string)
       .collection(`user-${userId}-categories`)
       .initializeUnorderedBulkOp();
 

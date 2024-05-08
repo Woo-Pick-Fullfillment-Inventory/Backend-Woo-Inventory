@@ -14,12 +14,6 @@ services:
       - type: bind
         source: ${PWD}/__test__/mongo-init
         target: /docker-entrypoint-initdb.d
-    healthcheck:
-      test: >
-        mongo --quiet --eval 'db.runCommand("ping").ok' --username $${MONGO_INITDB_ROOT_USERNAME} --password $${MONGO_INITDB_ROOT_PASSWORD}
-      interval: 15s
-      timeout: 10s
-      retries: 10
 
   wiremock:
     image: wiremock/wiremock:3.1.0

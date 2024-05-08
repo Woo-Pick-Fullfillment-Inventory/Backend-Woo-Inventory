@@ -14,7 +14,7 @@ type SortOptionType = {
 export const getProductsFactory = (mongoClient: MongoClient) => {
   return async (userId: string, sortOption: SortOptionType): Promise<ProductMongoType[]> => {
     const productsCollection = mongoClient
-      .db("test-database")
+      .db(process.env["MONGO_INITDB_DATABASE"] as string)
       .collection(`user-${userId}-products`);
 
     const sortDirection = sortOption.direction === "asc" ? 1 : -1;

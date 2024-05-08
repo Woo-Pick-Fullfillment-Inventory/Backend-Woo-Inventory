@@ -51,7 +51,7 @@ import type {
   UserUpdateAttributeType,
 } from "./models/user.type.js";
 
-const userCollection = mongoClient.db("test-database").collection("users");
+const userCollection = mongoClient.db(process.env["MONGO_INITDB_DATABASE"] as string).collection("users");
 
 export type {
   UserAttributeType,
