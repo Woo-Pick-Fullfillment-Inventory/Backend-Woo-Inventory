@@ -13,12 +13,6 @@ mongoClient
   .on("reconnect", () => console.log("MongoDB Client reconnected."))
   .on("timeout", () => console.warn("MongoDB Client connection timeout."))
   .on("disconnected", () => console.warn("MongoDB Client disconnected."))
-  .connect()
-  .then(() => {
-    console.log("MongoDB Client successfully connected!");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+  .connect();
 
 export default mongoClient;

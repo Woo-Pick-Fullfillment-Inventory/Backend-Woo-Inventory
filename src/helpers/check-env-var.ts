@@ -15,6 +15,11 @@ const checkEnvVars = () => {
         "JWT_SECRET",
         "PROJECT_ID",
         "PRODUCTS_IMAGES_BUCKET",
+        "MONGO_INITDB_ROOT_USERNAME",
+        "MONGO_INITDB_ROOT_PASSWORD",
+        "MONGO_HOST",
+        "MONGO_PORT",
+        "MONGO_INITDB_DATABASE",
       ];
 
   const missingVars = requiredVars.filter((v) => !process.env[v]);
