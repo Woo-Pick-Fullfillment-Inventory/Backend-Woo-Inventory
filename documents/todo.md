@@ -9,3 +9,4 @@
 9. createIndex in mongo docker startup
 10. what to do if more than 1000 data should be passed into mongodb
 11. local-tests should be done
+12. get the tests done on pipeline
