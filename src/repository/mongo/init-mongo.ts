@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
+dotenv.config();
 // todo: add options
 let mongoClient: MongoClient | null = null;
 
 if (process.env["NODE_ENV"] === "production") {
-  mongoClient = new MongoClient("mongodb+srv://woopickcloudvn:<password>@cluster0.brctpzh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  mongoClient = new MongoClient(
+    process.env["MONGO_URI"] as string,
     { connectTimeoutMS: 30000 },
   );
 }
