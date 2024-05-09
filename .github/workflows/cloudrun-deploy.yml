@@ -84,5 +84,6 @@ jobs:
           sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
           sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment.yml
           sed -i "s|\$PRODUCTS_IMAGES_BUCKET|${{ secrets.PRODUCTS_IMAGES_BUCKET }}|g" cloudrun_deployment.yml
+          sed -i "s|\$MONGO_URI|${{ secrets.MONGO_URI }}|g" cloudrun_deployment.yml
 
           gcloud run services replace cloudrun_deployment.yml
