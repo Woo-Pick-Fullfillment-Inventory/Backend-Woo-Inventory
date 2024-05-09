@@ -55,20 +55,13 @@ jobs:
 
       - name: install dependencies
         run: npm install
-      
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.10.0
-        with:
-          mongodb-username: admin
-          mongodb-password: pass
-          mongodb-db: test-database
 
       - name: Start wiremock and application
         run: |-
           docker-compose -f docker-compose.github-pipeline.yml up -d --build
 
       - name: Run all the tests
-        run: echo "TODO  Run all the tests"
+        run: npm run test
 
       - name: Check Docker container logs
         if: always()
