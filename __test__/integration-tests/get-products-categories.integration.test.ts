@@ -9,7 +9,7 @@ import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
-  { logLevel: "silent" },
+  { logLevel: "silent" }
 );
 
 // todo: add test for get products categories
@@ -187,14 +187,14 @@ describe("get products categories test", () => {
   beforeEach(async () => {
     await mongoRepository.category.batchWriteProductsCategories(
       categories,
-      mockUserForSyncingProducts.user_id,
+      mockUserForSyncingProducts.user_id
     );
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterEach(async () => {
     await mongoRepository.collection.clearCollection(
-      `user-${mockUserForSyncingProducts.user_id}-categories`,
+      `user-${mockUserForSyncingProducts.user_id}-categories`
     );
   });
 
@@ -206,7 +206,7 @@ describe("get products categories test", () => {
     const response = await httpClient.get("api/v1/products/categories", {
       headers: {
         Authorization: createAuthorizationHeader(
-          mockUserForSyncingProducts.user_id,
+          mockUserForSyncingProducts.user_id
         ),
       },
     });

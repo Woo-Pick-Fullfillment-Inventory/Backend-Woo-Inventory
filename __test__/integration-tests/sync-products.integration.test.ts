@@ -1,10 +1,10 @@
 import { WireMockRestClient } from "wiremock-rest-client";
 
 import { mongoRepository } from "../../src/repository/mongo/index.js";
-import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
   { logLevel: "silent" },
@@ -13,12 +13,12 @@ const woocommerceApiMockServer = new WireMockRestClient(
 describe("Syncing products test", () => {
   const userId = mockUserForSyncingProducts.user_id;
 
-  afterEach(async () => {
-    await woocommerceApiMockServer.requests.deleteAllRequests();
+  beforeAll(async () => {
+    await mongoRepository.user.insertUser(mockUserForSyncingProducts);
   });
 
   afterEach(async () => {
-    await mongoRepository.collection.clearCollection(`user-${userId}-products`);
+    await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterAll(async () => {

@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/*
 import { MongoClient } from "mongodb";
 import {
   MONGO_CONNECT_TIMEOUT,
@@ -61,4 +61,4 @@ const _closeMongo = async (): Promise<void> => {
   _mongoClient = null;
 };
 
-export { _initMongo, _closeMongo, _mongoClient };
+export { _initMongo, _closeMongo, _mongoClient }; */
