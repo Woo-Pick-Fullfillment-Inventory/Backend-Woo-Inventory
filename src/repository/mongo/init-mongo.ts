@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-
 // todo: add options
 const mongoClient = new MongoClient(
   `mongodb://${process.env["MONGO_INITDB_ROOT_USERNAME"]}:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@${process.env["MONGO_HOST"]}:${process.env["MONGO_PORT"]}/${process.env["MONGO_INITDB_DATABASE"]}?retryWrites=true&writeConcern=majority&authSource=admin`,
