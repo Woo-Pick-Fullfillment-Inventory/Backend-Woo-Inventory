@@ -18,7 +18,7 @@ if (process.env["NODE_ENV"] === "development") {
 
 if (process.env["NODE_ENV"] === "test") {
   mongoClient = new MongoClient(
-    "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+    "mongodb://admin:pass@0.0.0.0:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
     { connectTimeoutMS: 30000 },
   );
 }
