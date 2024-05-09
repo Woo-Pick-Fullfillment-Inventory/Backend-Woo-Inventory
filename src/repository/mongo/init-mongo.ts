@@ -1,12 +1,31 @@
 import { MongoClient } from "mongodb";
 // todo: add options
-const mongoClient = process.env["NODE_ENV"] !== "production" ? new MongoClient(
-  "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
-  { connectTimeoutMS: 30000 },
-) : new MongoClient(
-  `mongodb://${process.env["MONGO_USER"]}:${process.env["MONGO_PASSWORD"]}@${process.env["MONGO_CLUSTER"]}/${process.env["MONGO_DB"]}?retryWrites=true&w=majority`,
-  { connectTimeoutMS: 30000 },
-);
+let mongoClient: MongoClient | null = null;
+
+if (process.env["NODE_ENV"] === "production") {
+  mongoClient = new MongoClient(
+    process.env["MONGO_URI"] as string,
+    { connectTimeoutMS: 30000 },
+  );
+}
+
+if (process.env["NODE_ENV"] === "development") {
+  mongoClient = new MongoClient(
+    "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+    { connectTimeoutMS: 30000 },
+  );
+}
+
+if (process.env["NODE_ENV"] === "test") {
+  mongoClient = new MongoClient(
+    "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+    { connectTimeoutMS: 30000 },
+  );
+}
+
+if (!mongoClient) {
+  throw new Error("MongoDB Client is not defined.");
+}
 
 mongoClient
   .on("error", (err) => console.error("MongoDB Client Error:", err))
@@ -17,4 +36,5 @@ mongoClient
   .on("disconnected", () => console.warn("MongoDB Client disconnected."))
   .connect();
 
-export default mongoClient;
+// eslint-disable-next-line
+export default mongoClient!;
