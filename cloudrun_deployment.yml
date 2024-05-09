@@ -22,8 +22,8 @@ spec:
               value: $PROJECT_ID
             - name: PRODUCTS_IMAGES_BUCKET
               value: $PRODUCTS_IMAGES_BUCKET
-            - name: MONGO_URI
-              value: $MONGO_URI
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: $MONGO_INITDB_ROOT_PASSWORD
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

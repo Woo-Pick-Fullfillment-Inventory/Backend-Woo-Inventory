@@ -9,7 +9,7 @@ let mongoClient: MongoClient | null = null;
 
 if (process.env["NODE_ENV"] === "production") {
   mongoClient = new MongoClient(
-    process.env["MONGO_URI"] as string,
+    `mongodb+srv://woopickcloudvn:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@cluster0.brctpzh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
     {
       serverApi: {
         version: ServerApiVersion.v1,
