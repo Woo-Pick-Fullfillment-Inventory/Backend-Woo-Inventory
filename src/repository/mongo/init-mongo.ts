@@ -3,9 +3,9 @@ import { MongoClient } from "mongodb";
 let mongoClient: MongoClient | null = null;
 
 if (process.env["NODE_ENV"] === "production") {
-  mongoClient = new MongoClient(
-    process.env["MONGO_URI"] as string,
-    { connectTimeoutMS: 30000 },
+  mongoClient = new MongoClient(`
+    ${process.env["MONGO_URI"] as string}`,
+  { connectTimeoutMS: 30000 },
   );
 }
 
