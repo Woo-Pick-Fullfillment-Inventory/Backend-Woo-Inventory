@@ -5,6 +5,10 @@ import { mongoRepository } from "../../src/repository/mongo/index.js";
 import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbTest,
+  initDbTest,
+} from "../common/init-data.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
@@ -185,6 +189,7 @@ describe("get products categories test", () => {
   ];
 
   beforeEach(async () => {
+    await initDbTest();
     await mongoRepository.category.batchWriteProductsCategories(
       categories,
       mockUserForSyncingProducts.user_id,
@@ -193,9 +198,7 @@ describe("get products categories test", () => {
   });
 
   afterEach(async () => {
-    await mongoRepository.collection.clearCollection(
-      `user-${mockUserForSyncingProducts.user_id}-categories`,
-    );
+    await clearDbTest(mockUserForSyncingProducts.user_id);
   });
 
   afterAll(async () => {

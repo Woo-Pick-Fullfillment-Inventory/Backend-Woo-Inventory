@@ -6,6 +6,10 @@ import { createAuthorizationHeader } from "../common/create-authorization-header
 import { generateProductsArray } from "../common/faker/generate-mock-products.js";
 import { httpClient } from "../common/http-client.js";
 import {
+  clearDbTest,
+  initDbTest,
+} from "../common/init-data.js";
+import {
   mockUserDidntSync,
   mockUserForAddingProduct,
 } from "../common/mock-data.js";
@@ -19,15 +23,14 @@ describe("Add product test", () => {
   const userId = mockUserForAddingProduct.user_id;
 
   beforeEach(async () => {
+    await initDbTest();
     const mockProducts = await generateProductsArray(5);
     await mongoRepository.product.batchWriteProducts(mockProducts, userId);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterEach(async () => {
-    await mongoRepository.collection.clearCollection(
-      `user-${userId}-products`,
-    );
+    await clearDbTest(userId);
   });
 
   afterAll(async () => {

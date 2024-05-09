@@ -4,6 +4,10 @@ import { mongoRepository } from "../../src/repository/mongo/index.js";
 import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbTest,
+  initDbTest,
+} from "../common/init-data.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
@@ -13,12 +17,13 @@ const woocommerceApiMockServer = new WireMockRestClient(
 describe("Syncing products test", () => {
   const userId = mockUserForSyncingProducts.user_id;
 
-  afterEach(async () => {
-    await woocommerceApiMockServer.requests.deleteAllRequests();
+  beforeEach(async () => {
+    await initDbTest();
   });
 
   afterEach(async () => {
-    await mongoRepository.collection.clearCollection(`user-${userId}-products`);
+    await clearDbTest(userId);
+    await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterAll(async () => {

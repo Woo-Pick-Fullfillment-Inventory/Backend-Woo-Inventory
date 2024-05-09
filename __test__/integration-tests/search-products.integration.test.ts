@@ -3,18 +3,23 @@ import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { generateProductsArray } from "../common/faker/generate-mock-products.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbTest,
+  initDbTest,
+} from "../common/init-data.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 describe("Search products test", () => {
   const userId = mockUserForSyncingProducts.user_id;
 
   beforeEach(async () => {
+    await initDbTest();
     const mockProducts = await generateProductsArray(27);
     await mongoRepository.product.batchWriteProducts(mockProducts, userId);
   });
 
   afterEach(async () => {
-    await mongoRepository.collection.clearCollection(`user-${userId}-products`);
+    await clearDbTest(userId);
   });
 
   afterAll(async () => {

@@ -1,7 +1,12 @@
 import { WireMockRestClient } from "wiremock-rest-client";
 
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { createAuthorizationHeader } from "../common/create-authorization-header.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbTest,
+  initDbTest,
+} from "../common/init-data.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
@@ -10,7 +15,16 @@ const woocommerceApiMockServer = new WireMockRestClient(
 
 describe("Syncing products categories test", () => {
   beforeEach(async () => {
+    await initDbTest();
+  });
+
+  afterEach(async () => {
+    await clearDbTest(mockUserForSyncingProducts.user_id);
     await woocommerceApiMockServer.requests.deleteAllRequests();
+  });
+
+  afterAll(async () => {
+    await mongoClient.close();
   });
 
   it("should have products categories synced", async () => {

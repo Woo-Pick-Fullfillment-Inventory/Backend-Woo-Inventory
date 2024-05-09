@@ -1,8 +1,25 @@
 import { randomUUID } from "crypto";
 
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbUserTest,
+  initDbTest,
+} from "../common/init-data.js";
 
 describe("Signin test", () => {
+
+  beforeEach(async () => {
+    await initDbTest();
+  });
+
+  afterEach(async () => {
+    await clearDbUserTest();
+  });
+
+  afterAll(async () => {
+    await mongoClient.close();
+  });
 
   it("should return a token when log in was succesful", async () => {
     const responseEmail = await httpClient.post("api/v1/auth/signin", {

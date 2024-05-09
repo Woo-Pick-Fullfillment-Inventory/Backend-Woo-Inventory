@@ -1,7 +1,12 @@
 import { randomUUID } from "crypto";
 import { WireMockRestClient } from "wiremock-rest-client";
 
+import mongoClient from "../../src/repository/mongo/init-mongo.js";
 import { httpClient } from "../common/http-client.js";
+import {
+  clearDbUserTest,
+  initDbTest,
+} from "../common/init-data.js";
 
 const woocommerceApiMockServer = new WireMockRestClient(
   "http://localhost:1080",
@@ -11,7 +16,16 @@ const woocommerceApiMockServer = new WireMockRestClient(
 describe("Signup test", () => {
 
   beforeEach(async () => {
+    await initDbTest();
     await woocommerceApiMockServer.requests.deleteAllRequests();
+  });
+
+  afterEach(async () => {
+    await clearDbUserTest();
+  });
+
+  afterAll(async () => {
+    await mongoClient.close();
   });
 
   it("should return token when signup is successful", async () => {

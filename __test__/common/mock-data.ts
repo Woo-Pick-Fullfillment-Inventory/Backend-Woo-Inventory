@@ -1,7 +1,7 @@
 import type { UserMongoType } from "../../src/repository/mongo/index.js";
 
 export const mockUserWithHashedPassword: UserMongoType = {
-  user_id: "1",
+  user_id: "663ce8165beff09020df1111",
   email: "someone@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -23,7 +23,7 @@ export const mockUserWithHashedPassword: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserWrongType = {
-  user_id: "2",
+  user_id: "663ce8165beff09020df2222",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -106,7 +106,7 @@ export const mockUserForSyncingOrders: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
-  user_id: "4",
+  user_id: "663ce8165beff09020df4444",
   email: "someone44@gmail.com",
   username: "someone44",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -134,7 +134,7 @@ export const mockUserForAddingProduct: UserMongoType = {
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
   store: { app_url: "https://testwebsite.com" },
   woo_credentials: {
-    token: "cs_1111",
+    token: "ck_1111",
     secret: "cs_2222",
   },
   authentication: {

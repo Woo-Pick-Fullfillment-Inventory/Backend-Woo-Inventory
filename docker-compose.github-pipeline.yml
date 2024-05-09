@@ -10,10 +10,6 @@ services:
       MONGO_INITDB_DATABASE: test-database
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
-    volumes:
-      - type: bind
-        source: ${PWD}/__test__/mongo-init
-        target: /docker-entrypoint-initdb.d
 
   wiremock:
     image: wiremock/wiremock:3.1.0
