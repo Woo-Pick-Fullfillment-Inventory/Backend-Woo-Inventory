@@ -56,15 +56,9 @@ jobs:
       - name: install dependencies
         run: npm install
 
-      - name: Start wiremock, firestore-emulator and application
+      - name: Start wiremock and application
         run: |-
           docker-compose -f docker-compose.github-pipeline.yml up -d --build
-
-      - name: Check Docker Network
-        run: docker network ls
-
-      - name: Check Wiremock Mount
-        run: docker exec wiremock-container ls -al /home/wiremock/mappings
 
       - name: Run all the tests
         run: npm run test

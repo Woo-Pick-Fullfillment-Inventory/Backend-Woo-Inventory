@@ -16,7 +16,7 @@ export const verifyAuthorizationHeader = (
 
   return (
     jwt.verify(token, process.env["JWT_SECRET"] as string) as {
-      userId: string;
+      user_id: string;
     }
-  ).userId;
+  ).user_id;
 };

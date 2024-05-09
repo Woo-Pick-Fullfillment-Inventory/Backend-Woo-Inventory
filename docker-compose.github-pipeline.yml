@@ -1,15 +1,16 @@
 version: "3.9"
 
 services:
-  firebase-emulator:
-    image: fixl/firebase-emulator-suite:12.7
+  mongodb:
+    image: mongo
+    restart: always
     ports:
-      - "8888:8888"
+      - "27017:27017"
     environment:
-      - FIREBASE_PROJECT_ID=test-project
-      - FIRESTORE=true
-      - FIRESTORE_PORT=8888
-      - AUTH=false
+      MONGO_INITDB_DATABASE: test-database
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+
   wiremock:
     image: wiremock/wiremock:3.1.0
     container_name: wiremock-container
@@ -18,24 +19,27 @@ services:
       - "1080:8080"
     volumes:
       - ${PWD}/__test__/wiremock:/home/wiremock
+
   application:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 5003:5003
+      - "5003:5003"
     environment:
       NODE_ENV: test
       SERVICE_PORT: 5003
       WOO_BASE_URL: http://wiremock:8080
       JWT_SECRET: secret
-      FIRESTORE_EMULATOR_HOST: firebase-emulator:8888
-      FIRESTORE_PROJECT_ID: test-project
       PROJECT_ID: test-project
       PRODUCTS_IMAGES_BUCKET: test-bucket
-      FIREBASE_STORAGE_EMULATOR_HOST: firebase-emulator:9199
+      MONGO_INITDB_DATABASE: test-database
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
     depends_on:
-      firebase-emulator:
-        condition: service_started
+      mongodb:
+        condition: service_started  # Waits for MongoDB to pass its health check
       wiremock:
         condition: service_started

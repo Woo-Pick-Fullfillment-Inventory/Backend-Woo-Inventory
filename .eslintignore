@@ -1,1 +1,3 @@
 /dist
+
+/__test__/mongo-init

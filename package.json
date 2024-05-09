@@ -2,7 +2,7 @@
   "name": "backendwoopickinventory",
   "version": "1.0.0",
   "description": "Node.js setup with Express and TypeScript",
-  "main": "app.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -10,10 +10,10 @@
     "lint-markdown": "markdownlint -i ./node_modules ",
     "lint:fix": "npx eslint 'src/**/*' '__test__/**/*' --fix",
     "build": "tsc -p tsconfig-build.json",
-    "test": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.config.json --detectOpenHandles",
-    "test-local": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.local.config.json --detectOpenHandles",
-    "test-clear-cache": "FIRESTORE_EMULATOR_HOST='0.0.0.0:8888' FIREBASE_STORAGE_EMULATOR_HOST='0.0.0.0:9199' jest -c __test__/jest.local.config.json --clearCache --detectOpenHandles",
-    "dev": "nodemon --watch --env-file .env"
+    "test": "jest -c __test__/jest.config.json --detectOpenHandles",
+    "test-local": "jest -c __test__/jest.local.config.json --detectOpenHandles",
+    "test-clear-cache": "jest -c __test__/jest.local.config.json --clearCache --detectOpenHandles",
+    "dev": "nodemon --env-file .env"
   },
   "author": "",
   "license": "ISC",
@@ -39,6 +39,8 @@
     "helmet": "^7.0.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.3",
     "multer": "^1.4.5-lts.1",
     "perf_hooks": "^0.0.1",
     "redis": "^4.6.13",

@@ -6,7 +6,7 @@ import { convertCategoriesToCLient } from "../../helpers/convert-categories.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 
 import type {
   Request,
@@ -56,21 +56,21 @@ export const getProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.sync.are_products_categories_synced) {
+  if (userFoundInMongo.sync.are_products_categories_synced) {
     logger.log("error", "products categories were not synced");
     return createErrorResponse(res, SERVICE_ERRORS.dataNotSynced);
   }
 
-  const categories = await firestoreRepository.productCategory.getProductsCategories({ userId });
+  const categories = await mongoRepository.category.getProductsCategories(userId);
 
-  return res.status(201).send(
+  return res.status(200).send(
     convertCategoriesToCLient({
       data: categories,
       parentId: ROOT_CATEGORY_PARENT_ID,

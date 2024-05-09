@@ -1,15 +1,7 @@
 version: "3.8"
 
 services:
-  firestore-emulator:
-    image: fixl/firebase-emulator-suite:12.7
-    ports:
-      - "8888:8888"
-    environment:
-      - FIREBASE_PROJECT_ID=test-project
-      - FIRESTORE=true
-      - FIRESTORE_PORT=8888
-      - AUTH=false
+
   wiremock:
     image: wiremock/wiremock:3.1.0
     command: --verbose
@@ -22,3 +14,12 @@ services:
     restart: always
     ports:
       - "6379:6379"
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: test-database
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass

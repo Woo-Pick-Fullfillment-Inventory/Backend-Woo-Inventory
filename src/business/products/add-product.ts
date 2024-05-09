@@ -7,7 +7,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
-import { firestoreRepository } from "../../repository/firestore/index.js";
+import { mongoRepository } from "../../repository/mongo/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
 import type {
@@ -107,48 +107,48 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInFirestore =
-    await firestoreRepository.user.getUserById(userId);
-  if (!userFoundInFirestore) {
+  const userFoundInMongo =
+    await mongoRepository.user.getUserById(userId);
+  if (!userFoundInMongo) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInFirestore.sync.are_products_synced === false) {
+  if (userFoundInMongo.sync.are_products_synced === false) {
     logger.log("error", `user ${userId} needs to sync products first`);
     return createErrorResponse(res, SERVICE_ERRORS.dataNotSynced);
   }
 
   const product = await wooApiRepository.product.postAddProduct({
     baseUrl: process.env["NODE_ENV"] === "production"
-      ? userFoundInFirestore.store.app_url
+      ? userFoundInMongo.store.app_url
       : process.env["WOO_BASE_URL"] as string,
     token: createBasicAuthHeaderToken(
-      userFoundInFirestore.woo_credentials.token,
-      userFoundInFirestore.woo_credentials.secret,
+      userFoundInMongo.woo_credentials.token,
+      userFoundInMongo.woo_credentials.secret,
     ),
     addProductRequestFromUser: req.body,
   });
 
-  await firestoreRepository.product.insertProduct(
+  await mongoRepository.product.insertProduct(
     {
       id: product.id,
       name: req.body.name,
-      sku: req.body.sku || "",
-      slug: req.body.slug || "",
-      categories: req.body.categories || [],
-      images: product.images || [],
-      bar_code: req.body.barcode || "",
-      imei: req.body.imei || "",
-      description: req.body.description || "",
-      supplier: req.body.supplier || "",
-      purchase_price: req.body.purchase_price || "",
-      regular_price: req.body.regular_price || "",
-      sale_price: req.body.sale_price || "",
-      tax_status: req.body.tax_status || "",
-      tax_class: req.body.tax_class || "",
-      unit: req.body.unit || "",
-      activate: req.body.activate || false,
+      sku: req.body.sku ?? "",
+      slug: req.body.slug ?? "",
+      categories: req.body.categories ?? [],
+      images: product.images ?? [],
+      bar_code: req.body.barcode ?? "",
+      imei: req.body.imei ?? "",
+      description: req.body.description ?? "",
+      supplier: req.body.supplier ?? "",
+      purchase_price: req.body.purchase_price ?? "",
+      regular_price: req.body.regular_price ?? "",
+      sale_price: req.body.sale_price ?? "",
+      tax_status: req.body.tax_status ?? "",
+      tax_class: req.body.tax_class ?? "",
+      unit: req.body.unit ?? "",
+      activate: req.body.activate ?? false,
     },
     userId,
   );
