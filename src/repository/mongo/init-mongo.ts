@@ -1,7 +1,10 @@
 import { MongoClient } from "mongodb";
 // todo: add options
-const mongoClient = new MongoClient(
-  `mongodb://${process.env["MONGO_INITDB_ROOT_USERNAME"]}:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@${process.env["MONGO_HOST"]}:${process.env["MONGO_PORT"]}/${process.env["MONGO_INITDB_DATABASE"]}?retryWrites=true&writeConcern=majority&authSource=admin`,
+const mongoClient = process.env["NODE_ENV"] !== "production" ? new MongoClient(
+  "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+  { connectTimeoutMS: 30000 },
+) : new MongoClient(
+  `mongodb://${process.env["MONGO_USER"]}:${process.env["MONGO_PASSWORD"]}@${process.env["MONGO_CLUSTER"]}/${process.env["MONGO_DB"]}?retryWrites=true&w=majority`,
   { connectTimeoutMS: 30000 },
 );
 

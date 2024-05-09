@@ -67,12 +67,6 @@ jobs:
         run: |-
           docker-compose -f docker-compose.github-pipeline.yml up -d --build
 
-      - name: Check Docker Network
-        run: docker network ls
-
-      - name: Check Wiremock Mount
-        run: docker exec wiremock-container ls -al /home/wiremock/mappings
-
       - name: Run all the tests
         run: echo "TODO  Run all the tests"
 
