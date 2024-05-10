@@ -41,5 +41,19 @@ app.get("/", (_req: Request, res: Response) => {
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
   next(createError(404));
 });
+// eslint-disable-next-line
+app.use(function (err: any, _req: Request, res: Response, _next: NextFunction) {
+  if (err.isAPIResponseError) {
+    res.status(err.statusCode).json({
+      type: err.type,
+      message: err.message,
+    });
+  } else {
+    res.status(err.status || 500).json({
+      type: "/internal-server-error",
+      message: "Internal Server Error",
+    });
+  }
+});
 
 export default app;

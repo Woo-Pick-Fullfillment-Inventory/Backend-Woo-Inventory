@@ -16,7 +16,6 @@ export const getUserFactory = (userCollection: Collection<Document>) => {
       const user = await userCollection.findOne(query);
 
       if (!user) return undefined;
-      // todo: add type validation
       return user as unknown as UserMongoType;
     };
   };

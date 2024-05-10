@@ -11,7 +11,7 @@ export const getProductsCategoriesFactory = (
       .find()
       .toArray();
 
-    // todo: add type validation
+    // type validation on API
     return categories as unknown as ProductsCategoryMongoType[];
   };
 };

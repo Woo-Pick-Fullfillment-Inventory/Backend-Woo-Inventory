@@ -10,3 +10,5 @@
 10. what to do if more than 1000 data should be passed into mongodb
 11. local-tests should be done
 12. get the tests done on pipeline
+13. Use redis to make a queue => avoid too many write operations at once to mongo
+14. Use one way to handle api error only!

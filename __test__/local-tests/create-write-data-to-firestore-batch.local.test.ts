@@ -30,11 +30,11 @@ describe("batch data write firestore tests", () => {
       {
         data: orders,
         usecase: "orders",
-        userId: mockUserForSyncingOrders.user_id,
+        userId: mockUserForSyncingOrders.id,
       },
     );
     const ordersFromFirestore = await viewCollectionFactory(db)(
-      `orders/users-${mockUserForSyncingOrders.user_id}/users-orders`,
+      `orders/users-${mockUserForSyncingOrders.id}/users-orders`,
     );
     expect(ordersFromFirestore.length).toEqual(3);
   });
@@ -46,11 +46,11 @@ describe("batch data write firestore tests", () => {
       {
         data: orders,
         usecase: "orders",
-        userId: mockUserForSyncingOrders.user_id,
+        userId: mockUserForSyncingOrders.id,
       },
     );
     const ordersFromFirestore = await viewCollectionFactory(db)(
-      `orders/users-${mockUserForSyncingOrders.user_id}/users-orders`,
+      `orders/users-${mockUserForSyncingOrders.id}/users-orders`,
     );
     expect(ordersFromFirestore.length).toEqual(817);
   });
@@ -62,11 +62,11 @@ describe("batch data write firestore tests", () => {
       {
         data: orders,
         usecase: "orders",
-        userId: mockUserForSyncingOrders.user_id,
+        userId: mockUserForSyncingOrders.id,
       },
     );
     const ordersFromFirestore = await viewCollectionFactory(db)(
-      `orders/users-${mockUserForSyncingOrders.user_id}/users-orders`,
+      `orders/users-${mockUserForSyncingOrders.id}/users-orders`,
     );
     expect(ordersFromFirestore.length).toEqual(1417);
   });

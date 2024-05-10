@@ -1,7 +1,7 @@
 import type { UserMongoType } from "../../src/repository/mongo/index.js";
 
 export const mockUserWithHashedPassword: UserMongoType = {
-  user_id: "663ce8165beff09020df1111",
+  id: "663ce8165beff09020df1111",
   email: "someone@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -23,7 +23,7 @@ export const mockUserWithHashedPassword: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserWrongType = {
-  user_id: "663ce8165beff09020df2222",
+  id: "663ce8165beff09020df2222",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -40,7 +40,7 @@ export const mockUserWrongType = {
 } as UserMongoType;
 
 export const mockUserDidntSync: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea74",
+  id: "6634e9a7e541882e2b99ea74",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -62,7 +62,7 @@ export const mockUserDidntSync: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingProducts: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea73",
+  id: "6634e9a7e541882e2b99ea73",
   email: "someone33@gmail.com",
   username: "someone33",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -84,7 +84,7 @@ export const mockUserForSyncingProducts: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingOrders: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea76",
+  id: "6634e9a7e541882e2b99ea76",
   email: "mock-order-user@gmail.com",
   username: "mock-order-user",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -106,7 +106,7 @@ export const mockUserForSyncingOrders: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
-  user_id: "663ce8165beff09020df4444",
+  id: "663ce8165beff09020df4444",
   email: "someone44@gmail.com",
   username: "someone44",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
@@ -128,7 +128,7 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForAddingProduct: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea75",
+  id: "6634e9a7e541882e2b99ea75",
   email: "someone44@gmail.com",
   username: "someone44",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",

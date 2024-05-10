@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { PRODUCT_PER_PAGE } from "../../constants/size.constant.js";
+import delay from "../../helpers/delay.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -148,13 +149,26 @@ export const syncProducts = async (req: Request, res: Response) => {
   );
 
   // what if internet connection is lost?
+  let productsCount = 0;
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.product.batchWriteProducts(productsFromWoo, userId);
+  for (let i = 0; i < productsFromWoo.length; i+=1000) {
+    const products = productsFromWoo.slice(i, i + 1000);
+    productsCount += await mongoRepository.product.batchWriteProducts(products, userId);
+    await delay(5000);
+  }
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
+
+  if (productsCount !== productsFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${productsFromWoo.length} but got ${productsCount} products.`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
 
   await mongoRepository.user.updateUserProductsSynced(userId, true);
 

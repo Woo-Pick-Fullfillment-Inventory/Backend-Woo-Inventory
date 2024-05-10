@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
 import { CATEGORIES_PER_PAGE } from "../../constants/size.constant.js";
+import delay from "../../helpers/delay.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -138,16 +139,29 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   // todo: what if more than 1000 categories?
+  let categoriesCount = 0;
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.category.batchWriteProductsCategories(
-    categoriesFromWoo,
-    userId,
-  );
+  for (let i=0; i<categoriesFromWoo.length; i+=1000) {
+    const categoriesToWrite = categoriesFromWoo.slice(i, i + 1000);
+    categoriesCount += await mongoRepository.category.batchWriteProductsCategories(
+      categoriesToWrite,
+      userId,
+    );
+    await delay(5000);
+  }
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
+
+  if (categoriesCount !== categoriesFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Categories Syncing failed. Expected ${categoriesFromWoo.length} but received ${categoriesCount} products categories.`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
 
   await mongoRepository.user.updateUserProductsCategoriesSynced(
     userId,

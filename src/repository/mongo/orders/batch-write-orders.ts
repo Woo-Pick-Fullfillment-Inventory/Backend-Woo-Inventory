@@ -1,4 +1,7 @@
-import { ERRORS } from "../../../constants/error.constant.js";
+import {
+  MongoBatchSizeExceededError,
+  MongoDataWriteError,
+} from "../../../constants/error/mongo-error.constant.js";
 import { MONGO_ALLOWED_BATCH_SIZE } from "../../../constants/size.constant.js";
 import logger from "../../../modules/create-logger.js";
 
@@ -8,13 +11,17 @@ import type {
   MongoClient,
 } from "mongodb";
 
-export const batchWriteOrdersFactory = (
-  mongoClient: MongoClient,
-) => {
-  return async (orders: OrderMongoInputType[], userId: string): Promise<void> => {
+export const batchWriteOrdersFactory = (mongoClient: MongoClient) => {
+  return async (
+    orders: OrderMongoInputType[],
+    userId: string,
+  ): Promise<number> => {
     if (orders.length > MONGO_ALLOWED_BATCH_SIZE) {
-      logger.log("error", `Mongo: batch size ${orders.length} exceeded the limit.`);
-      throw new Error(ERRORS.BATCH_SIZE_EXCEEDED);
+      logger.log(
+        "error",
+        `Mongo: batch size ${orders.length} exceeded the limit.`,
+      );
+      throw new MongoBatchSizeExceededError();
     }
 
     const bulk = mongoClient
@@ -29,15 +36,20 @@ export const batchWriteOrdersFactory = (
     const result: BulkWriteResult = await bulk.execute();
 
     const totalOperations =
-            result.insertedCount +
-            result.matchedCount +
-            result.modifiedCount +
-            result.upsertedCount +
-            result.deletedCount;
+      result.insertedCount +
+      result.matchedCount +
+      result.modifiedCount +
+      result.upsertedCount +
+      result.deletedCount;
 
     if (totalOperations !== orders.length) {
-      logger.log("error", `Mongo: total operations ${totalOperations} does not match the orders length ${orders.length}.`);
-      throw new Error(ERRORS.BATCH_WRITE_FAILED);
+      logger.log(
+        "error",
+        `Mongo: total operations ${totalOperations} does not match the orders length ${orders.length}.`,
+      );
+      throw new MongoDataWriteError();
     }
+
+    return totalOperations;
   };
 };

@@ -27,7 +27,7 @@ export const getProductsFactory = (mongoClient: MongoClient) => {
       .limit(sortOption.per_page)
       .toArray();
 
-    // todo: add type validation
+    // type validation on API
     return products as unknown as ProductMongoType[];
   };
 };

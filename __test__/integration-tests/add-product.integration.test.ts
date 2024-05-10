@@ -20,7 +20,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Add product test", () => {
-  const userId = mockUserForAddingProduct.user_id;
+  const userId = mockUserForAddingProduct.id;
 
   beforeEach(async () => {
     await initDbTest();
@@ -79,7 +79,7 @@ describe("Add product test", () => {
     const response = await httpClient.post(
       "api/v1/products",
       { name: "Premium Quality" },
-      { headers: { authorization: createAuthorizationHeader(mockUserDidntSync.user_id) } },
+      { headers: { authorization: createAuthorizationHeader(mockUserDidntSync.id) } },
     );
     expect(response.status).toBe(400);
   });

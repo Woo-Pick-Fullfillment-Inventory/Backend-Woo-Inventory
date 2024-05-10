@@ -192,13 +192,13 @@ describe("get products categories test", () => {
     await initDbTest();
     await mongoRepository.category.batchWriteProductsCategories(
       categories,
-      mockUserForSyncingProducts.user_id,
+      mockUserForSyncingProducts.id,
     );
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
   afterEach(async () => {
-    await clearDbTest(mockUserForSyncingProducts.user_id);
+    await clearDbTest(mockUserForSyncingProducts.id);
   });
 
   afterAll(async () => {
@@ -209,7 +209,7 @@ describe("get products categories test", () => {
     const response = await httpClient.get("api/v1/products/categories", {
       headers: {
         Authorization: createAuthorizationHeader(
-          mockUserForSyncingProducts.user_id,
+          mockUserForSyncingProducts.id,
         ),
       },
     });

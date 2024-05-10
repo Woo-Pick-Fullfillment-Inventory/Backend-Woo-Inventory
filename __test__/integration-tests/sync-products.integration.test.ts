@@ -15,7 +15,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Syncing products test", () => {
-  const userId = mockUserForSyncingProducts.user_id;
+  const userId = mockUserForSyncingProducts.id;
 
   beforeEach(async () => {
     await initDbTest();

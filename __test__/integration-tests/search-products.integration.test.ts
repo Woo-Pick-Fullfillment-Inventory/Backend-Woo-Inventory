@@ -10,7 +10,7 @@ import {
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 
 describe("Search products test", () => {
-  const userId = mockUserForSyncingProducts.user_id;
+  const userId = mockUserForSyncingProducts.id;
 
   beforeEach(async () => {
     await initDbTest();

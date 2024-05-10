@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { ORDERS_PER_PAGE } from "../../constants/size.constant.js";
+import delay from "../../helpers/delay.js";
 import { fromWooToMongoOrdersMapping } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
@@ -151,16 +152,30 @@ export const syncOrders = async (req: Request, res: Response) => {
   );
 
   // what if internet connection is lost?
+  let ordersCount = 0;
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.order.batchWriteOrders(
-    fromWooToMongoOrdersMapping(ordersFromWoo),
-    userId,
-  );
+  for (let i=0; i<ordersFromWoo.length; i+=1000) {
+    const ordersToWrite = ordersFromWoo.slice(i, i + 1000);
+    ordersCount += await mongoRepository.order.batchWriteOrders(
+      fromWooToMongoOrdersMapping(ordersToWrite),
+      userId,
+    );
+    await delay(5000);
+  }
+
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
+
+  if (ordersCount !== ordersFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Orders Syncing failed`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
 
   await mongoRepository.user.updateUserOrdersSynced(userId, true);
 

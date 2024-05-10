@@ -13,14 +13,14 @@ const wooWebHookSchema = {
   type: "object",
   properties: {
     key_id: { type: "number" },
-    user_id: { type: "string" },
+    id: { type: "string" },
     consumer_key: { type: "string" },
     consumer_secret: { type: "string" },
     key_permissions: { type: "string" },
   },
   required: [
     "key_id",
-    "user_id",
+    "id",
     "consumer_key",
     "consumer_secret",
     "key_permissions",

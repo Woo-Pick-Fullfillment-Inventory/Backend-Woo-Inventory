@@ -108,7 +108,7 @@ export const signup = async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   // todo : products can actually be synced from another users of same store
-  const userInserted = await mongoRepository.user.insertUser({
+  await mongoRepository.user.insertUser({
     store: { app_url: req.body.app_url },
     email: req.body.email,
     username: req.body.username,
@@ -129,7 +129,10 @@ export const signup = async (req: Request, res: Response) => {
     },
   });
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ user_id: userInserted.user_id }, process.env["JWT_SECRET"] as string)}` });
+  const userInserted = await mongoRepository.user.getUserByEmail(req.body.email);
+  if (!userInserted) return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
+
+  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ user_id: userInserted.id }, process.env["JWT_SECRET"] as string)}` });
 };
 
 export default signup;

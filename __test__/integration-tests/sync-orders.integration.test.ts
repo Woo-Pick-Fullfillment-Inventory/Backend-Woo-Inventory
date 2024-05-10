@@ -23,7 +23,7 @@ describe("Syncing orders test", () => {
   });
 
   afterEach(async () => {
-    await clearDbTest(mockUserForSyncingOrders.user_id);
+    await clearDbTest(mockUserForSyncingOrders.id);
   });
 
   afterAll(async () => {
@@ -45,7 +45,7 @@ describe("Syncing orders test", () => {
       {
         headers: {
           Authorization: createAuthorizationHeader(
-            mockUserForSyncingOrders.user_id,
+            mockUserForSyncingOrders.id,
           ),
         },
       },
@@ -68,7 +68,7 @@ describe("Syncing orders test", () => {
       ).count,
     ).toEqual(1);
     const orders = await mongoRepository.order.getOrders(
-      mockUserForSyncingOrders.user_id,
+      mockUserForSyncingOrders.id,
     );
     expect(orders.length).toEqual(4);
     for (const order of orders) {

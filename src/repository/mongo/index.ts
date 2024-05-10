@@ -87,7 +87,7 @@ export const mongoRepository = {
     insertUser: insertUserFactory(userCollection),
     getUserByEmail: getUserFactory(userCollection)("email"),
     getUserByUsername: getUserFactory(userCollection)("username"),
-    getUserById: getUserFactory(userCollection)("user_id"),
+    getUserById: getUserFactory(userCollection)("id"),
     updateUserLastLogin: updateUserFactory(userCollection)("last_login"),
     updateUserProductsSynced: updateUserFactory(userCollection)(
       "sync.are_products_synced",
