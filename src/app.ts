@@ -50,7 +50,7 @@ app.use(function (err: any, _req: Request, res: Response, _next: NextFunction) {
       message: err.message,
     });
   } else {
-    logger.log("error ", err);
+    logger.log("error", err);
     res.status(err.status || 500).json({
       type: "/internal-server-error",
       message: "Internal Server Error",
