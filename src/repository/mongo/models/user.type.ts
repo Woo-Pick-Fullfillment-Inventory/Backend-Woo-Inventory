@@ -18,7 +18,13 @@ export const UserMongoSchema = Type.Object({
   email: Type.String(),
   username: Type.String(),
   password: Type.String(),
-  store: Type.Object({ app_url: Type.String() }),
+  store: Type.Object({
+    app_url: Type.String(),
+    type: Type.Union([
+      Type.Literal("shopify"),
+      Type.Literal("woo"),
+    ]),
+  }),
   woo_credentials: Type.Object({
     token: Type.String(),
     secret: Type.String(),

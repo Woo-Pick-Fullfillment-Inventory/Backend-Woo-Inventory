@@ -36,7 +36,7 @@ class WooInternalErrorError extends APIResponseError{
 
 class WooUnauthorizedError extends APIResponseError{
   constructor(
-    message = "Woo Authentication or permission error, e.g. incorrect API keys",
+    message = "Woo Authentication or permission error",
     type = ERROR_TYPES.AXIOS_ERROR,
     statusCode = StatusCodes.UNAUTHORIZED,
   ) {

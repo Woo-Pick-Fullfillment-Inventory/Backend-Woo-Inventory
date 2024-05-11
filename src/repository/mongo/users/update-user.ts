@@ -1,17 +1,19 @@
 import { MongoDataNotModifiedError } from "../../../constants/error/mongo-error.constant.js";
 
-import type { UserUpdateAttributeType } from "../index.js";
 import type {
-  Collection,
-  Document,
-} from "mongodb";
+  ShopType,
+  UserUpdateAttributeType,
+} from "../index.js";
+import type { Db } from "mongodb";
 
-export const updateUserFactory = (userCollection: Collection<Document>) => {
+export const updateUserFactory = (usersMongoDatabase: Db) => {
   return (userAttribute: UserUpdateAttributeType) => {
     return async (
       userId: string,
       attributeValue: string | boolean,
+      shop: ShopType,
     ): Promise<void> => {
+      const userCollection = usersMongoDatabase.collection(`${shop}-users`);
       const query = { id: userId };
       const update = { $set: { [userAttribute]: attributeValue } };
       const options = { upsert: false };

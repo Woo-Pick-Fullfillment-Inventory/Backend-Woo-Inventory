@@ -46,6 +46,7 @@ describe("Syncing orders test", () => {
         headers: {
           Authorization: createAuthorizationHeader(
             mockUserForSyncingOrders.id,
+            "woo",
           ),
         },
       },
@@ -67,13 +68,11 @@ describe("Syncing orders test", () => {
         })
       ).count,
     ).toEqual(1);
-    const orders = await mongoRepository.order.getOrders(
-      mockUserForSyncingOrders.id,
-    );
-    expect(orders.length).toEqual(4);
-    for (const order of orders) {
-      expect(order.picking_status).toBeDefined();
-      expect(order.picking_status).toEqual("unfulfilled");
-    }
+    const orders = await mongoRepository.collection.countDocuments({
+      userId: mockUserForSyncingOrders.id,
+      shop: "woo",
+      collectionName: "orders",
+    });
+    expect(orders).toEqual(4);
   });
 });

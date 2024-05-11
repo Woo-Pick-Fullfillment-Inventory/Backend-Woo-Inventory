@@ -12,24 +12,30 @@ import type {
 } from "mongodb";
 
 export const batchWriteOrdersFactory = (mongoClient: MongoClient) => {
-  return async (
-    orders: OrderMongoInputType[],
-    userId: string,
-  ): Promise<number> => {
-    if (orders.length > MONGO_ALLOWED_BATCH_SIZE) {
+  return async ({
+    data,
+    userId,
+    shop,
+  }: {
+    data: OrderMongoInputType[];
+    userId: string;
+    shop: string;
+  }): Promise<number> => {
+    if (data.length > MONGO_ALLOWED_BATCH_SIZE) {
       logger.log(
         "error",
-        `Mongo: batch size ${orders.length} exceeded the limit.`,
+        `Mongo: batch size ${data.length} exceeded the limit.`,
       );
       throw new MongoBatchSizeExceededError();
     }
 
-    const bulk = mongoClient
-      .db(process.env["MONGO_INITDB_DATABASE"] as string)
-      .collection(`user-${userId}-orders`)
-      .initializeUnorderedBulkOp();
+    const ordersCollection = mongoClient
+      .db(`shop-${shop}-${userId}`)
+      .collection("orders");
 
-    orders.forEach((order) => {
+    const bulk = ordersCollection.initializeUnorderedBulkOp();
+
+    data.forEach((order) => {
       bulk.insert(order);
     });
 
@@ -42,10 +48,10 @@ export const batchWriteOrdersFactory = (mongoClient: MongoClient) => {
       result.upsertedCount +
       result.deletedCount;
 
-    if (totalOperations !== orders.length) {
+    if (totalOperations !== data.length) {
       logger.log(
         "error",
-        `Mongo: total operations ${totalOperations} does not match the orders length ${orders.length}.`,
+        `Mongo: total operations ${totalOperations} does not match the orders length ${data.length}.`,
       );
       throw new MongoDataWriteError();
     }

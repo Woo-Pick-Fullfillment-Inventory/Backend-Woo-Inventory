@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
 import { CATEGORIES_PER_PAGE } from "../../constants/size.constant.js";
-import delay from "../../helpers/delay.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -11,6 +10,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type ProductsCategoryWooType,
@@ -67,7 +67,10 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -81,7 +84,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -139,16 +142,13 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   // todo: what if more than 1000 categories?
-  let categoriesCount = 0;
   const startTimeWritingToDb = performance.now();
-  for (let i=0; i<categoriesFromWoo.length; i+=1000) {
-    const categoriesToWrite = categoriesFromWoo.slice(i, i + 1000);
-    categoriesCount += await mongoRepository.category.batchWriteProductsCategories(
-      categoriesToWrite,
-      userId,
-    );
-    await delay(5000);
-  }
+  const categoriesCount = await writeDataToMongoBatch({
+    data: categoriesFromWoo,
+    userId,
+    shop: shopType,
+    caseType: "categories",
+  });
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
@@ -166,6 +166,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   await mongoRepository.user.updateUserProductsCategoriesSynced(
     userId,
     true,
+    shopType,
   );
 
   return res.sendStatus(201);

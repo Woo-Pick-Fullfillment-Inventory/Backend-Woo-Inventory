@@ -55,9 +55,11 @@ export const signin = async (req: Request, res: Response) => {
 
   const userFoundByEmail = await mongoRepository.user.getUserByEmail(
     req.body.email_or_username,
+    "woo",
   );
   const userFoundByUsername = await mongoRepository.user.getUserByUsername(
     req.body.email_or_username,
+    "woo",
   );
 
   const userFound = userFoundByEmail ? userFoundByEmail : userFoundByUsername;
@@ -87,7 +89,13 @@ export const signin = async (req: Request, res: Response) => {
   await mongoRepository.user.updateUserLastLogin(
     userFound.id,
     new Date().toISOString(),
+    "woo",
   );
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ user_id: userFound.id }, process.env["JWT_SECRET"] as string)}` });
+  return res.status(201).send({
+    jwtToken: `Bearer ${jwt.sign({
+      user_id: userFound.id,
+      shop_type: "woo",
+    }, process.env["JWT_SECRET"] as string)}`,
+  });
 };

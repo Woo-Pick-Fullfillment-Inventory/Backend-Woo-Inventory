@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { PRODUCT_PER_PAGE } from "../../constants/size.constant.js";
-import delay from "../../helpers/delay.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -12,6 +11,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type ProductWooType,
@@ -69,7 +69,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -79,7 +82,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -96,7 +99,11 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
 
-  const documentCounts = await mongoRepository.collection.countDocuments(userId);
+  const documentCounts = await mongoRepository.collection.countDocuments({
+    userId,
+    shop: userFoundInMongo.store.type,
+    collectionName: "products",
+  });
   if (documentCounts > 0) {
     logger.log(
       "warn",
@@ -149,13 +156,13 @@ export const syncProducts = async (req: Request, res: Response) => {
   );
 
   // what if internet connection is lost?
-  let productsCount = 0;
   const startTimeWritingToDb = performance.now();
-  for (let i = 0; i < productsFromWoo.length; i+=1000) {
-    const products = productsFromWoo.slice(i, i + 1000);
-    productsCount += await mongoRepository.product.batchWriteProducts(products, userId);
-    await delay(5000);
-  }
+  const productsCount = await writeDataToMongoBatch({
+    data: productsFromWoo,
+    userId,
+    shop: userFoundInMongo.store.type,
+    caseType: "products",
+  });
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
@@ -170,7 +177,7 @@ export const syncProducts = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  await mongoRepository.user.updateUserProductsSynced(userId, true);
+  await mongoRepository.user.updateUserProductsSynced(userId, true, userFoundInMongo.store.type);
 
   return res.sendStatus(201);
 };

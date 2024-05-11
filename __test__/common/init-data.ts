@@ -11,8 +11,8 @@ import mongoClient from "../../src/repository/mongo/init-mongo.js";
 
 export const initDbTest = async () => {
   await mongoClient
-    .db("test-database")
-    .collection("users")
+    .db("users")
+    .collection("woo-users")
     .insertMany([
       mockUserWithHashedPassword,
       mockUserWrongType,
@@ -26,26 +26,26 @@ export const initDbTest = async () => {
 
 export const clearDbTest = async (userId: string) => {
   await mongoClient
-    .db("test-database")
-    .collection(`user-${userId}-products`)
+    .db(`shop-woo-${userId}`)
+    .collection("products")
     .deleteMany({});
   await mongoClient
-    .db("test-database")
-    .collection(`user-${userId}-orders`)
+    .db(`shop-woo-${userId}`)
+    .collection("orders")
     .deleteMany({});
   await mongoClient
-    .db("test-database")
-    .collection(`user-${userId}-categories`)
+    .db(`shop-woo-${userId}`)
+    .collection("categories")
     .deleteMany({});
   await mongoClient
-    .db("test-database")
-    .collection("users")
+    .db("users")
+    .collection("woo-users")
     .deleteMany({});
 };
 
 export const clearDbUserTest = async() => {
   await mongoClient
-    .db("test-database")
-    .collection("users")
+    .db("users")
+    .collection("woo-users")
     .deleteMany({});
 };

@@ -2,11 +2,11 @@ import { ObjectId } from "mongodb";
 
 import { MongoDataNotModifiedError } from "../../../constants/error/mongo-error.constant.js";
 
-import type { UserMongoType } from "../index.js";
 import type {
-  Collection,
-  Document,
-} from "mongodb";
+  ShopType,
+  UserMongoType,
+} from "../index.js";
+import type { Db } from "mongodb";
 
 /**
  * Factory function to insert a new user and return the inserted user.
@@ -14,11 +14,14 @@ import type {
  * @param userCollection - MongoDB collection where users are stored.
  * @returns An asynchronous function that inserts a user and returns the newly inserted document.
  */
-export const insertUserFactory = (userCollection: Collection<Document>) => {
+export const insertUserFactory = (usersMongoDatabase: Db) => {
   return async (
     user: Omit<UserMongoType, "id" | "_id">,
+    shop: ShopType,
   ): Promise<void> => {
-    const existingUser = await userCollection.findOne({
+    const usersCollection = usersMongoDatabase.collection(`${shop}-users`);
+
+    const existingUser = await usersCollection.findOne({
       $or: [
         { email: user.email },
         { username: user.username },
@@ -27,7 +30,7 @@ export const insertUserFactory = (userCollection: Collection<Document>) => {
     if (existingUser) throw new MongoDataNotModifiedError();
 
     const newUserId = new ObjectId();
-    const result = await userCollection.insertOne({
+    const result = await usersCollection.insertOne({
       _id: newUserId,
       id: newUserId.toHexString(),
       ...user,

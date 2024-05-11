@@ -80,7 +80,12 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(
+    req.headers["authorization"],
+  );
   if (!userId) {
     logger.log(
       "warn",
@@ -93,8 +98,10 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+  const userFoundInMongo = await mongoRepository.user.getUserById(
+    userId,
+    shopType,
+  );
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -103,20 +110,21 @@ export const searchProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  const mongoProductseResult = await mongoRepository.product.getProducts(
+  const mongoProductseResult = await mongoRepository.product.getProducts({
     userId,
-    {
+    shop: userFoundInMongo.store.type,
+    sortOption: {
       attribute: req.body.sorting_criteria.field,
       direction: req.body.sorting_criteria.direction,
       page: req.body.pagination_criteria.page,
       per_page: req.body.pagination_criteria.per_page,
     },
-  );
+  });
 
   return res.status(201).send({
     products: mongoProductseResult.map((product) => ({
       id: product.id,
-      name: product.name,
+      name: product.name ?? "N/A",
       sku: product.sku ?? "N/A",
       stock_quantity: product.stock_quantity ?? "N/A",
       price: product.sale_price ?? "N/A",

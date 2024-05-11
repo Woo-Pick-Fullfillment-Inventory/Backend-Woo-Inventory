@@ -49,8 +49,10 @@ export const profileSetup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
-  if (!userId) {
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]); if (!userId) {
     logger.log(
       "warn",
       `${req.method} ${req.url} - 401 - Not Authorized ***ERROR*** no decoded token from ${userId} header`,
@@ -58,7 +60,7 @@ export const profileSetup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAuthorized);
   }
 
-  const userFoundInMongo = await mongoRepository.user.getUserById(userId);
+  const userFoundInMongo = await mongoRepository.user.getUserById(userId, "woo");
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -68,17 +70,9 @@ export const profileSetup = async (req: Request, res: Response) => {
   }
 
   // todo: adjust for all permissions and roles user may have
-  await mongoRepository.collection.createCollection({
-    collectionName: `user-${userId}-products`,
-    caseType: "products",
-  });
-  await mongoRepository.collection.createCollection({
-    collectionName: `user-${userId}-products`,
-    caseType: "orders",
-  });
-  await mongoRepository.collection.createCollection({
-    collectionName: `user-${userId}-products`,
-    caseType: "categories",
+  await mongoRepository.database.setupDatabase({
+    userId,
+    shop: shopType,
   });
 
   return res.status(200).json({ message: "Profile setup successful" });

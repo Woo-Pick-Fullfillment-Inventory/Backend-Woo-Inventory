@@ -5,7 +5,10 @@ import {
 import { MONGO_ALLOWED_BATCH_SIZE } from "../../../constants/size.constant.js";
 import logger from "../../../modules/create-logger.js";
 
-import type { ProductMongoInputType } from "../index.js";
+import type {
+  ProductMongoInputType,
+  ShopType,
+} from "../index.js";
 import type {
   BulkWriteResult,
   MongoClient,
@@ -21,23 +24,31 @@ import type {
  * @throws MongoDataWriteError when the total operations do not match the products length.
  */
 export const batchWriteProductsFactory = (mongoClient: MongoClient) => {
-  return async (
-    products: ProductMongoInputType[],
-    userId: string,
-  ): Promise<number> => {
-
-    if (products.length > MONGO_ALLOWED_BATCH_SIZE) {
-      logger.log("error", `Mongo: batch size ${products.length} exceeded the limit.`);
+  return async ({
+    data,
+    userId,
+    shop,
+  }: {
+    data: ProductMongoInputType[];
+    userId: string;
+    shop: ShopType;
+  }): Promise<number> => {
+    if (data.length > MONGO_ALLOWED_BATCH_SIZE) {
+      logger.log(
+        "error",
+        `Mongo: batch size ${data.length} exceeded the limit.`,
+      );
       throw new MongoBatchSizeExceededError();
     }
 
-    const bulk = mongoClient
-      .db(process.env["MONGO_INITDB_DATABASE"] as string)
-      .collection(`user-${userId}-products`)
-      .initializeUnorderedBulkOp();
+    const productsCollection = mongoClient
+      .db(`shop-${shop}-${userId}`)
+      .collection("products");
+
+    const bulk = productsCollection.initializeUnorderedBulkOp();
 
     // Create bulk operations
-    products.forEach((product) => {
+    data.forEach((product) => {
       bulk.insert(product);
     });
 
@@ -50,8 +61,11 @@ export const batchWriteProductsFactory = (mongoClient: MongoClient) => {
       result.upsertedCount +
       result.deletedCount;
 
-    if (totalOperations !== products.length) {
-      logger.log("error", `Mongo: total operations ${totalOperations} does not match the products length ${products.length}.`);
+    if (totalOperations !== data.length) {
+      logger.log(
+        "error",
+        `Mongo: total operations ${totalOperations} does not match the products length ${data.length}.`,
+      );
       throw new MongoDataWriteError();
     }
 

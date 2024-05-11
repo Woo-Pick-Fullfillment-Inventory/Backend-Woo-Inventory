@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { ORDERS_PER_PAGE } from "../../constants/size.constant.js";
-import delay from "../../helpers/delay.js";
 import { fromWooToMongoOrdersMapping } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
@@ -13,6 +12,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type OrderWooType,
@@ -81,7 +81,10 @@ export const syncOrders = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -91,7 +94,7 @@ export const syncOrders = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -152,16 +155,13 @@ export const syncOrders = async (req: Request, res: Response) => {
   );
 
   // what if internet connection is lost?
-  let ordersCount = 0;
   const startTimeWritingToDb = performance.now();
-  for (let i=0; i<ordersFromWoo.length; i+=1000) {
-    const ordersToWrite = ordersFromWoo.slice(i, i + 1000);
-    ordersCount += await mongoRepository.order.batchWriteOrders(
-      fromWooToMongoOrdersMapping(ordersToWrite),
-      userId,
-    );
-    await delay(5000);
-  }
+  const ordersInserted = await writeDataToMongoBatch({
+    data: fromWooToMongoOrdersMapping(ordersFromWoo),
+    userId,
+    shop: userFoundInMongo.store.type,
+    caseType: "orders",
+  });
 
   const endTimeWritingToDb = performance.now();
   logger.log(
@@ -169,7 +169,7 @@ export const syncOrders = async (req: Request, res: Response) => {
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  if (ordersCount !== ordersFromWoo.length) {
+  if (ordersInserted !== ordersFromWoo.length) {
     logger.log(
       "error",
       `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Orders Syncing failed`,
@@ -177,7 +177,7 @@ export const syncOrders = async (req: Request, res: Response) => {
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  await mongoRepository.user.updateUserOrdersSynced(userId, true);
+  await mongoRepository.user.updateUserOrdersSynced(userId, true, userFoundInMongo.store.type);
 
   return res.sendStatus(201);
 };

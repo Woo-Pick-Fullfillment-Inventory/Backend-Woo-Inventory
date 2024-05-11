@@ -35,6 +35,7 @@ describe("Syncing products categories test", () => {
         headers: {
           Authorization: createAuthorizationHeader(
             mockUserForSyncingProducts.id,
+            "woo",
           ),
         },
       },

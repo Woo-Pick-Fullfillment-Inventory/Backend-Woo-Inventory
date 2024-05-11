@@ -37,3 +37,4 @@ Changed in version 3.6: The limit raises from 1,000 to 100,000 writes. This limi
 
 The Bulk() operations in mongosh and comparable methods in the drivers do not have this limit.
 
+M0 free clusters and M2/M5 shared clusters can have a maximum of 100 databases and 500 collections total.

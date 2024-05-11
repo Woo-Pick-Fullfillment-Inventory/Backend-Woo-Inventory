@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 
-import APIResponseError from "./api-response-error.constant";
+import APIResponseError from "./api-response-error.constant.js";
 
 export const ERROR_TYPES = { MONGO_ERROR: "Database Error" } as const;
 

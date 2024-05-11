@@ -15,7 +15,11 @@ describe("Search products test", () => {
   beforeEach(async () => {
     await initDbTest();
     const mockProducts = await generateProductsArray(27);
-    await mongoRepository.product.batchWriteProducts(mockProducts, userId);
+    await mongoRepository.product.batchWriteProducts({
+      data: mockProducts,
+      userId,
+      shop: "woo",
+    });
   });
 
   afterEach(async () => {
@@ -39,7 +43,7 @@ describe("Search products test", () => {
           per_page: 10,
         },
       },
-      { headers: { authorization: createAuthorizationHeader(userId) } },
+      { headers: { authorization: createAuthorizationHeader(userId, "woo") } },
     );
     expect(responseFirstList.status).toEqual(201);
     expect(responseFirstList.data.products.length).toBe(10);
@@ -56,7 +60,7 @@ describe("Search products test", () => {
           per_page: 10,
         },
       },
-      { headers: { authorization: createAuthorizationHeader(userId) } },
+      { headers: { authorization: createAuthorizationHeader(userId, "woo") } },
     );
     expect(responseSecondList.status).toEqual(201);
     expect(responseSecondList.data.products.length).toBe(10);
@@ -73,7 +77,7 @@ describe("Search products test", () => {
           per_page: 10,
         },
       },
-      { headers: { authorization: createAuthorizationHeader(userId) } },
+      { headers: { authorization: createAuthorizationHeader(userId, "woo") } },
     );
     expect(responseThirdList.status).toEqual(201);
     expect(responseThirdList.data.products.length).toBe(7);

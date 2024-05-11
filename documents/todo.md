@@ -12,3 +12,4 @@
 12. get the tests done on pipeline
 13. Use redis to make a queue => avoid too many write operations at once to mongo
 14. Use one way to handle api error only!
+15. Mongo sharding, multiple databases!
