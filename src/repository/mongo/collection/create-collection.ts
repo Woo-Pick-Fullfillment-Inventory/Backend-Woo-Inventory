@@ -21,7 +21,11 @@ export const setupDatabaseFactory = (mongoClient: MongoClient) => {
     await productsCollection.createIndex({ price: 1 });
     await productsCollection.createIndex({ expiration_date: 1 });
     await productsCollection.createIndex({ name: 1 });
-    await productsCollection.createIndex({ sku: 1 }, { unique: true });
+    // ignore empty sku
+    const hasNonEmptySku = await productsCollection.findOne({ sku: { $ne: "" } });
+    if (hasNonEmptySku) {
+      await productsCollection.createIndex({ sku: 1 }, { unique: true });
+    }
     // Define any necessary indexes for "categories" if required.
     await categoriesCollection.createIndex({ id: 1 }, { unique: true });
     await categoriesCollection.createIndex({ name: 1 });

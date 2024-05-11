@@ -33,8 +33,8 @@
         "status": 200,
         "bodyFileName": "products/GET-all-products-1.json",
         "headers": {
-          "X-WP-Total": "176",
-          "X-WP-TotalPages": "176"
+          "X-WP-Total": "200",
+          "X-WP-TotalPages": "200"
         }
       }
     },
@@ -52,8 +52,8 @@
         "status": 200,
         "bodyFileName": "products/GET-all-products-1-falsy-type.json",
         "headers": {
-          "X-WP-Total": "176",
-          "X-WP-TotalPages": "176"
+          "X-WP-Total": "200",
+          "X-WP-TotalPages": "200"
         }
       }
     },
@@ -70,7 +70,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "X-WP-Total": "176",
+          "X-WP-Total": "200",
           "X-WP-TotalPages": "4"
         },
         "bodyFileName": "products/GET-products-100-page-1.json"
@@ -89,7 +89,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "X-WP-Total": "176",
+          "X-WP-Total": "200",
           "X-WP-TotalPages": "4"
         },
         "bodyFileName": "products/GET-products-100-page-2.json"

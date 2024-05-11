@@ -24,6 +24,8 @@ spec:
               value: $PRODUCTS_IMAGES_BUCKET
             - name: MONGO_INITDB_ROOT_PASSWORD
               value: $MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_USERS_DATABASE
+              value: $MONGO_USERS_DATABASE
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

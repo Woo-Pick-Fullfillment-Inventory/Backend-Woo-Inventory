@@ -7,6 +7,7 @@ import {
   mockUserWithHashedPassword,
   mockUserWrongType,
 } from "./mock-data.js";
+import { mongoRepository } from "../../src/repository/mongo/index.js";
 import mongoClient from "../../src/repository/mongo/init-mongo.js";
 
 export const initDbTest = async () => {
@@ -22,6 +23,13 @@ export const initDbTest = async () => {
       mockUserForSyncingProductsFalsyTypeProductReturn,
       mockUserForAddingProduct,
     ]);
+};
+
+export const initDbWithIndexTest = async (userId: string) => {
+  await mongoRepository.database.setupDatabase({
+    userId,
+    shop: "woo",
+  });
 };
 
 export const clearDbTest = async (userId: string) => {
