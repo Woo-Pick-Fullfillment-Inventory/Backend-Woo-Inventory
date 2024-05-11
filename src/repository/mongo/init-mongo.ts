@@ -20,7 +20,7 @@ const mongoClient =
       },
     )
     : new MongoClient(
-      "mongodb://admin:pass@localhost:27017?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+      "mongodb://admin:pass@mongo:27017?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
       { connectTimeoutMS: 30000 },
     );
 

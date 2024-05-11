@@ -143,11 +143,19 @@ export const signup = async (req: Request, res: Response) => {
   if (!userInserted)
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
 
+  await mongoRepository.database.setupDatabase({
+    userId: userInserted.id,
+    shop: "woo",
+  });
+
   return res.status(201).send({
-    jwtToken: `Bearer ${jwt.sign({
-      user_id: userInserted.id,
-      shop_type: "woo",
-    }, process.env["JWT_SECRET"] as string)}`,
+    jwtToken: `Bearer ${jwt.sign(
+      {
+        user_id: userInserted.id,
+        shop_type: "woo",
+      },
+      process.env["JWT_SECRET"] as string,
+    )}`,
   });
 };
 
