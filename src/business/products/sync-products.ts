@@ -144,7 +144,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   if (productsFromWoo.length !== totalItems) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${totalItems} but got ${productsFromWoo.length} products.`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${totalItems} to get from woo but got ${productsFromWoo.length} products.`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
@@ -172,7 +172,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   if (productsCount !== productsFromWoo.length) {
     logger.log(
       "error",
-      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${productsFromWoo.length} but got ${productsCount} products.`,
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${productsFromWoo.length} to be inserted but got ${productsCount} products.`,
     );
     return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
   }
