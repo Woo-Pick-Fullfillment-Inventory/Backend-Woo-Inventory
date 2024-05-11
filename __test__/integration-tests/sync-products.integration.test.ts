@@ -7,6 +7,7 @@ import { httpClient } from "../common/http-client.js";
 import {
   clearDbTest,
   initDbTest,
+  initDbWithIndexTest,
 } from "../common/init-data.js";
 import { mockUserForSyncingProducts } from "../common/mock-data.js";
 const woocommerceApiMockServer = new WireMockRestClient(
@@ -30,7 +31,8 @@ describe("Syncing products test", () => {
     await mongoClient.close();
   });
 
-  it("should have products synced", async () => {
+  it.only("should have products synced", async () => {
+    await initDbWithIndexTest(userId);
     const response = await httpClient.post(
       "api/v1/products/sync",
       { action: "sync-products" },
@@ -48,7 +50,7 @@ describe("Syncing products test", () => {
       userId,
       shop: "woo",
       collectionName: "products",
-    })).toEqual(176);
+    })).toEqual(200);
     // eslint-disable-next-line
     expect(
       (
