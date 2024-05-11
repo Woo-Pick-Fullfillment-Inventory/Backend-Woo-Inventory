@@ -1,8 +1,7 @@
 import { batchWriteProductsCategoriesFactory } from "./categories/batch-write-categories.js";
 import { getProductsCategoriesFactory } from "./categories/get-categories.js";
-import { clearCollectionFactory } from "./collection/clear-collection.js";
 import { countDocumentsFactory } from "./collection/count-documents.js";
-import { createCollectionFactory } from "./collection/create-collection.js";
+import { setupDatabaseFactory } from "./collection/create-collection.js";
 import mongoClient from "./init-mongo.js";
 import {
   ProductCategoryMongoInputSchema,
@@ -45,13 +44,14 @@ import type {
   ProductMongoInputType,
   ProductMongoType,
 } from "./models/product.type.js";
+import type { ShopType } from "./models/shop.type.js";
 import type {
   UserAttributeType,
   UserMongoType,
   UserUpdateAttributeType,
 } from "./models/user.type.js";
 
-const userCollection = mongoClient.db(process.env["MONGO_INITDB_DATABASE"] as string).collection("users");
+const usersMongoDatabase = mongoClient.db(process.env["MONGO_USERS_DATABASE"] as string);
 
 export type {
   UserAttributeType,
@@ -68,6 +68,7 @@ export type {
   ProductCategoryMongoInputType,
   OrderMongoType,
   OrderMongoInputType,
+  ShopType,
 };
 
 export {
@@ -84,18 +85,18 @@ export {
 
 export const mongoRepository = {
   user: {
-    insertUser: insertUserFactory(userCollection),
-    getUserByEmail: getUserFactory(userCollection)("email"),
-    getUserByUsername: getUserFactory(userCollection)("username"),
-    getUserById: getUserFactory(userCollection)("user_id"),
-    updateUserLastLogin: updateUserFactory(userCollection)("last_login"),
-    updateUserProductsSynced: updateUserFactory(userCollection)(
+    insertUser: insertUserFactory(usersMongoDatabase),
+    getUserByEmail: getUserFactory(usersMongoDatabase)("email"),
+    getUserByUsername: getUserFactory(usersMongoDatabase)("username"),
+    getUserById: getUserFactory(usersMongoDatabase)("id"),
+    updateUserLastLogin: updateUserFactory(usersMongoDatabase)("last_login"),
+    updateUserProductsSynced: updateUserFactory(usersMongoDatabase)(
       "sync.are_products_synced",
     ),
-    updateUserProductsCategoriesSynced: updateUserFactory(userCollection)(
+    updateUserProductsCategoriesSynced: updateUserFactory(usersMongoDatabase)(
       "sync.are_products_categories_synced",
     ),
-    updateUserOrdersSynced: updateUserFactory(userCollection)(
+    updateUserOrdersSynced: updateUserFactory(usersMongoDatabase)(
       "sync.are_orders_synced",
     ),
   },
@@ -104,11 +105,7 @@ export const mongoRepository = {
     getProducts: getProductsFactory(mongoClient),
     insertProduct: insertProductFactory(mongoClient),
   },
-  collection: {
-    clearCollection: clearCollectionFactory(mongoClient),
-    createCollection: createCollectionFactory(mongoClient),
-    countDocuments: countDocumentsFactory(mongoClient),
-  },
+  collection: { countDocuments: countDocumentsFactory(mongoClient) },
   category: {
     batchWriteProductsCategories: batchWriteProductsCategoriesFactory(mongoClient),
     getProductsCategories: getProductsCategoriesFactory(mongoClient),
@@ -117,4 +114,5 @@ export const mongoRepository = {
     batchWriteOrders: batchWriteOrdersFactory(mongoClient),
     getOrders: getOrdersFactory(mongoClient),
   },
+  database: { setupDatabase: setupDatabaseFactory(mongoClient) },
 };

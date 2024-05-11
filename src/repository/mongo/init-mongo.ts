@@ -4,40 +4,25 @@ import {
   ServerApiVersion,
 } from "mongodb";
 dotenv.config();
+
 // todo: add options
-let mongoClient: MongoClient | null = null;
-
-if (process.env["NODE_ENV"] === "production") {
-  mongoClient = new MongoClient(
-    `mongodb+srv://woopickcloudvn:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@cluster0.brctpzh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
-    {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
+const mongoClient =
+  process.env["NODE_ENV"] === "production"
+    ? new MongoClient(
+      `mongodb+srv://woopickcloudvn:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@cluster0.brctpzh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+      {
+        serverApi: {
+          version: ServerApiVersion.v1,
+          strict: true,
+          deprecationErrors: true,
+        },
+        connectTimeoutMS: 30000,
       },
-      connectTimeoutMS: 30000,
-    },
-  );
-}
-
-if (process.env["NODE_ENV"] === "development") {
-  mongoClient = new MongoClient(
-    "mongodb://admin:pass@localhost:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
-    { connectTimeoutMS: 30000 },
-  );
-}
-
-if (process.env["NODE_ENV"] === "test") {
-  mongoClient = new MongoClient(
-    "mongodb://admin:pass@0.0.0.0:27017/test-database?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
-    { connectTimeoutMS: 30000 },
-  );
-}
-
-if (!mongoClient) {
-  throw new Error("MongoDB Client is not defined.");
-}
+    )
+    : new MongoClient(
+      "mongodb://admin:pass@mongo:27017?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+      { connectTimeoutMS: 30000 },
+    );
 
 mongoClient
   .on("error", (err) => console.error("MongoDB Client Error:", err))
@@ -48,5 +33,4 @@ mongoClient
   .on("disconnected", () => console.warn("MongoDB Client disconnected."))
   .connect();
 
-// eslint-disable-next-line
-export default mongoClient!;
+export default mongoClient;

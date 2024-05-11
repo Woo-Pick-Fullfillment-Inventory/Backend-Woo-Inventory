@@ -20,12 +20,16 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Add product test", () => {
-  const userId = mockUserForAddingProduct.user_id;
+  const userId = mockUserForAddingProduct.id;
 
   beforeEach(async () => {
     await initDbTest();
     const mockProducts = await generateProductsArray(5);
-    await mongoRepository.product.batchWriteProducts(mockProducts, userId);
+    await mongoRepository.product.batchWriteProducts({
+      data: mockProducts,
+      userId,
+      shop: "woo",
+    });
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -39,25 +43,33 @@ describe("Add product test", () => {
 
   it("should increase products count", async () => {
     const productListBefore = (
-      await mongoRepository.product.getProducts(userId, {
-        attribute: "name",
-        direction: "asc",
-        page: 1,
-        per_page: 10,
+      await mongoRepository.product.getProducts({
+        userId,
+        sortOption: {
+          attribute: "name",
+          direction: "asc",
+          page: 1,
+          per_page: 10,
+        },
+        shop: "woo",
       })
     ).length;
 
     const response = await httpClient.post(
       "api/v1/products",
       { name: "Premium Quality" },
-      { headers: { authorization: createAuthorizationHeader(userId) } },
+      { headers: { authorization: createAuthorizationHeader(userId, "woo") } },
     );
     const productListAfter = (
-      await mongoRepository.product.getProducts(userId, {
-        attribute: "name",
-        direction: "asc",
-        page: 1,
-        per_page: 10,
+      await mongoRepository.product.getProducts({
+        userId,
+        sortOption: {
+          attribute: "name",
+          direction: "asc",
+          page: 1,
+          per_page: 10,
+        },
+        shop: "woo",
       })
     ).length;
 
@@ -79,7 +91,7 @@ describe("Add product test", () => {
     const response = await httpClient.post(
       "api/v1/products",
       { name: "Premium Quality" },
-      { headers: { authorization: createAuthorizationHeader(mockUserDidntSync.user_id) } },
+      { headers: { authorization: createAuthorizationHeader(mockUserDidntSync.id, "woo") } },
     );
     expect(response.status).toBe(400);
   });

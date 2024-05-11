@@ -2,7 +2,7 @@ import createAxiosClient from "../../../modules/axios/create-axios-client.js";
 import {
   axiosOnFulfillmentErrorLogger,
   axiosOnRejectedErrorLogger,
-} from "../../../modules/axios/create-axios-error-logger-mappings.js";
+} from "../../../modules/axios/create-axios-woo-error-logger-mappings.js";
 import {
   SystemStatusWooSchema,
   type SystemStatusWooType,

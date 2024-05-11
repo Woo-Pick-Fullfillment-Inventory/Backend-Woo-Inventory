@@ -14,7 +14,6 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Signup test", () => {
-
   beforeEach(async () => {
     await initDbTest();
     await woocommerceApiMockServer.requests.deleteAllRequests();
@@ -58,7 +57,7 @@ describe("Signup test", () => {
       password_confirmation: "Test123abcjs",
       token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29|some_random_string",
     });
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(401);
     expect(
       (
         await woocommerceApiMockServer.requests.getCount({

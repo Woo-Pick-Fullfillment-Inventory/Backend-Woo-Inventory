@@ -1,43 +1,34 @@
+import type { ShopType } from "../index.js";
 import type { MongoClient } from "mongodb";
 
-type CaseType = "products" | "categories" | "orders";
-
-export const createCollectionFactory = (mongoClient: MongoClient) => {
+export const setupDatabaseFactory = (mongoClient: MongoClient) => {
   return async ({
-    collectionName,
-    caseType,
+    userId,
+    shop,
   }: {
-    collectionName: string;
-    caseType: CaseType;
+    userId: string;
+    shop: ShopType;
   }): Promise<void> => {
-    const db = mongoClient.db(process.env["MONGO_INITDB_DATABASE"] as string);
-    await db.createCollection(collectionName);
-    const collection = db.collection(collectionName);
-
-    switch (caseType) {
-      case "products":
-        await collection.createIndex({ id: 1 }, { unique: true });
-        await collection.createIndex({ stock_quantity: 1 });
-        await collection.createIndex({ price: 1 });
-        await collection.createIndex({ expiration_date: 1 });
-        await collection.createIndex({ name: 1 });
-        await collection.createIndex({ sku: 1 }, { unique: true });
-        break;
-
-      case "categories":
-        // Define any necessary indexes for "categories" if required.
-        await collection.createIndex({ id: 1 }, { unique: true });
-        await collection.createIndex({ name: 1 });
-        break;
-
-      case "orders":
-        await collection.createIndex({ id: 1 }, { unique: true });
-        await collection.createIndex({ status: 1 }, { partialFilterExpression: { status: "processing" } });
-        break;
-
-      default:
-        console.log("No specific indexes to create for this case.");
-        break;
-    }
+    const db = mongoClient.db(`shop-${shop}-${userId}`);
+    await db.createCollection("products");
+    await db.createCollection("categories");
+    await db.createCollection("orders");
+    const productsCollection = db.collection("products");
+    const categoriesCollection = db.collection("categories");
+    const ordersCollection = db.collection("orders");
+    await productsCollection.createIndex({ id: 1 }, { unique: true });
+    await productsCollection.createIndex({ stock_quantity: 1 });
+    await productsCollection.createIndex({ price: 1 });
+    await productsCollection.createIndex({ expiration_date: 1 });
+    await productsCollection.createIndex({ name: 1 });
+    await productsCollection.createIndex({ sku: 1 }, { unique: true });
+    // Define any necessary indexes for "categories" if required.
+    await categoriesCollection.createIndex({ id: 1 }, { unique: true });
+    await categoriesCollection.createIndex({ name: 1 });
+    await ordersCollection.createIndex({ id: 1 }, { unique: true });
+    await ordersCollection.createIndex(
+      { status: 1 },
+      { partialFilterExpression: { status: "processing" } },
+    );
   };
 };

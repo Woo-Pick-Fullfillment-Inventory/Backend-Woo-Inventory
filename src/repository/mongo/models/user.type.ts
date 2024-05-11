@@ -2,7 +2,7 @@ import { Type } from "@sinclair/typebox";
 
 import type { Static } from "@sinclair/typebox";
 
-export type UserAttributeType = "user_id" | "email" | "username";
+export type UserAttributeType = "id" | "email" | "username";
 
 export type UserUpdateAttributeType =
   | "last_login"
@@ -14,11 +14,17 @@ const ObjectIdPattern = "^[0-9a-fA-F]{24}$";
 
 export const UserMongoSchema = Type.Object({
   _id: Type.Any(),
-  user_id: Type.String({ pattern: ObjectIdPattern }),
+  id: Type.String({ pattern: ObjectIdPattern }),
   email: Type.String(),
   username: Type.String(),
   password: Type.String(),
-  store: Type.Object({ app_url: Type.String() }),
+  store: Type.Object({
+    app_url: Type.String(),
+    type: Type.Union([
+      Type.Literal("shopify"),
+      Type.Literal("woo"),
+    ]),
+  }),
   woo_credentials: Type.Object({
     token: Type.String(),
     secret: Type.String(),

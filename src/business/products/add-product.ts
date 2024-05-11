@@ -49,11 +49,15 @@ const AddProductRequest = Type.Object({
   name: Type.String(),
   sku: Type.Optional(Type.String()),
   slug: Type.Optional(Type.String()),
-  categories: Type.Optional(Type.Array(Type.Object({
-    id: Type.String(),
-    name: Type.String(),
-    slug: Type.String(),
-  }))),
+  categories: Type.Optional(
+    Type.Array(
+      Type.Object({
+        id: Type.String(),
+        name: Type.String(),
+        slug: Type.String(),
+      }),
+    ),
+  ),
   barcode: Type.Optional(Type.String()),
   imei: Type.Optional(Type.String()),
   supplier: Type.Optional(Type.String()),
@@ -62,16 +66,20 @@ const AddProductRequest = Type.Object({
   sale_price: Type.Optional(Type.String()),
   images: Type.Optional(Type.Array(Type.Object({ src: Type.String() }))),
   // TODO: Deeper research on this field
-  tax_status: Type.Optional(Type.Union([
-    Type.Literal("taxable"),
-    Type.Literal("shipping"),
-    Type.Literal("none"),
-  ])),
-  tax_class: Type.Optional(Type.Union([
-    Type.Literal("standard"),
-    Type.Literal("reduced-rate"),
-    Type.Literal("zero-rate"),
-  ])),
+  tax_status: Type.Optional(
+    Type.Union([
+      Type.Literal("taxable"),
+      Type.Literal("shipping"),
+      Type.Literal("none"),
+    ]),
+  ),
+  tax_class: Type.Optional(
+    Type.Union([
+      Type.Literal("standard"),
+      Type.Literal("reduced-rate"),
+      Type.Literal("zero-rate"),
+    ]),
+  ),
   unit: Type.Optional(Type.String()),
   activate: Type.Optional(Type.Boolean()),
 });
@@ -95,7 +103,12 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(
+    req.headers["authorization"],
+  );
 
   if (!userId) {
     logger.log(
@@ -107,8 +120,10 @@ export const addProduct = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.notAllowed);
   }
 
-  const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+  const userFoundInMongo = await mongoRepository.user.getUserById(
+    userId,
+    shopType,
+  );
   if (!userFoundInMongo) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
@@ -120,9 +135,10 @@ export const addProduct = async (req: Request, res: Response) => {
   }
 
   const product = await wooApiRepository.product.postAddProduct({
-    baseUrl: process.env["NODE_ENV"] === "production"
-      ? userFoundInMongo.store.app_url
-      : process.env["WOO_BASE_URL"] as string,
+    baseUrl:
+      process.env["NODE_ENV"] === "production"
+        ? userFoundInMongo.store.app_url
+        : (process.env["WOO_BASE_URL"] as string),
     token: createBasicAuthHeaderToken(
       userFoundInMongo.woo_credentials.token,
       userFoundInMongo.woo_credentials.secret,
@@ -130,8 +146,9 @@ export const addProduct = async (req: Request, res: Response) => {
     addProductRequestFromUser: req.body,
   });
 
-  await mongoRepository.product.insertProduct(
-    {
+  await mongoRepository.product.insertProduct({
+    userId,
+    product: {
       id: product.id,
       name: req.body.name,
       sku: req.body.sku ?? "",
@@ -150,8 +167,8 @@ export const addProduct = async (req: Request, res: Response) => {
       unit: req.body.unit ?? "",
       activate: req.body.activate ?? false,
     },
-    userId,
-  );
+    shop: userFoundInMongo.store.type,
+  });
 
   return res.status(201).send({ id: product.id });
 };

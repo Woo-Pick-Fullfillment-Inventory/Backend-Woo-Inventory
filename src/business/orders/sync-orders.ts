@@ -12,6 +12,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type OrderWooType,
@@ -80,7 +81,10 @@ export const syncOrders = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -90,7 +94,7 @@ export const syncOrders = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -152,17 +156,28 @@ export const syncOrders = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.order.batchWriteOrders(
-    fromWooToMongoOrdersMapping(ordersFromWoo),
+  const ordersInserted = await writeDataToMongoBatch({
+    data: fromWooToMongoOrdersMapping(ordersFromWoo),
     userId,
-  );
+    shop: userFoundInMongo.store.type,
+    caseType: "orders",
+  });
+
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await mongoRepository.user.updateUserOrdersSynced(userId, true);
+  if (ordersInserted !== ordersFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Orders Syncing failed`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
+  await mongoRepository.user.updateUserOrdersSynced(userId, true, userFoundInMongo.store.type);
 
   return res.sendStatus(201);
 };

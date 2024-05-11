@@ -77,10 +77,10 @@ export const signup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  if (await mongoRepository.user.getUserByEmail(req.body.email))
+  if (await mongoRepository.user.getUserByEmail(req.body.email, "woo"))
     return createErrorResponse(res, SERVICE_ERRORS.existingEmail);
 
-  if (await mongoRepository.user.getUserByUsername(req.body.username))
+  if (await mongoRepository.user.getUserByUsername(req.body.username, "woo"))
     return createErrorResponse(res, SERVICE_ERRORS.existingUsername);
 
   if (!emailValidator(req.body.email))
@@ -93,9 +93,10 @@ export const signup = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidPassword);
 
   const systemStatusResult = await wooApiRepository.system.getSystemStatus({
-    baseUrl: process.env["NODE_ENV"] === "production"
-      ? req.body.app_url
-      : process.env["WOO_BASE_URL"] as string,
+    baseUrl:
+      process.env["NODE_ENV"] === "production"
+        ? req.body.app_url
+        : (process.env["WOO_BASE_URL"] as string),
     token: createBasicAuthHeaderToken(
       req.body.token.split("|")[0],
       req.body.token.split("|")[1],
@@ -108,28 +109,54 @@ export const signup = async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   // todo : products can actually be synced from another users of same store
-  const userInserted = await mongoRepository.user.insertUser({
-    store: { app_url: req.body.app_url },
-    email: req.body.email,
-    username: req.body.username,
-    password: hashedPassword,
-    woo_credentials: {
-      token: req.body.token.split("|")[0],
-      secret: req.body.token.split("|")[1],
+  await mongoRepository.user.insertUser(
+    {
+      store: {
+        app_url: req.body.app_url,
+        type: "woo",
+      },
+      email: req.body.email,
+      username: req.body.username,
+      password: hashedPassword,
+      woo_credentials: {
+        token: req.body.token.split("|")[0],
+        secret: req.body.token.split("|")[1],
+      },
+      authentication: {
+        method: "woo_token",
+        is_authorized: true,
+      },
+      last_login: new Date().toISOString(),
+      sync: {
+        are_products_synced: false,
+        are_products_categories_synced: false,
+        are_orders_synced: false,
+      },
     },
-    authentication: {
-      method: "woo_token",
-      is_authorized: true,
-    },
-    last_login: new Date().toISOString(),
-    sync: {
-      are_products_synced: false,
-      are_products_categories_synced: false,
-      are_orders_synced: false,
-    },
+    "woo",
+  );
+
+  const userInserted = await mongoRepository.user.getUserByEmail(
+    req.body.email,
+    "woo",
+  );
+  if (!userInserted)
+    return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
+
+  await mongoRepository.database.setupDatabase({
+    userId: userInserted.id,
+    shop: "woo",
   });
 
-  return res.status(201).send({ jwtToken: `Bearer ${jwt.sign({ user_id: userInserted.user_id }, process.env["JWT_SECRET"] as string)}` });
+  return res.status(201).send({
+    jwtToken: `Bearer ${jwt.sign(
+      {
+        user_id: userInserted.id,
+        shop_type: "woo",
+      },
+      process.env["JWT_SECRET"] as string,
+    )}`,
+  });
 };
 
 export default signup;

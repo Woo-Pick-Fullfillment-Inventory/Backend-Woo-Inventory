@@ -10,6 +10,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type ProductsCategoryWooType,
@@ -66,7 +67,10 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -80,7 +84,7 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -139,19 +143,30 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
   // what if internet connection is lost?
   // todo: what if more than 1000 categories?
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.category.batchWriteProductsCategories(
-    categoriesFromWoo,
+  const categoriesCount = await writeDataToMongoBatch({
+    data: categoriesFromWoo,
     userId,
-  );
+    shop: shopType,
+    caseType: "categories",
+  });
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
+  if (categoriesCount !== categoriesFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Categories Syncing failed. Expected ${categoriesFromWoo.length} but received ${categoriesCount} products categories.`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
   await mongoRepository.user.updateUserProductsCategoriesSynced(
     userId,
     true,
+    shopType,
   );
 
   return res.sendStatus(201);

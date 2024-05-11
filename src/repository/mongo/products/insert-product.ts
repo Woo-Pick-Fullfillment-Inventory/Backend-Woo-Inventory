@@ -1,30 +1,39 @@
-import { ERRORS } from "../../../constants/error.constant.js";
+import {
+  MongoDataConflictError,
+  MongoDataNotModifiedError,
+} from "../../../constants/error/mongo-error.constant.js";
 
-import type { AddProductMongoType } from "../index.js";
+import type {
+  AddProductMongoType,
+  ShopType,
+} from "../index.js";
 import type { MongoClient } from "mongodb";
 
 export const insertProductFactory = (mongoClient: MongoClient) => {
-  return async (product: AddProductMongoType, userId: string): Promise<void> => {
-    const productCollection = mongoClient
-      .db(process.env["MONGO_INITDB_DATABASE"] as string)
-      .collection(`user-${userId}-products`);
-    const existingProduct = await productCollection.findOne({
+  return async ({
+    product,
+    userId,
+    shop,
+  }: {
+    product: AddProductMongoType;
+    userId: string;
+    shop: ShopType;
+  }): Promise<void> => {
+    const productsCollection = mongoClient
+      .db(`shop-${shop}-${userId}`)
+      .collection("products");
+
+    // sku , barcode is unique
+    // sku, barcode can be empty string for now
+    const existingProduct = await productsCollection.findOne({
       $or: [
         { sku: product.sku },
         { id: product.id },
       ],
     });
+    if (existingProduct) throw new MongoDataConflictError();
 
-    if (existingProduct) {
-      throw new Error(ERRORS.DATA_ALREADY_EXISTS);
-    }
-
-    const { acknowledged } = await productCollection.insertOne(product);
-
-    if (!acknowledged) {
-      throw new Error(ERRORS.DATA_NOT_INSERTED);
-    }
-
-    console.log("Product added successfully.");
+    const result = await productsCollection.insertOne(product);
+    if (!result.acknowledged) throw new MongoDataNotModifiedError();
   };
 };

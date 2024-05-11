@@ -15,7 +15,7 @@ const woocommerceApiMockServer = new WireMockRestClient(
 );
 
 describe("Syncing products test", () => {
-  const userId = mockUserForSyncingProducts.user_id;
+  const userId = mockUserForSyncingProducts.id;
 
   beforeEach(async () => {
     await initDbTest();
@@ -38,12 +38,17 @@ describe("Syncing products test", () => {
         headers: {
           Authorization: createAuthorizationHeader(
             userId,
+            "woo",
           ),
         },
       },
     );
     expect(response.status).toEqual(201);
-    expect(await mongoRepository.collection.countDocuments(`user-${userId}-products`)).toEqual(176);
+    expect(await mongoRepository.collection.countDocuments({
+      userId,
+      shop: "woo",
+      collectionName: "products",
+    })).toEqual(176);
     // eslint-disable-next-line
     expect(
       (

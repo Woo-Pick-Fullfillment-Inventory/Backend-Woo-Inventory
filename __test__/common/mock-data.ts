@@ -1,11 +1,14 @@
 import type { UserMongoType } from "../../src/repository/mongo/index.js";
 
 export const mockUserWithHashedPassword: UserMongoType = {
-  user_id: "663ce8165beff09020df1111",
+  id: "663ce8165beff09020df1111",
   email: "someone@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
     secret: "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
@@ -23,11 +26,14 @@ export const mockUserWithHashedPassword: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserWrongType = {
-  user_id: "663ce8165beff09020df2222",
+  id: "663ce8165beff09020df2222",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
     secret: "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
@@ -40,11 +46,14 @@ export const mockUserWrongType = {
 } as UserMongoType;
 
 export const mockUserDidntSync: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea74",
+  id: "6634e9a7e541882e2b99ea74",
   email: "wrong@gmail.com",
   username: "someone",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_d7d08fe1607a38d72ac7566143a62c971c8c9a29",
     secret: "cs_0843d7cdeb3bccc539e7ec2452c1be9520098cfb",
@@ -62,11 +71,14 @@ export const mockUserDidntSync: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingProducts: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea73",
+  id: "6634e9a7e541882e2b99ea73",
   email: "someone33@gmail.com",
   username: "someone33",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_1111",
     secret: "cs_2222",
@@ -84,11 +96,14 @@ export const mockUserForSyncingProducts: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingOrders: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea76",
+  id: "6634e9a7e541882e2b99ea76",
   email: "mock-order-user@gmail.com",
   username: "mock-order-user",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "mock-order-token",
     secret: "mock-order-secret",
@@ -106,11 +121,14 @@ export const mockUserForSyncingOrders: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
-  user_id: "663ce8165beff09020df4444",
+  id: "663ce8165beff09020df4444",
   email: "someone44@gmail.com",
   username: "someone44",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_9999",
     secret: "cs_9999",
@@ -128,11 +146,14 @@ export const mockUserForSyncingProductsFalsyTypeProductReturn: UserMongoType = {
 } as UserMongoType;
 
 export const mockUserForAddingProduct: UserMongoType = {
-  user_id: "6634e9a7e541882e2b99ea75",
+  id: "6634e9a7e541882e2b99ea75",
   email: "someone44@gmail.com",
   username: "someone44",
   password: "$2b$10$0ZS4yQgQbOTtm7ZajoMumejFapHqyVTOOWcT7v8cONhFFG9x8dwYe",
-  store: { app_url: "https://testwebsite.com" },
+  store: {
+    app_url: "https://testwebsite.com",
+    type: "woo",
+  },
   woo_credentials: {
     token: "ck_1111",
     secret: "cs_2222",

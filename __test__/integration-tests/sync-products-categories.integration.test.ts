@@ -19,7 +19,7 @@ describe("Syncing products categories test", () => {
   });
 
   afterEach(async () => {
-    await clearDbTest(mockUserForSyncingProducts.user_id);
+    await clearDbTest(mockUserForSyncingProducts.id);
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 
@@ -34,7 +34,8 @@ describe("Syncing products categories test", () => {
       {
         headers: {
           Authorization: createAuthorizationHeader(
-            mockUserForSyncingProducts.user_id,
+            mockUserForSyncingProducts.id,
+            "woo",
           ),
         },
       },

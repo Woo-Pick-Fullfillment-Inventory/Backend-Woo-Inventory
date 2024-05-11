@@ -1,22 +1,30 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-import { ERRORS } from "../constants/error.constant.js";
+import {
+  NoAuthorizedHeader,
+  TokenNotFoundInHeaderError,
+} from "../constants/error/header-error.constant.js";
+
+import type { ShopType } from "../repository/mongo/index.js";
 
 dotenv.config();
 
+type JwtTokenType = {
+  user_id: string;
+  shop_type: ShopType;
+};
+
 export const verifyAuthorizationHeader = (
   authorizationHeader: string | undefined,
-): string => {
-  if (!authorizationHeader) throw new Error(ERRORS.NO_AUTHORIZATION_HEADER);
+): JwtTokenType => {
+  if (!authorizationHeader) throw new NoAuthorizedHeader();
 
   const token = authorizationHeader.split(" ")[1];
-  if (!token)
-    throw new Error(ERRORS.NO_TOKEN_FOUND);
+  if (!token) throw new TokenNotFoundInHeaderError();
 
-  return (
-    jwt.verify(token, process.env["JWT_SECRET"] as string) as {
-      user_id: string;
-    }
-  ).user_id;
+  return jwt.verify(token, process.env["JWT_SECRET"] as string) as {
+    user_id: string;
+    shop_type: ShopType;
+  };
 };

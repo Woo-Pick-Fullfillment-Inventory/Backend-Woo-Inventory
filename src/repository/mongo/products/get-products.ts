@@ -1,4 +1,7 @@
-import type { ProductMongoType } from "../index.js";
+import type {
+  ProductMongoType,
+  ShopType,
+} from "../index.js";
 import type {
   MongoClient,
   SortDirection,
@@ -12,22 +15,31 @@ type SortOptionType = {
 };
 
 export const getProductsFactory = (mongoClient: MongoClient) => {
-  return async (userId: string, sortOption: SortOptionType): Promise<ProductMongoType[]> => {
+  return async ({
+    userId,
+    shop,
+    sortOption,
+  }: {
+    userId: string;
+    shop: ShopType;
+    sortOption: SortOptionType;
+  }): Promise<ProductMongoType[]> => {
     const productsCollection = mongoClient
-      .db(process.env["MONGO_INITDB_DATABASE"] as string)
-      .collection(`user-${userId}-products`);
+      .db(`shop-${shop}-${userId}`)
+      .collection("products");
 
     const sortDirection = sortOption.direction === "asc" ? 1 : -1;
 
-    const skip = (sortOption.page-1) * sortOption.per_page;
+    const skip = (sortOption.page - 1) * sortOption.per_page;
 
-    const products = await productsCollection.find({})
+    const products = await productsCollection
+      .find({})
       .sort({ [sortOption.attribute]: sortDirection })
       .skip(skip)
       .limit(sortOption.per_page)
       .toArray();
 
-    // todo: add type validation
+    // type validation on API
     return products as unknown as ProductMongoType[];
   };
 };

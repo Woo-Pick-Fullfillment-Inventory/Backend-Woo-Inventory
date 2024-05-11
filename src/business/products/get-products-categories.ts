@@ -44,7 +44,10 @@ const SERVICE_ERRORS = {
 };
 
 export const getProductsCategories = async (req: Request, res: Response) => {
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
 
   if (!userId) {
     logger.log(
@@ -57,7 +60,7 @@ export const getProductsCategories = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log("error", `user not found by id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);

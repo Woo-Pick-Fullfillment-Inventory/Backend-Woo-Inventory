@@ -11,6 +11,7 @@ import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
 import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
+import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import {
   type ProductWooType,
@@ -68,7 +69,10 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.invalidRequestType);
   }
 
-  const userId = verifyAuthorizationHeader(req.headers["authorization"]);
+  const {
+    user_id: userId,
+    shop_type: shopType,
+  } = verifyAuthorizationHeader(req.headers["authorization"]);
   if (!userId) {
     logger.log(
       "warn",
@@ -78,7 +82,7 @@ export const syncProducts = async (req: Request, res: Response) => {
   }
 
   const userFoundInMongo =
-    await mongoRepository.user.getUserById(userId);
+    await mongoRepository.user.getUserById(userId, shopType);
   if (!userFoundInMongo) {
     logger.log(
       "warn",
@@ -95,7 +99,11 @@ export const syncProducts = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.dataSyncedAlready);
   }
 
-  const documentCounts = await mongoRepository.collection.countDocuments(userId);
+  const documentCounts = await mongoRepository.collection.countDocuments({
+    userId,
+    shop: userFoundInMongo.store.type,
+    collectionName: "products",
+  });
   if (documentCounts > 0) {
     logger.log(
       "warn",
@@ -149,14 +157,27 @@ export const syncProducts = async (req: Request, res: Response) => {
 
   // what if internet connection is lost?
   const startTimeWritingToDb = performance.now();
-  await mongoRepository.product.batchWriteProducts(productsFromWoo, userId);
+  const productsCount = await writeDataToMongoBatch({
+    data: productsFromWoo,
+    userId,
+    shop: userFoundInMongo.store.type,
+    caseType: "products",
+  });
   const endTimeWritingToDb = performance.now();
   logger.log(
     "info",
     `Total time taken to write data into DB: ${measureTime(startTimeWritingToDb, endTimeWritingToDb)} milliseconds`,
   );
 
-  await mongoRepository.user.updateUserProductsSynced(userId, true);
+  if (productsCount !== productsFromWoo.length) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${productsFromWoo.length} but got ${productsCount} products.`,
+    );
+    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
+  await mongoRepository.user.updateUserProductsSynced(userId, true, userFoundInMongo.store.type);
 
   return res.sendStatus(201);
 };

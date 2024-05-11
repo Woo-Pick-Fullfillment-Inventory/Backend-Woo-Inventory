@@ -1,9 +1,9 @@
-import { ERRORS } from "../../../constants/error.constant.js";
+import { WooHeaderError } from "../../../constants/error/header-error.constant.js";
 import createAxiosClient from "../../../modules/axios/create-axios-client.js";
 import {
   axiosOnFulfillmentErrorLogger,
   axiosOnRejectedErrorLogger,
-} from "../../../modules/axios/create-axios-error-logger-mappings.js";
+} from "../../../modules/axios/create-axios-woo-error-logger-mappings.js";
 import {
   ProductsCategoriesWooSchema,
   type ProductsCategoriesWooType,
@@ -57,7 +57,7 @@ export const getProductsCategoriesPaginationFactory = async ({
     headers["x-wp-total"] === undefined ||
     headers["x-wp-totalpages"] === undefined
   ) {
-    throw new Error(ERRORS.INVALID_RESPONSE_HEADERS);
+    throw new WooHeaderError();
   }
 
   return {
