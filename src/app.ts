@@ -8,6 +8,7 @@ import authRouter from "./business/authentication/index.js";
 import fileRouter from "./business/files/index.js";
 import orderRouter from "./business/orders/index.js";
 import productRouter from "./business/products/index.js";
+import logger from "./modules/create-logger.js";
 import webhookRouter from "./webhook/index.js";
 
 import type {
@@ -49,6 +50,7 @@ app.use(function (err: any, _req: Request, res: Response, _next: NextFunction) {
       message: err.message,
     });
   } else {
+    logger.log("error ", err);
     res.status(err.status || 500).json({
       type: "/internal-server-error",
       message: "Internal Server Error",
