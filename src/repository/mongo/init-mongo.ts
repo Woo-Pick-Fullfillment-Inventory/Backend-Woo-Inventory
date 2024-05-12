@@ -20,10 +20,9 @@ const mongoClient =
       },
     )
     : new MongoClient(
-      "mongodb://admin:pass@localhost:27017?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+      `mongodb://${process.env["MONGO_INITDB_ROOT_USERNAME"]}:${process.env["MONGO_INITDB_ROOT_PASSWORD"]}@${process.env["MONGO_HOST"]}:${process.env["MONGO_PORT"]}?authSource=admin`,
       { connectTimeoutMS: 30000 },
     );
-
 mongoClient
   .on("error", (err) => console.error("MongoDB Client Error:", err))
   .on("connect", () => console.log("MongoDB Client connecting ..."))
