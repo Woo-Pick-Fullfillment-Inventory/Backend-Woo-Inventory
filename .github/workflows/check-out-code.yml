@@ -50,11 +50,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          
+
       - uses: actions/checkout@v3
 
       - name: install dependencies
         run: npm install
+
+      - name: install dependencies
+        run: mv .env.local .env
 
       - name: Start wiremock and application
         run: |-
