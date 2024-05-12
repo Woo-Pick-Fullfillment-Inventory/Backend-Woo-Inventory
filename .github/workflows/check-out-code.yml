@@ -56,7 +56,7 @@ jobs:
       - name: install dependencies
         run: npm install
 
-      - name: install dependencies
+      - name: Renaming env file
         run: mv .env.local .env
 
       - name: Start wiremock and application
