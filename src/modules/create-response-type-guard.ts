@@ -11,7 +11,7 @@ export type ValidationResult =
       isValid: true;
     };
 
-export const isResponseTypeTrue = <T extends Schema>(
+export const isResponseTypeValid = <T extends Schema>(
   schema: T,
   data: Record<string, unknown> | Record<string, unknown>[],
   areAdditionalPropertiesAllowed: boolean,

@@ -8,7 +8,7 @@ import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
@@ -54,7 +54,7 @@ const SERVICE_ERRORS = {
 const SyncProductsCategoriesSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products-categories") ]) });
 
 export const syncProductsCategories = async (req: Request, res: Response) => {
-  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeTrue(
+  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeValid(
     SyncProductsCategoriesSchema,
     req.body,
     false,

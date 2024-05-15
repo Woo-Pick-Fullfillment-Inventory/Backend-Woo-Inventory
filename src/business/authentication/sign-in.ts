@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import {
   UserMongoSchema,
   mongoRepository,
@@ -40,7 +40,7 @@ const SigninRequest = Type.Object({
 export type SigninRequestType = Static<typeof SigninRequest>;
 
 export const signin = async (req: Request, res: Response) => {
-  const isSignInRequestTypeValid = isResponseTypeTrue(
+  const isSignInRequestTypeValid = isResponseTypeValid(
     SigninRequest,
     req.body,
     false,
@@ -66,7 +66,7 @@ export const signin = async (req: Request, res: Response) => {
 
   if (!userFound)
     return createErrorResponse(res, SERVICE_ERRORS.invalidCredentials);
-  const isUserFoundTypeValid = isResponseTypeTrue(
+  const isUserFoundTypeValid = isResponseTypeValid(
     UserMongoSchema,
     userFound,
     true,

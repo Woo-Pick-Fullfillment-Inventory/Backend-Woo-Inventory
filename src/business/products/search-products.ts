@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 
@@ -61,7 +61,7 @@ const postGetProductsRequest = Type.Object({
 });
 
 export const searchProducts = async (req: Request, res: Response) => {
-  const isPostGetProductsRequestTypeValid = isResponseTypeTrue(
+  const isPostGetProductsRequestTypeValid = isResponseTypeValid(
     postGetProductsRequest,
     req.body,
     false,

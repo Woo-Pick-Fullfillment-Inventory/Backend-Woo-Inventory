@@ -1,4 +1,4 @@
-import { isResponseTypeTrue } from "../../src/modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../src/modules/create-response-type-guard.js";
 import {
   ProductMongoSchema,
   ProductsMongoSchema,
@@ -11,7 +11,7 @@ describe("return type check tests", () => {
       name: "product1",
       price: "100",
     };
-    const result = isResponseTypeTrue(ProductMongoSchema, data, true);
+    const result = isResponseTypeValid(ProductMongoSchema, data, true);
     expect(result.isValid).toBe(false);
   });
   it("should return error when schema is an array", async () => {
@@ -25,7 +25,7 @@ describe("return type check tests", () => {
         price: "200",
       },
     ];
-    const result = isResponseTypeTrue(ProductsMongoSchema, data, true);
+    const result = isResponseTypeValid(ProductsMongoSchema, data, true);
     expect(result.isValid).toBe(false);
   });
   it("should return error when price is expected as number", async () => {
@@ -52,7 +52,7 @@ describe("return type check tests", () => {
       ],
       stock_quantity: null,
     };
-    const result = isResponseTypeTrue(ProductWooSchema, data, true) as {
+    const result = isResponseTypeValid(ProductWooSchema, data, true) as {
       isValid: boolean;
       errorMessage: string;
     };

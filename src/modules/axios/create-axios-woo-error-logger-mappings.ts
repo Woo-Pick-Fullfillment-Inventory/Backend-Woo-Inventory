@@ -7,7 +7,7 @@ import {
   WooUnauthorizedError,
 } from "../../constants/error/woo-error.constant.js";
 import logger from "../create-logger.js";
-import { isResponseTypeTrue } from "../create-response-type-guard.js";
+import { isResponseTypeValid } from "../create-response-type-guard.js";
 
 import type {
   AxiosError,
@@ -53,7 +53,7 @@ export const axiosOnFulfillmentErrorLogger = ({
       );
       throw new InvalidAxiosStatusError();
     }
-    const isResponseValid = isResponseTypeTrue(
+    const isResponseValid = isResponseTypeValid(
       expectedSchema,
       response.data,
       true,

@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
@@ -85,7 +85,7 @@ const AddProductRequest = Type.Object({
 });
 
 export const addProduct = async (req: Request, res: Response) => {
-  const isAddProductTypeRequestValid = isResponseTypeTrue(
+  const isAddProductTypeRequestValid = isResponseTypeValid(
     AddProductRequest,
     req.body,
     false,

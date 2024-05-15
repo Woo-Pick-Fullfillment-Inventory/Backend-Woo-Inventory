@@ -8,7 +8,7 @@ import { emailValidator } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import logger from "../../modules/create-logger.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
 import { wooApiRepository } from "../../repository/woo-api/index.js";
 
@@ -64,7 +64,7 @@ const SignupRequest = Type.Object({
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 export const signup = async (req: Request, res: Response) => {
-  const isSignupRequestTypeValid = isResponseTypeTrue(
+  const isSignupRequestTypeValid = isResponseTypeValid(
     SignupRequest,
     req.body,
     false,

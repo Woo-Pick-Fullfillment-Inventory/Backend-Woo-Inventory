@@ -34,10 +34,10 @@ services:
       MONGO_INITDB_DATABASE: test-database
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
-      MONGO_HOST: mongodb
+      MONGO_USERS_DATABASE: users
+      MONGO_HOST: localhost
       MONGO_PORT: 27017
       PRODUCTS_IMAGES_BUCKET: test-bucket
-      MONGO_USERS_DATABASE: users
     depends_on:
       mongodb:
         condition: service_started # Waits for MongoDB to pass its health check

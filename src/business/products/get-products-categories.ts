@@ -66,8 +66,8 @@ export const getProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.resourceNotFound);
   }
 
-  if (userFoundInMongo.sync.are_products_categories_synced) {
-    logger.log("error", "products categories were not synced");
+  if (!userFoundInMongo.sync.are_products_categories_synced) {
+    logger.log("error", `products categories were not synced by user id ${userId}`);
     return createErrorResponse(res, SERVICE_ERRORS.dataNotSynced);
   }
 
