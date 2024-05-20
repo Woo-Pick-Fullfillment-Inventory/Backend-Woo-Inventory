@@ -56,7 +56,6 @@ describe("Signin test", () => {
       email_or_username: "wrong@gmail.com",
       password: "Test123abcjs",
     });
-    console.log(response.data);
     expect(response.status).toEqual(500);
   });
 });

@@ -4,13 +4,16 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { ORDERS_PER_PAGE } from "../../constants/size.constant.js";
-import { fromWooToMongoOrdersMapping } from "../../helpers/index.js";
+import {
+  findDuplicateIds,
+  fromWooToMongoOrdersMapping,
+} from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
@@ -47,6 +50,11 @@ const SERVICE_ERRORS = {
     type: "/orders/sync-process/synced-already",
     message: "orders synced",
   },
+  dupplicateIdsFound: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/orders/sync-process/dupplicate-ids-found",
+    message: "dupplicate ids found",
+  },
 };
 
 const SyncOrdersSchema = Type.Object({
@@ -68,7 +76,7 @@ const SyncOrdersSchema = Type.Object({
 });
 
 export const syncOrders = async (req: Request, res: Response) => {
-  const isSyncOrdersRequestTypeValid = isResponseTypeTrue(
+  const isSyncOrdersRequestTypeValid = isResponseTypeValid(
     SyncOrdersSchema,
     req.body,
     false,
@@ -140,6 +148,15 @@ export const syncOrders = async (req: Request, res: Response) => {
     dateAfter: req.body.date_after,
     status: req.body.status,
   });
+
+  const dupplicateIdsFound = findDuplicateIds(ordersFromWoo);
+  if (dupplicateIdsFound.length > 0) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - Orders Syncing failed. dupplicate ids found ${dupplicateIdsFound.join(", ")}`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.dupplicateIdsFound);
+  }
 
   if (ordersFromWoo.length !== totalItems) {
     logger.log(

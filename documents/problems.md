@@ -35,3 +35,5 @@ becareful validating the fields from woo. there can be nullish fields unexpected
 7. sku can be empty string. it cant be unique in mongo!
 
 8. force sync if users hasnt done sync process!
+
+9. stop syncing process if found dupplicates!

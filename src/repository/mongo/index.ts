@@ -37,6 +37,8 @@ import type {
 import type {
   OrderMongoInputType,
   OrderMongoType,
+  OrderStatusType,
+  PickingStatusType,
 } from "./models/order.type.js";
 import type {
   AddProductMongoType,
@@ -69,6 +71,8 @@ export type {
   OrderMongoType,
   OrderMongoInputType,
   ShopType,
+  PickingStatusType,
+  OrderStatusType,
 };
 
 export {

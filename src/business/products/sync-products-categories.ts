@@ -3,12 +3,13 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
 import { CATEGORIES_PER_PAGE } from "../../constants/size.constant.js";
+import { findDuplicateIds } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
 import logger from "../../modules/create-logger.js";
 import { measureTime } from "../../modules/create-measure-timer.js";
-import { isResponseTypeTrue } from "../../modules/create-response-type-guard.js";
+import { isResponseTypeValid } from "../../modules/create-response-type-guard.js";
 import { verifyAuthorizationHeader } from "../../modules/create-verify-authorization-header.js";
 import { writeDataToMongoBatch } from "../../modules/create-write-data-to-mongo-batch.js";
 import { mongoRepository } from "../../repository/mongo/index.js";
@@ -49,12 +50,17 @@ const SERVICE_ERRORS = {
     type: "/products/categories/sync/synced-already",
     message: "products categories already synced",
   },
+  dupplicateIdsFound: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/categories/sync/dupplicate-ids-found",
+    message: "dupplicate ids found",
+  },
 };
 
 const SyncProductsCategoriesSchema = Type.Object({ action: Type.Union([ Type.Literal("sync-products-categories") ]) });
 
 export const syncProductsCategories = async (req: Request, res: Response) => {
-  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeTrue(
+  const isSyncProductsCategoriesRequestTypeValid = isResponseTypeValid(
     SyncProductsCategoriesSchema,
     req.body,
     false,
@@ -127,6 +133,16 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     perPage: CATEGORIES_PER_PAGE,
     endpoint: "products-categories",
   });
+
+  const dupplicateIdsFound = findDuplicateIds(categoriesFromWoo);
+  if (dupplicateIdsFound.length > 0) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - Products Categories Syncing failed. dupplicate ids found ${dupplicateIdsFound.join(", ")}`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.dupplicateIdsFound);
+  }
+
   if (categoriesFromWoo.length !== totalItems) {
     logger.log(
       "error",
