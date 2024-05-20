@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { performance } from "perf_hooks";
 
 import { PRODUCT_PER_PAGE } from "../../constants/size.constant.js";
+import { findDuplicateIds } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -45,6 +46,11 @@ const SERVICE_ERRORS = {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/products/sync-process/synced-already",
     message: "products synced",
+  },
+  dupplicateIdsFound: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/sync-process/dupplicate-ids-found",
+    message: "dupplicate ids found",
   },
 };
 
@@ -137,16 +143,21 @@ export const syncProducts = async (req: Request, res: Response) => {
     endpoint: "products",
     perPage: PRODUCT_PER_PAGE,
   });
-  logger.log(
-    "info",
-    `Total products fetched from WooCommerce: ${productsFromWoo.length}/${totalItems}`,
-  );
   if (productsFromWoo.length !== totalItems) {
     logger.log(
       "error",
       `${req.method} ${req.url} - 500 - Internal Server Error ***ERROR*** Products Syncing failed. expected ${totalItems} to get from woo but got ${productsFromWoo.length} products.`,
     );
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    return createErrorResponse(res, SERVICE_ERRORS.dupplicateIdsFound);
+  }
+
+  const dupplicateIdsFound = findDuplicateIds(productsFromWoo);
+  if (dupplicateIdsFound.length > 0) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - Products Syncing failed. dupplicate ids found ${dupplicateIdsFound.join(", ")}`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.dupplicateIdsFound);
   }
 
   const endTimeGettingProducts = performance.now();

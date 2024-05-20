@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-import type { OrdersWooType } from "../../../src/repository/woo-api/index.js";
+import type { OrderMongoInputType } from "../../../src/repository/mongo/index.js";
 
 const allowedOrderStatuses = [
   "pending",
@@ -15,7 +15,7 @@ const allowedOrderStatuses = [
 
 let orderIdCounter = 0;
 
-const generateRandomOrder = (): OrdersWooType[number] => {
+const generateRandomOrder = () => {
   orderIdCounter++;
 
   return {
@@ -48,13 +48,27 @@ const generateRandomOrder = (): OrdersWooType[number] => {
         meta_data: [],
       }),
     ),
+    billing: {
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+    },
+    shipping: {
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+    },
     meta_data: [],
-  };
+    // problems: check here if code fails. hardcode time created
+    date_created: faker.date.between({
+      from: "2024-01-01T00:00:00.000Z",
+      to: "2024-12-31T00:00:00.000Z",
+    }).toISOString(),
+    picking_status: "unfulfilled",
+  } as OrderMongoInputType;
 };
 
 export const generateOrdersArray = async (
   numberOfOrders: number,
-): Promise<OrdersWooType> => {
+): Promise<OrderMongoInputType[]> => {
   orderIdCounter = 0;
-  return Array.from({ length: numberOfOrders }, generateRandomOrder);
+  return Array.from({ length: numberOfOrders }, () => generateRandomOrder());
 };

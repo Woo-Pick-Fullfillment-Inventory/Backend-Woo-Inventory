@@ -29,7 +29,19 @@ export const setupDatabaseFactory = (mongoClient: MongoClient) => {
     // Define any necessary indexes for "categories" if required.
     await categoriesCollection.createIndex({ id: 1 }, { unique: true });
     await categoriesCollection.createIndex({ name: 1 });
+    // Define any necessary indexes for "orders" if required.
+    // Create indexes for the orders collection
     await ordersCollection.createIndex({ id: 1 }, { unique: true });
+    await ordersCollection.createIndex({ userId: 1 });
+    await ordersCollection.createIndex({ status: 1 });
+    await ordersCollection.createIndex({ date_created: 1 });
+
+    // Optionally, create a compound index if queries often combine multiple fields
+    await ordersCollection.createIndex({
+      userId: 1,
+      status: 1,
+      date_created: 1,
+    });
     await ordersCollection.createIndex(
       { status: 1 },
       { partialFilterExpression: { status: "processing" } },

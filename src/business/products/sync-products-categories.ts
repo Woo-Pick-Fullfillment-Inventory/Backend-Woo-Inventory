@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { StatusCodes } from "http-status-codes";
 
 import { CATEGORIES_PER_PAGE } from "../../constants/size.constant.js";
+import { findDuplicateIds } from "../../helpers/index.js";
 import { createBasicAuthHeaderToken } from "../../modules/create-basic-auth-header.js";
 import { createErrorResponse } from "../../modules/create-error-response.js";
 import fetchAllDataFromWoo from "../../modules/create-fetch-data-from-woo-batch.js";
@@ -48,6 +49,11 @@ const SERVICE_ERRORS = {
     statusCode: StatusCodes.BAD_REQUEST,
     type: "/products/categories/sync/synced-already",
     message: "products categories already synced",
+  },
+  dupplicateIdsFound: {
+    statusCode: StatusCodes.BAD_REQUEST,
+    type: "/products/categories/sync/dupplicate-ids-found",
+    message: "dupplicate ids found",
   },
 };
 
@@ -127,6 +133,16 @@ export const syncProductsCategories = async (req: Request, res: Response) => {
     perPage: CATEGORIES_PER_PAGE,
     endpoint: "products-categories",
   });
+
+  const dupplicateIdsFound = findDuplicateIds(categoriesFromWoo);
+  if (dupplicateIdsFound.length > 0) {
+    logger.log(
+      "error",
+      `${req.method} ${req.url} - Products Categories Syncing failed. dupplicate ids found ${dupplicateIdsFound.join(", ")}`,
+    );
+    return createErrorResponse(res, SERVICE_ERRORS.dupplicateIdsFound);
+  }
+
   if (categoriesFromWoo.length !== totalItems) {
     logger.log(
       "error",

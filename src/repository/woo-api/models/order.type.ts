@@ -197,6 +197,7 @@ export const OrderWooSchema = Type.Object({
   total: Type.String(),
   meta_data: Type.Optional(Type.Array(MetaDataSchema)),
   line_items: Type.Array(LineItemSchema),
+  date_created: Type.String({ format: "date-time" }),
 });
 
 export type OrderWooType = Static<typeof OrderWooSchema>;

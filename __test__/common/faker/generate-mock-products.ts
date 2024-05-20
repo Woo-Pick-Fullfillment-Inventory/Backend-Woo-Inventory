@@ -11,18 +11,24 @@ const generateRandomProduct = () => {
     id: productIdCounter,
     name: faker.commerce.productName(),
     sku: faker.string.alpha(),
-    price: faker.number.int({
-      min: 1,
-      max: 1000,
-    }).toString(),
-    regular_price: faker.number.int({
-      min: 1,
-      max: 1000,
-    }).toString(),
-    sale_price: faker.number.int({
-      min: 1,
-      max: 1000,
-    }).toString(),
+    price: faker.number
+      .int({
+        min: 1,
+        max: 1000,
+      })
+      .toString(),
+    regular_price: faker.number
+      .int({
+        min: 1,
+        max: 1000,
+      })
+      .toString(),
+    sale_price: faker.number
+      .int({
+        min: 1,
+        max: 1000,
+      })
+      .toString(),
     stock_quantity: faker.number.int({
       min: 0,
       max: 100,
