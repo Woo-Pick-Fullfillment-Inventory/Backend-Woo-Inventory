@@ -1,13 +1,16 @@
-import type { ProductsCategoryMongoType } from "../index.js";
+import type {
+  ProductsCategoryMongoType,
+  ShopType,
+} from "../index.js";
 import type { MongoClient } from "mongodb";
 
 export const getProductsCategoriesFactory = (
   mongoClient: MongoClient,
 ) => {
-  return async (userId: string): Promise<ProductsCategoryMongoType[]> => {
+  return async (userId: string, shop: ShopType): Promise<ProductsCategoryMongoType[]> => {
     const categories = await mongoClient
-      .db(process.env["MONGO_INITDB_DATABASE"] as string)
-      .collection(`user-${userId}-categories`)
+      .db(`shop-${shop}-${userId}`)
+      .collection("categories")
       .find()
       .toArray();
 

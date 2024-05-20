@@ -71,7 +71,7 @@ export const getProductsCategories = async (req: Request, res: Response) => {
     return createErrorResponse(res, SERVICE_ERRORS.dataNotSynced);
   }
 
-  const categories = await mongoRepository.category.getProductsCategories(userId);
+  const categories = await mongoRepository.category.getProductsCategories(userId, shopType);
 
   return res.status(200).send(
     convertCategoriesToCLient({

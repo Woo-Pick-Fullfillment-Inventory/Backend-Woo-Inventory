@@ -195,6 +195,12 @@ describe("get products categories test", () => {
       userId: mockUserForSyncingProducts.id,
       shop: "woo",
     });
+    await mongoRepository.user.updateUserProductsCategoriesSynced(
+      mockUserForSyncingProducts.id,
+      true,
+      "woo",
+    );
+
     await woocommerceApiMockServer.requests.deleteAllRequests();
   });
 

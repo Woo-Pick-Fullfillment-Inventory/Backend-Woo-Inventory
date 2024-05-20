@@ -42,9 +42,5 @@ export const setupDatabaseFactory = (mongoClient: MongoClient) => {
       status: 1,
       date_created: 1,
     });
-    await ordersCollection.createIndex(
-      { status: 1 },
-      { partialFilterExpression: { status: "processing" } },
-    );
   };
 };
