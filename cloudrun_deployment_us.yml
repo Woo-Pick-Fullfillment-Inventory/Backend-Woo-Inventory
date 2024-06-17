@@ -9,7 +9,7 @@ spec:
     spec:
       serviceAccountName: $SA_CLOUDRUN_BACKEND
       containers:
-        - image: us-central1-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+        - image: us-central1-docker.pkg.dev/$PROJECT_ID/backend-registry-us/$IMAGE_NAME:latest
           ports:
             - name: http1
               containerPort: 5003
