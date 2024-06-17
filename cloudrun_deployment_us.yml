@@ -1,0 +1,36 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: woopick-backend
+  labels:
+    cloud.googleapis.com/location: us-central1
+spec:
+  template:
+    spec:
+      serviceAccountName: $SA_CLOUDRUN_BACKEND
+      containers:
+        - image: us-central1-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
+          ports:
+            - name: http1
+              containerPort: 5003
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: SERVICE_PORT
+              value: "5003"
+            - name: PROJECT_ID
+              value: $PROJECT_ID
+            - name: PRODUCTS_IMAGES_BUCKET
+              value: $PRODUCTS_IMAGES_BUCKET
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: $MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_USERS_DATABASE
+              value: $MONGO_USERS_DATABASE
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_SECRET
+  traffic:
+    - percent: 100
+      latestRevision: true

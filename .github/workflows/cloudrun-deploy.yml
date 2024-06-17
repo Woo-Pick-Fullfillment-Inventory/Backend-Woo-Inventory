@@ -45,10 +45,16 @@ jobs:
           GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |-
           gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
-          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest .
-          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG .
-          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:latest
-          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/woopick-registry/$IMAGE_NAME:$GIT_TAG
+          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:latest .
+          docker build --platform linux/amd64 -t europe-west3-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:$GIT_TAG .
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:latest
+          docker push europe-west3-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:$GIT_TAG
+
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+          docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:latest .
+          docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/$PROJECT_ID/backend-registry-eu/$IMAGE_NAME:$GIT_TAG .
+          docker push us-central1-docker.pkg.dev/$PROJECT_ID/backend-registry-us/$IMAGE_NAME:latest
+          docker push us-central1-docker.pkg.dev/$PROJECT_ID/backend-registry-us/$IMAGE_NAME:$GIT_TAG
 
   deploy-to-cloudrun:
     name: Deploy to Cloud Run
@@ -79,12 +85,22 @@ jobs:
 
       - name: Prepare and Deploy to Cloud Run
         run: |
-          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
-          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment.yml
-          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment.yml
-          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment.yml
-          sed -i "s|\$PRODUCTS_IMAGES_BUCKET|${{ secrets.PRODUCTS_IMAGES_BUCKET }}|g" cloudrun_deployment.yml
-          sed -i "s|\$MONGO_INITDB_ROOT_PASSWORD|${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}|g" cloudrun_deployment.yml
-          sed -i "s|\$MONGO_USERS_DATABASE|${{ secrets.MONGO_USERS_DATABASE }}|g" cloudrun_deployment.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$PRODUCTS_IMAGES_BUCKET|${{ secrets.PRODUCTS_IMAGES_BUCKET }}|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$MONGO_INITDB_ROOT_PASSWORD|${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}|g" cloudrun_deployment_eu.yml
+          sed -i "s|\$MONGO_USERS_DATABASE|${{ secrets.MONGO_USERS_DATABASE }}|g" cloudrun_deployment_eu.yml
 
-          gcloud run services replace cloudrun_deployment.yml
+          gcloud run services replace cloudrun_deployment_eu.yml
+
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment_us.yml
+          sed -i "s|\$IMAGE_NAME|$IMAGE_NAME|g" cloudrun_deployment_us.yml
+          sed -i "s|\$PROJECT_ID|${{ secrets.PROJECT_ID }}|g" cloudrun_deployment_us.yml
+          sed -i "s|\$SA_CLOUDRUN_BACKEND|${{ secrets.SA_CLOUDRUN_BACKEND }}|g" cloudrun_deployment_us.yml
+          sed -i "s|\$PRODUCTS_IMAGES_BUCKET|${{ secrets.PRODUCTS_IMAGES_BUCKET }}|g" cloudrun_deployment_us.yml
+          sed -i "s|\$MONGO_INITDB_ROOT_PASSWORD|${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}|g" cloudrun_deployment_us.yml
+          sed -i "s|\$MONGO_USERS_DATABASE|${{ secrets.MONGO_USERS_DATABASE }}|g" cloudrun_deployment_us.yml
+
+          gcloud run services replace cloudrun_deployment_us.yml
